@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-TW" className={`${montserrat.variable} h-full antialiased`}>
-      <body className="min-h-full bg-neutral-300 bg-[url('/images/cubes.png')] bg-repeat font-sans">
+      <body className="min-h-full bg-neutral-100 font-sans">
         <LanguageProvider>
           <ChromeLayout>{children}</ChromeLayout>
         </LanguageProvider>

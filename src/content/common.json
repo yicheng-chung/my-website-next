@@ -4,8 +4,6 @@
     "nav": {
       "home": "首頁",
       "about": "關於我",
-      "skills": "技能",
-      "portofolio": "作品集",
       "contact": "聯絡我"
     },
     "languageSwitch": {
@@ -14,10 +12,10 @@
     },
     "profile": {
       "name": "鍾貽丞",
-      "role": "新手前端工程師",
+      "role": "準諮商心理師",
       "school": "國立政治大學 資訊管理學系",
       "years": "(2014 - 2020)",
-      "intro": "去年底自學網頁前端程式語言後，因為非常感興趣而立志成為前端工程師！技術上還有許多不足的地方，但對於程式，我願意用我的餘生去探索它。"
+      "intro": "前端工程師做了三年多，去年決定給自己一個新方向，考上了心理諮商研究所，準備朝心理師的路走。這個網站留著，記錄一下工程師時期學到的東西怎麼帶到下一階段。"
     },
     "footer": {
       "copyright": "Copyright ⓒ {year} Yi-Cheng, Chung. All rights reserved."
@@ -28,8 +26,6 @@
     "nav": {
       "home": "Main",
       "about": "About",
-      "skills": "Skills",
-      "portofolio": "Portofolio",
       "contact": "Contact"
     },
     "languageSwitch": {
@@ -38,10 +34,10 @@
     },
     "profile": {
       "name": "Yi-Cheng, Chung",
-      "role": "Junior Front-End Engineer",
+      "role": "Counseling Psychologist in Training",
       "school": "National ChengChi Uni. MIS",
       "years": "(2014 - 2020)",
-      "intro": "I decided to become a front-end engineer out of passion after me self-taught programming knowledge of website last year. Still got rooms to improve for sure, but I'm willing to spend the rest of my life keep exploring nonstop."
+      "intro": "I spent three years as a front-end engineer before deciding on a new direction last year — I was admitted to a counseling psychology graduate program and am now working toward becoming a therapist. This site stays up as a record of carrying what I learned as an engineer into the next chapter."
     },
     "footer": {
       "copyright": "Copyright ⓒ {year} Yi-Cheng, Chung. All rights reserved."

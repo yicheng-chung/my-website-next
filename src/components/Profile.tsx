@@ -18,14 +18,14 @@ export default function Profile() {
   const t = useTranslations(common);
 
   return (
-    <div className="flex w-full flex-col items-center rounded-3xl bg-white p-6 shadow-lg md:sticky md:top-32 md:w-72">
+    <div className="flex w-full flex-col items-center rounded-2xl border border-neutral-200 bg-white p-6 md:sticky md:top-24 md:w-72">
       <div className="mb-4">
         <Image
           src="/images/me.jpg"
           alt="Yi-Cheng Chung"
           width={150}
           height={150}
-          className="rounded-full border-[7px] border-[#ca4141]/40 object-cover"
+          className="rounded-full border-2 border-[#ca4141]/40 object-cover"
         />
       </div>
       <div className="flex flex-col items-center text-center">

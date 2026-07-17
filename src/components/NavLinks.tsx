@@ -8,8 +8,6 @@ import common from "@/content/common.json";
 const NAV_ROUTES = [
   { href: "/", key: "home" },
   { href: "/about", key: "about" },
-  { href: "/skills", key: "skills" },
-  { href: "/portofolio", key: "portofolio" },
   { href: "/contact", key: "contact" },
 ] as const;
 

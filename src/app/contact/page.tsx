@@ -11,7 +11,7 @@ export default function Contact() {
   const t = useTranslations(content);
 
   return (
-    <div className="rounded-3xl bg-[#4f884a] p-8 shadow-lg text-white">
+    <div className="rounded-2xl bg-[#4f884a] p-8 text-white">
       <h1 className="mb-6 border-b-2 border-white pb-1 text-2xl font-bold">
         {t.contactHeading}
       </h1>

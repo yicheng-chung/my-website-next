@@ -4,30 +4,36 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import NavLinks from "./NavLinks";
+import LanguageToggle from "./LanguageToggle";
 
 export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <>
-      <header className="fixed top-4 left-1/2 z-40 w-[90%] max-w-5xl -translate-x-1/2 rounded-full bg-[#ca4141] px-6 py-4 shadow-lg md:top-6">
-        <div className="flex items-center justify-between">
-          <button
-            type="button"
-            className="text-white md:hidden"
-            aria-label="Open menu"
-            onClick={() => setDrawerOpen(true)}
-          >
-            <Menu size={28} />
-          </button>
+      <header className="fixed top-0 left-0 right-0 z-40 bg-[#ca4141] px-6 py-4 shadow-sm">
+        <div className="mx-auto flex max-w-5xl items-center justify-between">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              className="text-white md:hidden"
+              aria-label="Open menu"
+              onClick={() => setDrawerOpen(true)}
+            >
+              <Menu size={28} />
+            </button>
 
-          <Link href="/" className="text-xl font-bold text-white hover:text-amber-100 transition-colors">
-            YiCheng&apos;s Page
-          </Link>
+            <Link href="/" className="text-xl font-bold text-white hover:text-amber-100 transition-colors">
+              YiCheng&apos;s Page
+            </Link>
+          </div>
 
-          <nav className="hidden md:block">
-            <NavLinks />
-          </nav>
+          <div className="flex items-center gap-6">
+            <nav className="hidden md:block">
+              <NavLinks />
+            </nav>
+            <LanguageToggle />
+          </div>
         </div>
       </header>
 
