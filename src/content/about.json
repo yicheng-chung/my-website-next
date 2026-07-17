@@ -1,0 +1,30 @@
+{
+  "zh": {
+    "heading": "關於我",
+    "intro1": "你好！我是鍾貽丞，今年24歲，畢業於國立政治大學資訊管理學系雙主修廣播電視學系。\n    我喜歡用雙手親手做東西，例如做菜或是畫畫、寫程式。我也是一個熱愛旅行的人，2016年暑假獨自當了背包客到歐洲打工換宿了兩個月。\n    我也喜歡學習英文，這也是我把這個網站做成雙語切換的原因。",
+    "intro2": "去年底自己開始努力學習前端程式相關課程，上網自學了HTML, CSS, Javascript, React js 等相關程式語言跟框架，發現自己非常喜歡！\n    特別是能夠實現想像中的功能或畫面時很有成就感！希望未來工作實作中能夠續深入精進自己的程式能力。",
+    "lifeHeading": "一點點我的生活",
+    "slides": [
+      { "title": "登山去!", "caption": "與朋友們的一日四獸山小旅行" },
+      { "title": "來擺攤吧!", "caption": "在假日免費市集送出不需要的東西" },
+      { "title": "一起來攀岩!", "caption": "與朋友一同室內攀岩" },
+      { "title": "一起來遊行吧!", "caption": "去年跟大學朋友一起參加遊行" },
+      { "title": "與德國打工換宿家庭合影", "caption": "陪伴我度過2016年精采美好暑假的德國一家人" },
+      { "title": "", "caption": "" }
+    ]
+  },
+  "en": {
+    "heading": "About Me",
+    "intro1": "Hello there! I'm Yi-Cheng, 24, graduated from National ChengChi University double-majored in MIS\n    and Broadcast & Television.\n    I enjoy building stuffs with my own hands, such as cooking, painting or coding.\n    I'm also a travelholic that have spent entire two months in summer 2016 doing work-exchange as a backpacker alone in Europe.\n    I enjoy studying English too, that's kinda reason why I tried to make this website bilingual with toggle buttons.",
+    "intro2": "To be honest, I was once lost in my future directions until I tried to approach the building knowledges of website.\n    I started studying really hard last year end at front-end programming related courses online, which includes several\n    programming languages and frameworks such as HTML, CSS, Javascript and React js, and ended up realizing that I like it a lot!\n    Especially the moment when you are able to fullfill your imaginary functions or render, which really gives me senses of achievement!\n    Hope to even dive deeper to strenghthen my coding knowledge in the future career.",
+    "lifeHeading": "A peek of my life",
+    "slides": [
+      { "title": "Let's go hiking!", "caption": "A daily little trip to the Four Beasts with friends." },
+      { "title": "Let's run a stall!", "caption": "Giving away stuffs that we don't need for free at the weekend market." },
+      { "title": "Let's go rock climbing!", "caption": "Indoor rock climbing with my friends." },
+      { "title": "Let's march with pride!", "caption": "Attended pride parade with my college friends last year." },
+      { "title": "Photo with my work-exchange German family", "caption": "A warm-hearted German family that I spent an amazing summer holiday with in 2016." },
+      { "title": "", "caption": "" }
+    ]
+  }
+}

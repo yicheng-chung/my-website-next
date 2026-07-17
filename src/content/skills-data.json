@@ -1,0 +1,9 @@
+[
+  { "name": "HTML5", "level": 90 },
+  { "name": "CSS3", "level": 75 },
+  { "name": "Javascript", "level": 85 },
+  { "name": "React JS", "level": 75 },
+  { "name": "Git", "level": 80 },
+  { "name": "RWD", "level": 80 },
+  { "name": "Jquery, Bootstrap", "level": 70 }
+]

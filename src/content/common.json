@@ -1,0 +1,50 @@
+{
+  "zh": {
+    "siteName": "YiCheng's Page",
+    "nav": {
+      "home": "首頁",
+      "about": "關於我",
+      "skills": "技能",
+      "portofolio": "作品集",
+      "contact": "聯絡我"
+    },
+    "languageSwitch": {
+      "zh": "中文",
+      "en": "ENG"
+    },
+    "profile": {
+      "name": "鍾貽丞",
+      "role": "新手前端工程師",
+      "school": "國立政治大學 資訊管理學系",
+      "years": "(2014 - 2020)",
+      "intro": "去年底自學網頁前端程式語言後，因為非常感興趣而立志成為前端工程師！技術上還有許多不足的地方，但對於程式，我願意用我的餘生去探索它。"
+    },
+    "footer": {
+      "copyright": "Copyright ⓒ {year} Yi-Cheng, Chung. All rights reserved."
+    }
+  },
+  "en": {
+    "siteName": "YiCheng's Page",
+    "nav": {
+      "home": "Main",
+      "about": "About",
+      "skills": "Skills",
+      "portofolio": "Portofolio",
+      "contact": "Contact"
+    },
+    "languageSwitch": {
+      "zh": "中文",
+      "en": "ENG"
+    },
+    "profile": {
+      "name": "Yi-Cheng, Chung",
+      "role": "Junior Front-End Engineer",
+      "school": "National ChengChi Uni. MIS",
+      "years": "(2014 - 2020)",
+      "intro": "I decided to become a front-end engineer out of passion after me self-taught programming knowledge of website last year. Still got rooms to improve for sure, but I'm willing to spend the rest of my life keep exploring nonstop."
+    },
+    "footer": {
+      "copyright": "Copyright ⓒ {year} Yi-Cheng, Chung. All rights reserved."
+    }
+  }
+}

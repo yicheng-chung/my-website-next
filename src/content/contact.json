@@ -1,0 +1,14 @@
+{
+  "zh": {
+    "contactHeading": "聯絡方式",
+    "email": "信箱: ",
+    "mobile": "手機: ",
+    "linksHeading": "我的連結"
+  },
+  "en": {
+    "contactHeading": "Contact Me",
+    "email": "Email: ",
+    "mobile": "Mobile: ",
+    "linksHeading": "My Links"
+  }
+}
