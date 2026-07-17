@@ -1,13 +1,15 @@
 {
   "zh": {
-    "locationLabel": "現在在",
+    "locationLabel": "貽丞現在在：",
     "location": "台北",
+    "musicLabel": "正在聆聽：",
     "nowPlayingLabel": "正在聽",
     "recentlyPlayedLabel": "最近在聽"
   },
   "en": {
-    "locationLabel": "Now in",
+    "locationLabel": "Yicheng's now in: ",
     "location": "Taipei",
+    "musicLabel": "Now listening:",
     "nowPlayingLabel": "Now playing",
     "recentlyPlayedLabel": "Recently played"
   }

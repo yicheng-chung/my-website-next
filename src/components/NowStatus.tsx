@@ -16,6 +16,7 @@ export default function NowStatus() {
           {s.locationLabel} {s.location}
         </span>
       </div>
+      <span className="text-sm text-neutral-500">{s.musicLabel}</span>
       <NowPlaying />
     </div>
   );
