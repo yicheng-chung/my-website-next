@@ -1,9 +1,11 @@
 "use client";
 
 import { MapPin } from "lucide-react";
+import Link from "next/link";
 import { useTranslations } from "@/lib/useTranslations";
 import status from "@/content/status.json";
 import NowPlaying from "./NowPlaying";
+import NowReading from "./NowReading";
 
 export default function NowStatus() {
   const s = useTranslations(status);
@@ -18,6 +20,11 @@ export default function NowStatus() {
       </div>
       <span className="text-sm text-neutral-500">{s.musicLabel}</span>
       <NowPlaying />
+      <span className="text-sm text-neutral-500">{s.readingLabel}</span>
+      <NowReading />
+      <Link href="/reading" className="self-start text-xs text-[#577E89] hover:underline">
+        {s.viewAllLabel}
+      </Link>
     </div>
   );
 }

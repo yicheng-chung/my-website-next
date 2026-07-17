@@ -7,9 +7,9 @@ export default function Home() {
   const t = useTranslations(content);
 
   return (
-    <div className="rounded-2xl border border-neutral-200 bg-white p-8">
-      <h1 className="mb-4 text-3xl font-bold text-[#577E89]">{t.title}</h1>
-      <p className="whitespace-pre-line text-lg leading-relaxed">{t.body}</p>
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-8">
+      <h1 className="mb-4 text-2xl font-bold text-[#577E89] sm:text-3xl">{t.title}</h1>
+      <p className="whitespace-pre-line text-base leading-relaxed sm:text-lg">{t.body}</p>
     </div>
   );
 }

@@ -1,0 +1,18 @@
+{
+  "zh": {
+    "heading": "閱讀",
+    "sourceNote": "書單同步自 Notion。",
+    "readingHeading": "正在閱讀",
+    "finishedHeading": "已完成",
+    "emptyReading": "目前沒有正在讀的書。",
+    "emptyFinished": "還沒有標記已完成的書。"
+  },
+  "en": {
+    "heading": "Reading",
+    "sourceNote": "Synced from my Notion book list.",
+    "readingHeading": "Currently Reading",
+    "finishedHeading": "Finished",
+    "emptyReading": "Nothing in progress right now.",
+    "emptyFinished": "No finished books yet."
+  }
+}
