@@ -1,0 +1,14 @@
+{
+  "zh": {
+    "locationLabel": "現在在",
+    "location": "台北",
+    "nowPlayingLabel": "正在聽",
+    "recentlyPlayedLabel": "最近在聽"
+  },
+  "en": {
+    "locationLabel": "Now in",
+    "location": "Taipei",
+    "nowPlayingLabel": "Now playing",
+    "recentlyPlayedLabel": "Recently played"
+  }
+}

@@ -11,8 +11,8 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-40 bg-[#ca4141] px-6 py-4 shadow-sm">
-        <div className="mx-auto flex max-w-5xl items-center justify-between">
+      <header className="fixed top-0 left-0 right-0 z-40 bg-[#577E89] px-6 py-4 shadow-sm">
+        <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -45,7 +45,7 @@ export default function Navbar() {
             className="absolute inset-0 bg-black/50"
             onClick={() => setDrawerOpen(false)}
           />
-          <div className="absolute top-0 left-0 h-full w-64 bg-[#ca4141] p-6 shadow-xl">
+          <div className="absolute top-0 left-0 h-full w-64 bg-[#577E89] p-6 shadow-xl">
             <button
               type="button"
               className="mb-8 text-white"

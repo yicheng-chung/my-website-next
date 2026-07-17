@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Mail, Smartphone } from "lucide-react";
 import { FaGithub, FaLinkedin, FaFacebook } from "react-icons/fa";
 import { useTranslations } from "@/lib/useTranslations";
@@ -11,7 +10,7 @@ export default function Contact() {
   const t = useTranslations(content);
 
   return (
-    <div className="rounded-2xl bg-[#4f884a] p-8 text-white">
+    <div className="rounded-2xl bg-[#6F9F9C] p-8 text-white">
       <h1 className="mb-6 border-b-2 border-white pb-1 text-2xl font-bold">
         {t.contactHeading}
       </h1>
@@ -45,14 +44,6 @@ export default function Contact() {
           <FaFacebook size={32} />
         </a>
       </div>
-
-      <Image
-        src="/images/contact/contact.png"
-        alt="contact"
-        width={300}
-        height={300}
-        className="mx-auto mt-8"
-      />
     </div>
   );
 }
