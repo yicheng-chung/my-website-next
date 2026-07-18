@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   --font-sans: var(--font-montserrat), "微軟正黑體", Arial, Helvetica, sans-serif;
 }

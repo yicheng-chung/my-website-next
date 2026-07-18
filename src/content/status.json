@@ -2,7 +2,7 @@
   "zh": {
     "locationLabel": "貽丞現在在：",
     "location": "台北",
-    "musicLabel": "正在聆聽：",
+    "musicLabel": "最近在Spotify上聆聽：",
     "nowPlayingLabel": "正在聽",
     "recentlyPlayedLabel": "最近在聽",
     "readingLabel": "正在讀：",
@@ -11,7 +11,7 @@
   "en": {
     "locationLabel": "Yicheng's now in: ",
     "location": "Taipei",
-    "musicLabel": "Now listening:",
+    "musicLabel": "Recently played on Spotify:",
     "nowPlayingLabel": "Now playing",
     "recentlyPlayedLabel": "Recently played",
     "readingLabel": "Now reading:",

@@ -18,7 +18,7 @@ export default function Profile() {
   const t = useTranslations(common)
 
   return (
-    <div className='flex w-full flex-col items-center rounded-2xl border border-neutral-200 bg-white p-6'>
+    <div className='flex w-full flex-col items-center rounded-2xl border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-neutral-800'>
       <div className='mb-4'>
         <Image
           src='/images/yc.jpg'
@@ -34,7 +34,7 @@ export default function Profile() {
         <h6 className='text-lg'>{t.profile.school}</h6>
         <h6 className='text-lg'>{t.profile.years}</h6>
       </div>
-      <p className='mt-6 rounded-xl rounded-br-none bg-[#577E89]/30 p-3 text-base font-normal'>
+      <p className='mt-6 rounded-xl rounded-br-none bg-[#577E89]/30 p-3 text-base font-normal dark:bg-[#577E89]/25 dark:text-neutral-100'>
         {t.profile.intro}
       </p>
       <nav className='mt-4 flex gap-4'>
@@ -45,7 +45,7 @@ export default function Profile() {
             target='_blank'
             rel='noreferrer'
             aria-label={label}
-            className='text-[#3a2709]/70 hover:text-[#577E89] transition-colors'
+            className='text-[#3a2709]/70 hover:text-[#577E89] transition-colors dark:text-neutral-400 dark:hover:text-[#9BB8C2]'
           >
             <Icon size={32} />
           </a>

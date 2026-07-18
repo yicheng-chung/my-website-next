@@ -42,10 +42,10 @@ export default function NowReading() {
         href={book.url}
         target='_blank'
         rel='noreferrer'
-        className='flex animate-[fadeIn_0.4s_ease] items-center gap-3 rounded-xl border border-neutral-200 bg-white p-3 transition-shadow hover:shadow-md'
+        className='flex animate-[fadeIn_0.4s_ease] items-center gap-3 rounded-xl border border-neutral-200 bg-white p-3 transition-shadow hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800'
       >
         {book.cover ? (
-          <div className='flex h-40 w-28 flex-shrink-0 items-center justify-center rounded-md bg-neutral-100 p-[5%]'>
+          <div className='flex h-40 w-28 flex-shrink-0 items-center justify-center rounded-md bg-neutral-100 p-[5%] dark:bg-neutral-700'>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={book.cover}
@@ -54,13 +54,13 @@ export default function NowReading() {
             />
           </div>
         ) : (
-          <div className='h-40 w-28 flex-shrink-0 rounded-md bg-neutral-100' />
+          <div className='h-40 w-28 flex-shrink-0 rounded-md bg-neutral-100 dark:bg-neutral-700' />
         )}
         <div className='min-w-0'>
-          <p className='line-clamp-2 text-sm font-semibold text-neutral-800'>
+          <p className='line-clamp-2 text-sm font-semibold text-neutral-800 dark:text-neutral-100'>
             {book.title}
           </p>
-          <p className='truncate text-xs text-neutral-500'>{book.author}</p>
+          <p className='truncate text-xs text-neutral-500 dark:text-neutral-400'>{book.author}</p>
           {book.progress !== null && <ProgressBar percent={book.progress} />}
         </div>
       </a>
@@ -74,7 +74,9 @@ export default function NowReading() {
               aria-label={`第 ${i + 1} 本`}
               onClick={() => setIndex(i)}
               className={`h-1.5 rounded-full transition-all ${
-                i === index ? 'w-4 bg-[#577E89]' : 'w-1.5 bg-neutral-300'
+                i === index
+                  ? 'w-4 bg-[#577E89] dark:bg-[#9BB8C2]'
+                  : 'w-1.5 bg-neutral-300 dark:bg-neutral-600'
               }`}
             />
           ))}

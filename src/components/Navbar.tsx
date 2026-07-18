@@ -5,13 +5,14 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import NavLinks from "./NavLinks";
 import LanguageToggle from "./LanguageToggle";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-40 bg-[#577E89] px-4 py-3 shadow-sm sm:px-6 sm:py-4">
+      <header className="fixed top-0 left-0 right-0 z-40 bg-[#577E89] px-4 py-3 shadow-sm transition-colors sm:px-6 sm:py-4 dark:bg-[#33474D]">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
             <button
@@ -35,6 +36,7 @@ export default function Navbar() {
             <nav className="hidden md:block">
               <NavLinks />
             </nav>
+            <ThemeToggle />
             <LanguageToggle />
           </div>
         </div>
@@ -48,7 +50,7 @@ export default function Navbar() {
             className="absolute inset-0 bg-black/50"
             onClick={() => setDrawerOpen(false)}
           />
-          <div className="absolute top-0 left-0 h-full w-64 max-w-[80vw] bg-[#577E89] p-6 shadow-xl">
+          <div className="absolute top-0 left-0 h-full w-64 max-w-[80vw] bg-[#577E89] p-6 shadow-xl dark:bg-[#33474D]">
             <button
               type="button"
               className="mb-8 text-white"
