@@ -1,17 +1,16 @@
 'use client'
 
 import Image from 'next/image'
-import { Mountain } from 'lucide-react'
-import { FaGithub, FaLinkedin, FaFacebook } from 'react-icons/fa'
+import { FaGithub, FaLinkedin, FaFacebook, FaInstagram } from 'react-icons/fa'
 import { useTranslations } from '@/lib/useTranslations'
 import common from '@/content/common.json'
 import links from '@/content/links.json'
 
 const SOCIAL_LINKS = [
+  { href: links.instagram, label: 'Instagram', Icon: FaInstagram },
+  { href: links.facebook, label: 'Facebook', Icon: FaFacebook },
   { href: links.github, label: 'GitHub', Icon: FaGithub },
   { href: links.linkedin, label: 'LinkedIn', Icon: FaLinkedin },
-  { href: links.facebook, label: 'Facebook', Icon: FaFacebook },
-  { href: links.helpx, label: 'HelpX', Icon: Mountain },
 ]
 
 export default function Profile() {
