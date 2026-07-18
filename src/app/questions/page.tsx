@@ -24,6 +24,62 @@ const MAX_LINE_DISTANCE = 260;
 const LINE_GAP = 16;
 
 type Position = { x: number; y: number };
+type Size = { width: number; height: number };
+
+// Minimum gap left between two stars' bounding boxes after separation.
+const COLLISION_PADDING = 10;
+
+// Pairwise AABB separation over a few passes — nudges overlapping stars apart
+// along whichever axis has the smaller overlap, so a language switch (which
+// changes each card's actual rendered size) can't leave two cards covering
+// each other. Only returns entries for stars that actually needed to move.
+function resolveCollisions(
+  positions: Record<string, Position>,
+  sizes: Record<string, Size>,
+): Record<string, Position> {
+  const ids = Object.keys(positions).filter((id) => sizes[id]);
+  const corrections: Record<string, Position> = {};
+
+  const box = (id: string) => {
+    const pos = positions[id];
+    const size = sizes[id];
+    const corr = corrections[id] ?? { x: 0, y: 0 };
+    return { x: pos.x + corr.x, y: pos.y + corr.y, w: size.width, h: size.height };
+  };
+
+  for (let iter = 0; iter < 3; iter++) {
+    let moved = false;
+    for (let i = 0; i < ids.length; i++) {
+      for (let j = i + 1; j < ids.length; j++) {
+        const idA = ids[i];
+        const idB = ids[j];
+        const a = box(idA);
+        const b = box(idB);
+        const overlapX = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+        const overlapY = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+        if (overlapX <= 0 || overlapY <= 0) continue;
+
+        moved = true;
+        const corrA = corrections[idA] ?? { x: 0, y: 0 };
+        const corrB = corrections[idB] ?? { x: 0, y: 0 };
+        if (overlapX < overlapY) {
+          const push = overlapX / 2 + COLLISION_PADDING;
+          const dir = a.x <= b.x ? -1 : 1;
+          corrections[idA] = { x: corrA.x + dir * push, y: corrA.y };
+          corrections[idB] = { x: corrB.x - dir * push, y: corrB.y };
+        } else {
+          const push = overlapY / 2 + COLLISION_PADDING;
+          const dir = a.y <= b.y ? -1 : 1;
+          corrections[idA] = { x: corrA.x, y: corrA.y + dir * push };
+          corrections[idB] = { x: corrB.x, y: corrB.y - dir * push };
+        }
+      }
+    }
+    if (!moved) break;
+  }
+
+  return corrections;
+}
 
 // sessionStorage (not a module-level variable — Next.js can re-evaluate this
 // module across client-side route transitions, which silently discarded a
@@ -129,6 +185,12 @@ export default function QuestionsPage() {
   const [offsets, setOffsets] = useState<Record<string, Position>>(() => loadStoredOffsets());
   // Bumping this tells every star to animate its own offset back to zero.
   const [resetSignal, setResetSignal] = useState(0);
+  // Each star's actual rendered (collapsed) footprint, reported by itself —
+  // needed because a language switch changes title/answer text length, which
+  // this layout can't predict ahead of render. See resolveCollisions below.
+  const [cardSizes, setCardSizes] = useState<Record<string, Size>>({});
+  // Bumping this tells every star to glide to its (possibly just-corrected) offset.
+  const [correctionSignal, setCorrectionSignal] = useState(0);
 
   // This page is an immersive space — force the whole site dark while it's open,
   // regardless of the light/dark toggle, and restore the prior state on leaving.
@@ -182,6 +244,17 @@ export default function QuestionsPage() {
     });
   };
 
+  const handleSizeChange = (id: string, size: Size) => {
+    setCardSizes((prev) => {
+      const existing = prev[id];
+      // Ignore sub-pixel ResizeObserver noise so this doesn't churn every frame.
+      if (existing && Math.abs(existing.width - size.width) < 1 && Math.abs(existing.height - size.height) < 1) {
+        return prev;
+      }
+      return { ...prev, [id]: size };
+    });
+  };
+
   const positions = useMemo(() => {
     const map: Record<string, Position> = {};
     Object.entries(basePositions).forEach(([id, base]) => {
@@ -190,6 +263,31 @@ export default function QuestionsPage() {
     });
     return map;
   }, [basePositions, offsets]);
+
+  // Whenever a star's actual size changes (a language switch reflowing its
+  // text, most notably) or positions reset to their seed, re-check for
+  // overlaps and nudge apart whatever's colliding. Debounced so a burst of
+  // resize reports (many stars mounting, or a whole-page language switch)
+  // settles before the pass runs, rather than firing once per star.
+  useEffect(() => {
+    if (Object.keys(cardSizes).length === 0) return;
+    const timer = setTimeout(() => {
+      const corrections = resolveCollisions(positions, cardSizes);
+      if (Object.keys(corrections).length === 0) return;
+      setOffsets((prev) => {
+        const next = { ...prev };
+        Object.entries(corrections).forEach(([id, delta]) => {
+          const cur = next[id] ?? { x: 0, y: 0 };
+          next[id] = { x: cur.x + delta.x, y: cur.y + delta.y };
+        });
+        saveStoredOffsets(next);
+        return next;
+      });
+      setCorrectionSignal((s) => s + 1);
+    }, 400);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cardSizes, resetSignal]);
 
   // Each star connects to its single nearest neighbor, "constellation" style,
   // recomputed whenever a star is dragged to a new spot.
@@ -309,7 +407,9 @@ export default function QuestionsPage() {
                     initialOffsetX={seed.x}
                     initialOffsetY={seed.y}
                     resetSignal={resetSignal}
+                    correctionSignal={correctionSignal}
                     onPositionChange={handlePositionChange}
+                    onSizeChange={handleSizeChange}
                   />
                 );
               })}

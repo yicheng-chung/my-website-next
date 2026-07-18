@@ -29,7 +29,9 @@ interface PlanetQuestionProps {
   initialOffsetX: number
   initialOffsetY: number
   resetSignal: number
+  correctionSignal: number
   onPositionChange: (id: string, offsetX: number, offsetY: number) => void
+  onSizeChange: (id: string, size: { width: number; height: number }) => void
 }
 
 export default function PlanetQuestion({
@@ -41,7 +43,9 @@ export default function PlanetQuestion({
   initialOffsetX,
   initialOffsetY,
   resetSignal,
+  correctionSignal,
   onPositionChange,
+  onSizeChange,
 }: PlanetQuestionProps) {
   const reduceMotion = useReducedMotion()
   const [expanded, setExpanded] = useState(false)
@@ -53,6 +57,13 @@ export default function PlanetQuestion({
   const dragX = useMotionValue(initialOffsetX)
   const dragY = useMotionValue(initialOffsetY)
   const isFirstReset = useRef(true)
+  const isFirstCorrection = useRef(true)
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  // Guards the resize observer against the answer panel's own expand/collapse
+  // animation — only the collapsed, resting size should ever feed into the
+  // collision-avoidance pass below, otherwise opening a card would nudge its
+  // neighbors as a side effect.
+  const expandedRef = useRef(false)
 
   const title = (lang === 'en' && question.titleEn) || question.title
   const thoughts = (lang === 'en' ? question.thoughtsEn : question.thoughts) ?? question.thoughts
@@ -91,8 +102,30 @@ export default function PlanetQuestion({
 
   const toggleExpanded = () => {
     if (!hasAnswer) return
-    setExpanded((v) => !v)
+    setExpanded((v) => {
+      const next = !v
+      expandedRef.current = next
+      return next
+    })
   }
+
+  // Reports this star's actual rendered footprint (icon + card, collapsed)
+  // so the parent can detect and resolve overlaps it can't predict from text
+  // length alone — e.g. a language switch changing how many lines a title wraps to.
+  useEffect(() => {
+    const el = wrapperRef.current
+    if (!el) return
+    const observer = new ResizeObserver((entries) => {
+      if (expandedRef.current) return
+      const entry = entries[0]
+      if (!entry) return
+      const { width, height } = entry.contentRect
+      onSizeChange(question.id, { width, height })
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // dragX/dragY are left alone after the drag — Framer Motion's drag transform
   // persists and naturally accumulates across multiple drags on its own. We
@@ -120,8 +153,26 @@ export default function PlanetQuestion({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetSignal])
 
+  // Collision avoidance nudges this star's offset in the parent (see
+  // resolveCollisions in the page) — glide there instead of snapping,
+  // mirroring the reset animation above (skip the very first render).
+  useEffect(() => {
+    if (isFirstCorrection.current) {
+      isFirstCorrection.current = false
+      return
+    }
+    const controlsX = animate(dragX, initialOffsetX, { duration: 0.5, ease: 'easeInOut' })
+    const controlsY = animate(dragY, initialOffsetY, { duration: 0.5, ease: 'easeInOut' })
+    return () => {
+      controlsX.stop()
+      controlsY.stop()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [correctionSignal])
+
   return (
     <motion.div
+      ref={wrapperRef}
       drag
       dragMomentum={false}
       onDragEnd={handleDragEnd}
