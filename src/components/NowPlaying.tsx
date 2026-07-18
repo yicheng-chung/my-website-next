@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Spinner from "./Spinner";
 
 type SpotifyStatus = {
   isPlaying: boolean;
@@ -10,6 +11,7 @@ type SpotifyStatus = {
 
 export default function NowPlaying() {
   const [data, setData] = useState<SpotifyStatus | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
@@ -20,11 +22,22 @@ export default function NowPlaying() {
       })
       .catch(() => {
         if (!cancelled) setData(null);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
       });
     return () => {
       cancelled = true;
     };
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex h-[152px] items-center justify-center rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800">
+        <Spinner />
+      </div>
+    );
+  }
 
   if (!data || !data.track || !data.trackId) return null;
 

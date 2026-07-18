@@ -2,18 +2,28 @@
 
 import { useEffect, useState } from 'react'
 import type { Book } from '@/lib/notion'
+import { readNotionCache, writeNotionCache } from '@/lib/notionCache'
 import ProgressBar from './ProgressBar'
+import Spinner from './Spinner'
 
 export default function NowReading() {
   const [books, setBooks] = useState<Book[] | null>(null)
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
+    const cached = readNotionCache()
+    if (cached) {
+      setBooks(cached.reading)
+      return
+    }
     let cancelled = false
     fetch('/api/notion')
       .then((res) => res.json())
       .then((json) => {
-        if (!cancelled) setBooks(json.reading ?? [])
+        if (!cancelled) {
+          setBooks(json.reading ?? [])
+          writeNotionCache(json)
+        }
       })
       .catch(() => {
         if (!cancelled) setBooks([])
@@ -31,7 +41,15 @@ export default function NowReading() {
     return () => clearInterval(timer)
   }, [books])
 
-  if (!books || books.length === 0) return null
+  if (books === null) {
+    return (
+      <div className='flex h-[188px] items-center justify-center rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800'>
+        <Spinner />
+      </div>
+    )
+  }
+
+  if (books.length === 0) return null
 
   const book = books[index]
 

@@ -7,6 +7,7 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { timelineEvents, formatEventShort, formatEventFull } from "@/lib/timelineEvents";
+import { useIsDesktop } from "@/lib/useIsDesktop";
 
 const NODE_WIDTH = 104;
 const DRAG_THRESHOLD = 5;
@@ -14,20 +15,6 @@ const ARROW_SCROLL_AMOUNT = NODE_WIDTH * 3;
 
 const MAP_STYLE = "https://tiles.openfreemap.org/styles/liberty";
 const DEFAULT_ZOOM = 4;
-
-function useIsDesktop() {
-  const [isDesktop, setIsDesktop] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
-    setIsDesktop(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
-
-  return isDesktop;
-}
 
 export default function LifeTimeline() {
   const { lang } = useLanguage();

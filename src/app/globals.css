@@ -29,3 +29,28 @@
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+@keyframes spinner-fade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.15;
+  }
+}
+
+.spinner-spoke {
+  position: absolute;
+  inset: 0;
+  animation: spinner-fade 1s linear infinite;
+}
+
+.spinner-spoke::before {
+  content: "";
+  display: block;
+  width: 9%;
+  height: 26%;
+  margin: 4% auto 0;
+  border-radius: 40%;
+  background-color: currentColor;
+}

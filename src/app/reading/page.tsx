@@ -4,20 +4,27 @@ import { useEffect, useState } from 'react'
 import { useTranslations } from '@/lib/useTranslations'
 import content from '@/content/reading.json'
 import BookCard from '@/components/BookCard'
-import type { Book } from '@/lib/notion'
-
-type NotionResponse = { reading: Book[]; finished: Book[] }
+import Spinner from '@/components/Spinner'
+import { readNotionCache, writeNotionCache, type NotionData } from '@/lib/notionCache'
 
 export default function ReadingPage() {
   const t = useTranslations(content)
-  const [data, setData] = useState<NotionResponse | null>(null)
+  const [data, setData] = useState<NotionData | null>(null)
 
   useEffect(() => {
+    const cached = readNotionCache()
+    if (cached) {
+      setData(cached)
+      return
+    }
     let cancelled = false
     fetch('/api/notion')
       .then((res) => res.json())
-      .then((json: NotionResponse) => {
-        if (!cancelled) setData(json)
+      .then((json: NotionData) => {
+        if (!cancelled) {
+          setData(json)
+          writeNotionCache(json)
+        }
       })
       .catch(() => {
         if (!cancelled) setData({ reading: [], finished: [] })
@@ -38,37 +45,45 @@ export default function ReadingPage() {
         </p>
       </div>
 
-      <section>
-        <h2 className='mb-4 text-lg font-bold text-neutral-800 sm:text-xl dark:text-neutral-100'>
-          {t.readingHeading}
-        </h2>
-        {data && data.reading.length === 0 && (
-          <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-            {t.emptyReading}
-          </p>
-        )}
-        <div className='grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4'>
-          {(data?.reading ?? []).map((book) => (
-            <BookCard key={book.id} book={book} />
-          ))}
+      {data === null ? (
+        <div className='flex justify-center py-16'>
+          <Spinner size={36} />
         </div>
-      </section>
+      ) : (
+        <>
+          <section>
+            <h2 className='mb-4 text-lg font-bold text-neutral-800 sm:text-xl dark:text-neutral-100'>
+              {t.readingHeading}
+            </h2>
+            {data.reading.length === 0 && (
+              <p className='text-sm text-neutral-500 dark:text-neutral-400'>
+                {t.emptyReading}
+              </p>
+            )}
+            <div className='grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4'>
+              {data.reading.map((book) => (
+                <BookCard key={book.id} book={book} />
+              ))}
+            </div>
+          </section>
 
-      <section>
-        <h2 className='mb-4 text-lg font-bold text-neutral-800 sm:text-xl dark:text-neutral-100'>
-          {t.finishedHeading}
-        </h2>
-        {data && data.finished.length === 0 && (
-          <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-            {t.emptyFinished}
-          </p>
-        )}
-        <div className='grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4'>
-          {(data?.finished ?? []).map((book) => (
-            <BookCard key={book.id} book={book} />
-          ))}
-        </div>
-      </section>
+          <section>
+            <h2 className='mb-4 text-lg font-bold text-neutral-800 sm:text-xl dark:text-neutral-100'>
+              {t.finishedHeading}
+            </h2>
+            {data.finished.length === 0 && (
+              <p className='text-sm text-neutral-500 dark:text-neutral-400'>
+                {t.emptyFinished}
+              </p>
+            )}
+            <div className='grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4'>
+              {data.finished.map((book) => (
+                <BookCard key={book.id} book={book} />
+              ))}
+            </div>
+          </section>
+        </>
+      )}
     </div>
   )
 }

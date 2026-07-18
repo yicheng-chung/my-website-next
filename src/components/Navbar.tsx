@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import NavLinks from "./NavLinks";
 import LanguageToggle from "./LanguageToggle";
@@ -42,27 +43,39 @@ export default function Navbar() {
         </div>
       </header>
 
-      {drawerOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <button
-            type="button"
-            aria-label="Close menu"
-            className="absolute inset-0 bg-black/50"
-            onClick={() => setDrawerOpen(false)}
-          />
-          <div className="absolute top-0 left-0 h-full w-64 max-w-[80vw] bg-[#577E89] p-6 shadow-xl dark:bg-[#33474D]">
-            <button
+      <AnimatePresence>
+        {drawerOpen && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            <motion.button
               type="button"
-              className="mb-8 text-white"
               aria-label="Close menu"
+              className="absolute inset-0 bg-black/50"
               onClick={() => setDrawerOpen(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+            />
+            <motion.div
+              className="absolute top-0 left-0 h-full w-64 max-w-[80vw] bg-[#577E89] p-6 shadow-xl dark:bg-[#33474D]"
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
             >
-              <X size={28} />
-            </button>
-            <NavLinks onNavigate={() => setDrawerOpen(false)} />
+              <button
+                type="button"
+                className="mb-8 text-white"
+                aria-label="Close menu"
+                onClick={() => setDrawerOpen(false)}
+              >
+                <X size={28} />
+              </button>
+              <NavLinks onNavigate={() => setDrawerOpen(false)} />
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </>
   );
 }
