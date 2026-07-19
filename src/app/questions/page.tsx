@@ -4,9 +4,11 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useLanguage } from '@/context/LanguageContext'
 import { useTheme } from '@/context/ThemeContext'
+import { useIsDesktop } from '@/lib/useIsDesktop'
 import type { QuestionEntry } from '@/lib/questions'
 import { layoutStars, type StarPosition } from '@/lib/starfield'
 import PlanetQuestion from '@/components/PlanetQuestion'
+import QuestionListItem from '@/components/QuestionListItem'
 import StarfieldGuide from '@/components/StarfieldGuide'
 import StarLoading from '@/components/StarLoading'
 
@@ -205,6 +207,7 @@ function computeBasePositions(
 export default function QuestionsPage() {
   const { lang } = useLanguage()
   const { forceDark, clearForceDark } = useTheme()
+  const isDesktop = useIsDesktop()
   const t = TEXT[lang]
   const fieldRef = useRef<HTMLDivElement>(null)
   // null while the Notion-backed fetch is in flight.
@@ -391,8 +394,12 @@ export default function QuestionsPage() {
     return result
   }, [positions])
 
+  // On mobile the field div (and its ref) never renders at all — passing a
+  // ref that's defined but permanently un-hydrated throws at runtime, so the
+  // scroll target is only wired up in desktop mode. The resulting
+  // scrollYProgress is unused on mobile anyway (no parallax there).
   const { scrollYProgress } = useScroll({
-    target: fieldRef,
+    target: isDesktop ? fieldRef : undefined,
     offset: ['start start', 'end end'],
   })
   const nebulaY = useTransform(
@@ -424,79 +431,102 @@ export default function QuestionsPage() {
         <p className='mt-4 text-base leading-relaxed sm:text-lg'>{t.intro}</p>
       </div>
 
-      <div
-        ref={fieldRef}
-        className='relative overflow-hidden rounded-2xl border border-white/10 bg-[#05080a]'
-        style={{ height: fieldHeight }}
-      >
-        <motion.div
-          aria-hidden
-          className='pointer-events-none absolute inset-0'
-          style={{ ...NEBULA, backgroundPositionY: nebulaY }}
-        />
-        <motion.div
-          aria-hidden
-          className='pointer-events-none absolute inset-0'
-          style={{ ...FAR_DUST, backgroundPositionY: farY }}
-        />
-        <motion.div
-          aria-hidden
-          className='pointer-events-none absolute inset-0'
-          style={{ ...NEAR_DUST, backgroundPositionY: nearY }}
-        />
+      {isDesktop ? (
+        <div
+          ref={fieldRef}
+          className='relative overflow-hidden rounded-2xl border border-white/10 bg-[#05080a]'
+          style={{ height: fieldHeight }}
+        >
+          <motion.div
+            aria-hidden
+            className='pointer-events-none absolute inset-0'
+            style={{ ...NEBULA, backgroundPositionY: nebulaY }}
+          />
+          <motion.div
+            aria-hidden
+            className='pointer-events-none absolute inset-0'
+            style={{ ...FAR_DUST, backgroundPositionY: farY }}
+          />
+          <motion.div
+            aria-hidden
+            className='pointer-events-none absolute inset-0'
+            style={{ ...NEAR_DUST, backgroundPositionY: nearY }}
+          />
 
-        {questions === null ? (
-          <div className='absolute inset-0 flex items-center justify-center'>
-            <StarLoading lang={lang} />
-          </div>
-        ) : (
-          <>
-            <svg
-              aria-hidden
-              className='pointer-events-none absolute inset-0 h-full w-full'
-            >
-              {lines.map((line) => (
-                <line
-                  key={line.key}
-                  x1={line.x1}
-                  y1={line.y1}
-                  x2={line.x2}
-                  y2={line.y2}
-                  stroke='rgba(155,184,194,0.35)'
-                  strokeWidth={1}
-                  strokeDasharray='2 5'
-                  strokeLinecap='round'
-                />
-              ))}
-            </svg>
-
-            <div className='absolute inset-0'>
-              {starPositions.map((pos, index) => {
-                const question = questions.find((q) => q.id === pos.id)
-                const base = basePositions[pos.id]
-                if (!question || !base) return null
-                const seed = offsets[pos.id] ?? { x: 0, y: 0 }
-                return (
-                  <PlanetQuestion
-                    key={pos.id}
-                    question={question}
-                    x={base.x}
-                    y={base.y}
-                    index={index}
-                    lang={lang}
-                    initialOffsetX={seed.x}
-                    initialOffsetY={seed.y}
-                    resetSignal={resetSignal}
-                    correctionSignal={correctionSignal}
-                    onPositionChange={handlePositionChange}
-                    onSizeChange={handleSizeChange}
-                  />
-                )
-              })}
+          {questions === null ? (
+            <div className='absolute inset-0 flex items-center justify-center'>
+              <StarLoading lang={lang} />
             </div>
-          </>
-        )}
-      </div>
+          ) : (
+            <>
+              <svg
+                aria-hidden
+                className='pointer-events-none absolute inset-0 h-full w-full'
+              >
+                {lines.map((line) => (
+                  <line
+                    key={line.key}
+                    x1={line.x1}
+                    y1={line.y1}
+                    x2={line.x2}
+                    y2={line.y2}
+                    stroke='rgba(155,184,194,0.35)'
+                    strokeWidth={1}
+                    strokeDasharray='2 5'
+                    strokeLinecap='round'
+                  />
+                ))}
+              </svg>
+
+              <div className='absolute inset-0'>
+                {starPositions.map((pos, index) => {
+                  const question = questions.find((q) => q.id === pos.id)
+                  const base = basePositions[pos.id]
+                  if (!question || !base) return null
+                  const seed = offsets[pos.id] ?? { x: 0, y: 0 }
+                  return (
+                    <PlanetQuestion
+                      key={pos.id}
+                      question={question}
+                      x={base.x}
+                      y={base.y}
+                      index={index}
+                      lang={lang}
+                      initialOffsetX={seed.x}
+                      initialOffsetY={seed.y}
+                      resetSignal={resetSignal}
+                      correctionSignal={correctionSignal}
+                      onPositionChange={handlePositionChange}
+                      onSizeChange={handleSizeChange}
+                    />
+                  )
+                })}
+              </div>
+            </>
+          )}
+        </div>
+      ) : (
+        // Mobile: a plain, non-draggable feed — no absolute positioning, no
+        // collision avoidance needed, since normal document flow already
+        // pushes cards apart (and back) as one expands or collapses.
+        <div className='relative overflow-hidden rounded-2xl border border-white/10 bg-[#05080a] p-3'>
+          <div aria-hidden className='pointer-events-none absolute inset-0' style={NEBULA} />
+          <div aria-hidden className='pointer-events-none absolute inset-0' style={FAR_DUST} />
+          <div aria-hidden className='pointer-events-none absolute inset-0' style={NEAR_DUST} />
+
+          {questions === null ? (
+            <div className='relative flex min-h-[320px] items-center justify-center'>
+              <StarLoading lang={lang} />
+            </div>
+          ) : (
+            <div className='relative flex flex-col gap-3'>
+              {questions.map((question) => (
+                <QuestionListItem key={question.id} question={question} lang={lang} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       <StarfieldGuide
         total={(questions ?? []).length}

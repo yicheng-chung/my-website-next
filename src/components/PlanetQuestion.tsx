@@ -1,30 +1,15 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
 import {
   animate,
   motion,
   useMotionValue,
   useReducedMotion,
 } from 'framer-motion'
-import { BadgeCheck, Heart, MessageCircle, Repeat2, Share2, Sparkle } from 'lucide-react'
-import { useTranslations } from '@/lib/useTranslations'
-import common from '@/content/common.json'
 import type { QuestionEntry } from '@/lib/questions'
-
-// Decorative — not a registered account, just the "poster" for every card
-// on this page (it's all one person's questions).
-const HANDLE = '@yicheng_chung'
-const TWITTER_BLUE = '#1d9bf0'
-const GLOW_COLOR = '155,184,194' // matches the site's dark-mode accent, #9BB8C2
-const GLOW_HEX = '#9BB8C2'
-const QUIET_HEX = '#5b5f63'
-
-const TEXT = {
-  zh: { thoughts: '想法', answer: '答案', via: '問題宇宙' },
-  en: { thoughts: 'Thoughts', answer: 'Answer', via: 'Universe of Questions' },
-}
+import QuestionCardContent from './QuestionCardContent'
+import QuestionStarGlyph from './QuestionStarGlyph'
 
 interface PlanetQuestionProps {
   question: QuestionEntry
@@ -38,19 +23,6 @@ interface PlanetQuestionProps {
   correctionSignal: number
   onPositionChange: (id: string, offsetX: number, offsetY: number) => void
   onSizeChange: (id: string, size: { width: number; height: number }) => void
-}
-
-function formatDate(date: string | undefined, lang: 'zh' | 'en') {
-  if (!date) return null
-  const d = new Date(date)
-  if (Number.isNaN(d.getTime())) return null
-  return lang === 'zh'
-    ? `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`
-    : d.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      })
 }
 
 export default function PlanetQuestion({
@@ -69,8 +41,6 @@ export default function PlanetQuestion({
   const reduceMotion = useReducedMotion()
   const [expanded, setExpanded] = useState(false)
   const [hovered, setHovered] = useState(false)
-  const t = TEXT[lang]
-  const profile = useTranslations(common).profile
 
   // Seeded from the previous session's offset (if any) so a star's dragged
   // position survives navigating away and back — see the page-level cache.
@@ -86,35 +56,12 @@ export default function PlanetQuestion({
   const expandedRef = useRef(false)
 
   const title = (lang === 'en' && question.titleEn) || question.title
-  const thoughts =
-    (lang === 'en' ? question.thoughtsEn : question.thoughts) ??
-    question.thoughts
-  const answer =
-    (lang === 'en' ? question.answerEn : question.answer) ?? question.answer
-
   const hasAnswer = Boolean(question.answer || question.answerEn)
-  const dateLabel = formatDate(question.date, lang)
 
   // The little star marker that sits in front of the card — unrelated to the
   // card's own hover/expand state, this is the original starfield glyph.
   const baseSize = question.favorite ? 34 : hasAnswer ? 26 : 20
   const starSize = hovered ? baseSize * 1.25 : baseSize
-  const starColor = hasAnswer ? GLOW_HEX : QUIET_HEX
-  const glowAlpha = hasAnswer
-    ? hovered
-      ? question.favorite
-        ? 0.9
-        : 0.75
-      : question.favorite
-      ? 0.6
-      : 0.45
-    : 0
-  const glowSpread = question.favorite ? 12 : 8
-  const starFilter = hasAnswer
-    ? `drop-shadow(0 0 ${glowSpread}px rgba(${GLOW_COLOR},${glowAlpha})) drop-shadow(0 0 ${
-        hovered ? glowSpread * 2 : glowSpread
-      }px rgba(${GLOW_COLOR},${glowAlpha * 0.6}))`
-    : 'none'
 
   const driftDuration = 9 + (index % 5)
   const driftX = 5 + (index % 4) * 2
@@ -241,13 +188,11 @@ export default function PlanetQuestion({
             hasAnswer ? 'cursor-pointer' : 'cursor-grab'
           }`}
         >
-          <Sparkle
-            width='100%'
-            height='100%'
-            fill={starColor}
-            stroke={starColor}
-            strokeWidth={1}
-            style={{ filter: starFilter }}
+          <QuestionStarGlyph
+            size={starSize}
+            hasAnswer={hasAnswer}
+            favorite={question.favorite}
+            hovered={hovered}
           />
         </motion.button>
       </motion.div>
@@ -263,100 +208,7 @@ export default function PlanetQuestion({
           hasAnswer ? 'cursor-pointer' : 'cursor-grab'
         }`}
       >
-        <div className='flex items-start gap-3'>
-          <Image
-            src='/images/yc.jpg'
-            alt=''
-            width={40}
-            height={40}
-            className='h-10 w-10 flex-shrink-0 rounded-full border border-white/10 object-cover'
-          />
-          <div className='min-w-0 flex-1'>
-            <div className='flex items-center gap-1 text-[15px] leading-tight'>
-              <span className='font-bold text-neutral-100'>{profile.name}</span>
-              <BadgeCheck
-                size={15}
-                fill={TWITTER_BLUE}
-                stroke='#fff'
-                strokeWidth={1.5}
-                className='flex-shrink-0'
-              />
-            </div>
-            <p className='text-[13px] leading-tight text-neutral-500'>{HANDLE}</p>
-
-            <p className='mt-2.5 text-[15px] leading-relaxed break-words text-neutral-100'>
-              {title}
-            </p>
-
-            <p className='mt-2.5 text-xs text-neutral-500'>
-              {dateLabel ? `${dateLabel} · ` : ''}
-              {t.via}
-            </p>
-
-            {expanded && hasAnswer && (
-              <motion.div
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2, ease: 'easeOut' }}
-                className='mt-4 space-y-4 border-t border-white/10 pt-4'
-              >
-                {thoughts && (
-                  <div className='flex gap-3'>
-                    <div className='flex w-10 flex-shrink-0 flex-col items-center'>
-                      <div className='w-px flex-1 bg-white/10' />
-                    </div>
-                    <div className='min-w-0 flex-1 pb-1'>
-                      <p className='text-[11px] font-semibold tracking-wide text-[#9BB8C2] uppercase'>
-                        {t.thoughts}
-                      </p>
-                      <p className='mt-1.5 text-[15px] leading-relaxed text-neutral-300'>
-                        {thoughts}
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                <div className='flex gap-3'>
-                  <Image
-                    src='/images/yc.jpg'
-                    alt=''
-                    width={36}
-                    height={36}
-                    className='h-9 w-9 flex-shrink-0 rounded-full border border-white/10 object-cover'
-                  />
-                  <div className='min-w-0 flex-1 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3'>
-                    <div className='flex items-center gap-1 text-xs'>
-                      <span className='font-bold text-neutral-100'>{profile.name}</span>
-                      <BadgeCheck size={12} fill={TWITTER_BLUE} stroke='#fff' strokeWidth={1.5} />
-                      <span className='text-neutral-500'>{HANDLE}</span>
-                    </div>
-                    <p className='mt-2 text-[11px] font-semibold tracking-wide text-[#9BB8C2] uppercase'>
-                      {t.answer}
-                    </p>
-                    <p className='mt-1.5 text-[15px] leading-relaxed text-neutral-100'>{answer}</p>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            <div className='mt-3 flex items-center gap-5 text-neutral-500'>
-              <MessageCircle
-                size={16}
-                className={thoughts ? 'text-[#9BB8C2]' : ''}
-              />
-              <Repeat2
-                size={16}
-                className={question.favorite ? 'text-amber-400' : ''}
-              />
-              <Heart
-                size={16}
-                fill={hasAnswer ? '#f91880' : 'none'}
-                className={hasAnswer ? 'text-[#f91880]' : ''}
-              />
-              <Share2 size={15} />
-            </div>
-          </div>
-        </div>
+        <QuestionCardContent question={question} lang={lang} expanded={expanded} />
       </motion.button>
     </motion.div>
   )
