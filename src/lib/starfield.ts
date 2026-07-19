@@ -18,9 +18,12 @@ function mulberry32(seed: number) {
 }
 
 // Scatters items into vertical "regions" (for progressive reveal while scrolling).
-// Within a region, each item gets its own horizontal "band" — a guaranteed slice
-// of vertical space — so cards (whose height varies with title length) can't
-// overlap a neighbor, unlike pure rejection sampling on a point distance.
+// Within a region, each item gets a free random spot across the full width and
+// height of that region — actual overlap avoidance happens later, at the page
+// level, once real rendered card sizes are known (see resolveCollisions in
+// questions/page.tsx). xPercent spans the full 0-100 range here; the page
+// applies its own pixel margins when projecting onto the actual field width,
+// since it knows how much room a card needs to grow into on the right.
 // Items with a date are sorted most-recent-first and placed in the top regions;
 // undated items fill the regions after them.
 export function layoutStars<T extends { id: string; date?: string }>(
@@ -40,22 +43,13 @@ export function layoutStars<T extends { id: string; date?: string }>(
     regions.push(ordered.slice(i, i + perRegion));
   }
 
-  const margin = 8;
-  // Leave extra room on the right of each x position for the question card
-  // that grows out from the planet, so cards don't clip the field's edges.
-  const rightMargin = 42;
-
   regions.forEach((region, regionIndex) => {
-    const bandHeight = 100 / region.length;
     region.forEach((item, i) => {
-      const bandStart = i * bandHeight;
-      // The very first star gets a tighter, top-biased band so it sits close
-      // to the top edge of the field instead of drifting toward band center.
+      // The very first star gets a tight, top-biased spot so it sits close to
+      // the top edge of the field instead of landing anywhere in the region.
       const isVeryFirst = regionIndex === 0 && i === 0;
-      const bandPad = bandHeight * (isVeryFirst ? 0.05 : 0.15);
-      const bandSpan = isVeryFirst ? (bandHeight - bandPad * 2) * 0.4 : bandHeight - bandPad * 2;
-      const y = bandStart + bandPad + rand() * bandSpan;
-      const x = margin + rand() * (100 - margin - rightMargin);
+      const y = isVeryFirst ? rand() * 8 : 6 + rand() * 88;
+      const x = rand() * 100;
       positions.push({ id: item.id, xPercent: x, yPercent: y, regionIndex });
     });
   });

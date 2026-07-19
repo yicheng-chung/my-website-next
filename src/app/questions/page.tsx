@@ -157,14 +157,24 @@ const TEXT = {
   },
 };
 
+// Pixel margins for projecting a star's 0-100 xPercent onto the actual field
+// width: a small gutter on the left, and room on the right for the answer
+// card that grows out from the planet (min-width 130px up to max-w-[260px],
+// plus the icon and gap). Capped as a fraction of the field itself so this
+// doesn't eat the whole width on a narrow viewport.
+const LEFT_MARGIN_PX = 16;
+const RIGHT_MARGIN_PX = 300;
+
 function computeBasePositions(
   starPositions: StarPosition[],
   fieldWidth: number,
 ): Record<string, Position> {
   const map: Record<string, Position> = {};
+  const rightMargin = Math.min(RIGHT_MARGIN_PX, fieldWidth * 0.4);
+  const usableWidth = Math.max(fieldWidth - LEFT_MARGIN_PX - rightMargin, 0);
   starPositions.forEach((pos) => {
     const topPx = pos.regionIndex * REGION_HEIGHT + (pos.yPercent / 100) * REGION_HEIGHT;
-    const leftPx = (pos.xPercent / 100) * fieldWidth;
+    const leftPx = LEFT_MARGIN_PX + (pos.xPercent / 100) * usableWidth;
     map[pos.id] = { x: leftPx, y: topPx };
   });
   return map;

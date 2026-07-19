@@ -5,7 +5,11 @@ import { useTranslations } from '@/lib/useTranslations'
 import content from '@/content/reading.json'
 import BookCard from '@/components/BookCard'
 import Spinner from '@/components/Spinner'
-import { readNotionCache, writeNotionCache, type NotionData } from '@/lib/notionCache'
+import {
+  readNotionCache,
+  writeNotionCache,
+  type NotionData,
+} from '@/lib/notionCache'
 
 export default function ReadingPage() {
   const t = useTranslations(content)
@@ -60,7 +64,7 @@ export default function ReadingPage() {
                 {t.emptyReading}
               </p>
             )}
-            <div className='grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4'>
+            <div className='grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-7'>
               {data.reading.map((book) => (
                 <BookCard key={book.id} book={book} />
               ))}
@@ -76,7 +80,7 @@ export default function ReadingPage() {
                 {t.emptyFinished}
               </p>
             )}
-            <div className='grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4'>
+            <div className='grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-7'>
               {data.finished.map((book) => (
                 <BookCard key={book.id} book={book} />
               ))}
