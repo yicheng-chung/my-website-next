@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import type { QuestionEntry } from '@/lib/questions'
 import QuestionCardContent from './QuestionCardContent'
-import QuestionStarGlyph from './QuestionStarGlyph'
 
 interface QuestionListItemProps {
   question: QuestionEntry
@@ -39,20 +38,11 @@ export default function QuestionListItem({ question, lang }: QuestionListItemPro
         onClick={toggleExpanded}
         aria-label={label}
         aria-expanded={hasAnswer ? expanded : undefined}
-        className={`flex w-full items-start gap-2 rounded-2xl border border-white/10 bg-black/70 p-3 text-left shadow-lg ${
+        className={`w-full rounded-2xl border border-white/10 bg-black/70 p-3 text-left shadow-lg ${
           hasAnswer ? 'cursor-pointer' : ''
         }`}
       >
-        <div className='mt-1 flex-shrink-0'>
-          <QuestionStarGlyph
-            size={question.favorite ? 22 : hasAnswer ? 18 : 14}
-            hasAnswer={hasAnswer}
-            favorite={question.favorite}
-          />
-        </div>
-        <div className='min-w-0 flex-1'>
-          <QuestionCardContent question={question} lang={lang} expanded={expanded} compact />
-        </div>
+        <QuestionCardContent question={question} lang={lang} expanded={expanded} compact />
       </motion.button>
     </motion.div>
   )
