@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Info, RotateCcw, X } from 'lucide-react'
+import { RotateCcw } from 'lucide-react'
 import { Sparkle } from 'lucide-react'
 
 interface StarfieldGuideProps {
@@ -111,6 +112,36 @@ function GuideContent({
   )
 }
 
+// The planet drifts slowly within a small radius even at rest, and the glow
+// brightens on hover — separate from the drift so hover feedback stays
+// instant regardless of where the drift loop currently is.
+function GuidePlanet({ open }: { open: boolean }) {
+  return (
+    <motion.span
+      aria-hidden
+      className='relative block h-14 w-14'
+      animate={{ x: [0, 7, -5, 0], y: [0, -6, 5, 0] }}
+      transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+    >
+      <motion.span
+        className='absolute inset-0 overflow-hidden rounded-full'
+        animate={{
+          boxShadow: open
+            ? '0 0 16px 3px rgba(155,184,194,0.6), 0 0 30px 8px rgba(155,184,194,0.3)'
+            : '0 0 10px 2px rgba(155,184,194,0.4), 0 0 18px 5px rgba(155,184,194,0.18)',
+        }}
+        whileHover={{
+          boxShadow:
+            '0 0 20px 4px rgba(155,184,194,0.75), 0 0 36px 10px rgba(155,184,194,0.4)',
+        }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
+      >
+        <Image src='/images/guide-planet.png' alt='' fill sizes='56px' className='object-cover' />
+      </motion.span>
+    </motion.span>
+  )
+}
+
 export default function StarfieldGuide({
   total,
   answered,
@@ -118,83 +149,57 @@ export default function StarfieldGuide({
   lang,
   onReset,
 }: StarfieldGuideProps) {
-  // Desktop panel defaults open; collapses into a slim tab on the right edge.
-  const [desktopOpen, setDesktopOpen] = useState(true)
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const mobileRef = useRef<HTMLDivElement>(null)
+  const [open, setOpen] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
   const t = TEXT[lang]
 
-  // Mobile: tapping anywhere outside the panel/button closes it.
+  // Tapping/clicking anywhere outside the planet or panel closes it.
   useEffect(() => {
-    if (!mobileOpen) return
+    if (!open) return
     function handlePointerDown(e: PointerEvent) {
-      if (mobileRef.current && !mobileRef.current.contains(e.target as Node)) {
-        setMobileOpen(false)
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false)
       }
     }
     document.addEventListener('pointerdown', handlePointerDown)
     return () => document.removeEventListener('pointerdown', handlePointerDown)
-  }, [mobileOpen])
+  }, [open])
 
   return (
-    <>
-      {/* Desktop: collapsible drawer anchored to the right edge */}
-      <div className='fixed right-0 bottom-6 z-30 hidden md:block'>
-        <motion.div
-          initial={false}
-          animate={{ x: desktopOpen ? 0 : 224 }}
-          transition={{ duration: 0.35, ease: 'easeInOut' }}
-          className='relative w-56 rounded-l-2xl border border-r-0 border-white/10 bg-white/5 p-4 backdrop-blur-md'
-        >
-          <button
-            type='button'
-            onClick={() => setDesktopOpen((v) => !v)}
-            aria-label={t.guide}
-            aria-expanded={desktopOpen}
-            className='absolute top-1/2 -left-8 flex h-10 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-l-lg border border-r-0 border-white/10 bg-white/10 text-white backdrop-blur-md'
+    <div
+      ref={containerRef}
+      className='fixed right-4 bottom-4 z-30 md:right-6 md:bottom-6'
+    >
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            key='panel'
+            initial={{ opacity: 0, y: 16, scale: 0.92 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 16, scale: 0.92 }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+            className='mb-3 w-60 rounded-2xl border border-white/10 bg-[#0d1416]/90 p-4 backdrop-blur-md sm:w-64'
           >
-            {desktopOpen ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-          </button>
-          <GuideContent
-            total={total}
-            answered={answered}
-            exploring={exploring}
-            lang={lang}
-            onReset={onReset}
-          />
-        </motion.div>
-      </div>
+            <GuideContent
+              total={total}
+              answered={answered}
+              exploring={exploring}
+              lang={lang}
+              onReset={onReset}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Mobile: collapsible button, closes on tap outside */}
-      <div ref={mobileRef} className='fixed right-4 bottom-4 z-30 md:hidden'>
-        <AnimatePresence>
-          {mobileOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: 12, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 12, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              className='mb-3 w-56 rounded-2xl border border-white/10 bg-[#0d1416]/90 p-4 backdrop-blur-md'
-            >
-              <GuideContent
-                total={total}
-                answered={answered}
-                exploring={exploring}
-                lang={lang}
-                onReset={onReset}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
-        <button
-          type='button'
-          onClick={() => setMobileOpen((v) => !v)}
-          aria-label={t.guide}
-          className='ml-auto flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-white/10 text-white backdrop-blur-md'
-        >
-          {mobileOpen ? <X size={18} /> : <Info size={18} />}
-        </button>
-      </div>
-    </>
+      <button
+        type='button'
+        onClick={() => setOpen((v) => !v)}
+        aria-label={t.guide}
+        aria-expanded={open}
+        className='ml-auto flex cursor-pointer items-center justify-center'
+      >
+        <GuidePlanet open={open} />
+      </button>
+    </div>
   )
 }

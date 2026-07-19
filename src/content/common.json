@@ -5,8 +5,7 @@
       "home": "首頁",
       "about": "關於我",
       "reading": "閱讀",
-      "questions": "問題",
-      "contact": "聯絡我"
+      "questions": "問題"
     },
     "languageSwitch": {
       "zh": "中文",
@@ -29,8 +28,7 @@
       "home": "Main",
       "about": "About",
       "reading": "Reading",
-      "questions": "Questions",
-      "contact": "Contact"
+      "questions": "Questions"
     },
     "languageSwitch": {
       "zh": "中文",
@@ -44,6 +42,7 @@
       "intro": "I spent three years as a front-end engineer before deciding on a new direction last year — I was admitted to a counseling psychology graduate program and am now working toward becoming a therapist. This site stays up as a record of carrying what I learned as an engineer into the next chapter."
     },
     "footer": {
+      "linksHeading": "My Links",
       "copyright": "Copyright ⓒ {year} Yi-Cheng, Chung. All rights reserved."
     }
   }

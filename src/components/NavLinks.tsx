@@ -10,7 +10,6 @@ const NAV_ROUTES = [
   { href: "/about", key: "about" },
   { href: "/reading", key: "reading" },
   { href: "/questions", key: "questions" },
-  { href: "/contact", key: "contact" },
 ] as const;
 
 export default function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
