@@ -1,10 +1,20 @@
 {
   "zh": {
     "title": "嗨！歡迎來到我的網站!",
-    "body": "這是我第一個用 React 製作的簡易中英文履歷 SPA，之後用 Next.js 重寫過一次。\n    RWD 的部分，我使用了 Tailwind 讓網站有響應式設計，歡迎縮放網頁試試看！\n    希望你會喜歡！"
+    "body": "這是我第一個用 React 製作的簡易中英文履歷 SPA，之後用 Next.js 重寫過一次。\n    RWD 的部分，我使用了 Tailwind 讓網站有響應式設計，歡迎縮放網頁試試看！\n    希望你會喜歡！",
+    "navCards": {
+      "about": "關於鍾貽丞的一些事情",
+      "reading": "書單、進度、正在讀的東西",
+      "questions": "腦中一閃而過、想留住的問題"
+    }
   },
   "en": {
     "title": "Welcome to my website!",
-    "body": "This is my first personal CV single page application built with React, later rewritten with Next.js.\n    As for Responsive Web Design, I used Tailwind to make the site responsive — please feel free to resize the window and play around!\n    Hope you enjoy it!"
+    "body": "This is my first personal CV single page application built with React, later rewritten with Next.js.\n    As for Responsive Web Design, I used Tailwind to make the site responsive — please feel free to resize the window and play around!\n    Hope you enjoy it!",
+    "navCards": {
+      "about": "A few things about Yi-Cheng Chung",
+      "reading": "What I'm reading, and what's next",
+      "questions": "Fleeting questions I want to hold onto"
+    }
   }
 }

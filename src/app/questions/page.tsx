@@ -1,16 +1,23 @@
 'use client'
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useLanguage } from '@/context/LanguageContext'
 import { useTheme } from '@/context/ThemeContext'
 import { useIsDesktop } from '@/lib/useIsDesktop'
 import type { QuestionEntry } from '@/lib/questions'
 import { layoutStars, type StarPosition } from '@/lib/starfield'
+import { NEBULA, FAR_DUST, NEAR_DUST } from '@/lib/starfieldBackground'
 import PlanetQuestion from '@/components/PlanetQuestion'
 import QuestionListItem from '@/components/QuestionListItem'
 import StarfieldGuide from '@/components/StarfieldGuide'
 import StarLoading from '@/components/StarLoading'
+
+// Trying a photo background in place of the CSS-generated nebula/dust
+// starfield — flip this back to false to revert to the original if the
+// photo doesn't end up suiting the page.
+const USE_PHOTO_BACKGROUND = true
 
 // Fewer per region than the old bubble-card layout — each one is now a full
 // tweet-style card (avatar, name, body, meta row), so packing 3 into a band
@@ -129,39 +136,6 @@ function saveStoredOffsets(offsets: Record<string, Position>) {
   } catch {
     // ignore (private browsing, storage full, etc.)
   }
-}
-
-// Layered low-opacity blobs standing in for nebula clouds, plus fine star dust —
-// self-contained CSS so there's no dependency on an external image asset.
-const NEBULA = {
-  backgroundImage: [
-    'radial-gradient(600px 500px at 15% 10%, rgba(87,126,137,0.35), transparent 60%)',
-    'radial-gradient(700px 600px at 85% 30%, rgba(111,159,156,0.28), transparent 60%)',
-    'radial-gradient(650px 550px at 30% 80%, rgba(143,110,169,0.22), transparent 60%)',
-    'radial-gradient(500px 500px at 75% 90%, rgba(155,184,194,0.25), transparent 60%)',
-  ].join(', '),
-  backgroundRepeat: 'no-repeat',
-}
-
-const FAR_DUST = {
-  backgroundImage: [
-    'radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.35), transparent)',
-    'radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.25), transparent)',
-    'radial-gradient(1.5px 1.5px at 80% 10%, rgba(255,255,255,0.3), transparent)',
-    'radial-gradient(1px 1px at 30% 85%, rgba(255,255,255,0.2), transparent)',
-  ].join(', '),
-  backgroundSize: '260px 260px',
-  backgroundRepeat: 'repeat',
-}
-
-const NEAR_DUST = {
-  backgroundImage: [
-    'radial-gradient(2px 2px at 25% 40%, rgba(155,184,194,0.5), transparent)',
-    'radial-gradient(1.5px 1.5px at 75% 60%, rgba(255,255,255,0.4), transparent)',
-    'radial-gradient(2px 2px at 50% 15%, rgba(255,255,255,0.35), transparent)',
-  ].join(', '),
-  backgroundSize: '380px 380px',
-  backgroundRepeat: 'repeat',
 }
 
 const TEXT = {
@@ -437,21 +411,34 @@ export default function QuestionsPage() {
           className='relative overflow-hidden rounded-2xl border border-white/10 bg-[#05080a]'
           style={{ height: fieldHeight }}
         >
-          <motion.div
-            aria-hidden
-            className='pointer-events-none absolute inset-0'
-            style={{ ...NEBULA, backgroundPositionY: nebulaY }}
-          />
-          <motion.div
-            aria-hidden
-            className='pointer-events-none absolute inset-0'
-            style={{ ...FAR_DUST, backgroundPositionY: farY }}
-          />
-          <motion.div
-            aria-hidden
-            className='pointer-events-none absolute inset-0'
-            style={{ ...NEAR_DUST, backgroundPositionY: nearY }}
-          />
+          {USE_PHOTO_BACKGROUND ? (
+            <Image
+              src='/images/questions-page-bg.png'
+              alt=''
+              fill
+              sizes='100vw'
+              priority
+              className='pointer-events-none object-cover'
+            />
+          ) : (
+            <>
+              <motion.div
+                aria-hidden
+                className='pointer-events-none absolute inset-0'
+                style={{ ...NEBULA, backgroundPositionY: nebulaY }}
+              />
+              <motion.div
+                aria-hidden
+                className='pointer-events-none absolute inset-0'
+                style={{ ...FAR_DUST, backgroundPositionY: farY }}
+              />
+              <motion.div
+                aria-hidden
+                className='pointer-events-none absolute inset-0'
+                style={{ ...NEAR_DUST, backgroundPositionY: nearY }}
+              />
+            </>
+          )}
 
           {questions === null ? (
             <div className='absolute inset-0 flex items-center justify-center'>
@@ -510,9 +497,33 @@ export default function QuestionsPage() {
         // collision avoidance needed, since normal document flow already
         // pushes cards apart (and back) as one expands or collapses.
         <div className='relative overflow-hidden rounded-2xl border border-white/10 bg-[#05080a] p-3'>
-          <div aria-hidden className='pointer-events-none absolute inset-0' style={NEBULA} />
-          <div aria-hidden className='pointer-events-none absolute inset-0' style={FAR_DUST} />
-          <div aria-hidden className='pointer-events-none absolute inset-0' style={NEAR_DUST} />
+          {USE_PHOTO_BACKGROUND ? (
+            <Image
+              src='/images/questions-page-bg.png'
+              alt=''
+              fill
+              sizes='100vw'
+              className='pointer-events-none object-cover'
+            />
+          ) : (
+            <>
+              <div
+                aria-hidden
+                className='pointer-events-none absolute inset-0'
+                style={NEBULA}
+              />
+              <div
+                aria-hidden
+                className='pointer-events-none absolute inset-0'
+                style={FAR_DUST}
+              />
+              <div
+                aria-hidden
+                className='pointer-events-none absolute inset-0'
+                style={NEAR_DUST}
+              />
+            </>
+          )}
 
           {questions === null ? (
             <div className='relative flex min-h-[320px] items-center justify-center'>
@@ -521,7 +532,11 @@ export default function QuestionsPage() {
           ) : (
             <div className='relative flex flex-col gap-3'>
               {questions.map((question) => (
-                <QuestionListItem key={question.id} question={question} lang={lang} />
+                <QuestionListItem
+                  key={question.id}
+                  question={question}
+                  lang={lang}
+                />
               ))}
             </div>
           )}
