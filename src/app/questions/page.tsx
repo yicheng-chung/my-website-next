@@ -10,24 +10,32 @@ import PlanetQuestion from '@/components/PlanetQuestion'
 import StarfieldGuide from '@/components/StarfieldGuide'
 import StarLoading from '@/components/StarLoading'
 
-const QUESTIONS_PER_REGION = 3
-const REGION_HEIGHT = 320
+// Fewer per region than the old bubble-card layout — each one is now a full
+// tweet-style card (avatar, name, body, meta row), so packing 3 into a band
+// left the collision-avoidance pass too much overlap to resolve reliably,
+// especially right after a language switch reflows several cards at once.
+const QUESTIONS_PER_REGION = 2
+// Taller than the old bubble cards for the same reason.
+const REGION_HEIGHT = 420
 // Cards anchor at their star's y and grow downward — without this, a card
 // seeded near the bottom of the last region can extend past the field's
 // height and get clipped by its overflow-hidden edge.
-const BOTTOM_PADDING = 160
+const BOTTOM_PADDING = 220
 
 // A star only gets a constellation line to its single nearest neighbor, and
 // only if that neighbor is within this distance — keeps the sky sparse rather
 // than a tangle of lines.
 const MAX_LINE_DISTANCE = 260
 const LINE_GAP = 16
+// Roughly the center of the small drifting star marker that sits in front of
+// each card — lines anchor there rather than at the card's top-left corner.
+const ICON_CENTER_PX = 14
 
 type Position = { x: number; y: number }
 type Size = { width: number; height: number }
 
 // Minimum gap left between two stars' bounding boxes after separation.
-const COLLISION_PADDING = 10
+const COLLISION_PADDING = 14
 
 // Pairwise AABB separation over a few passes — nudges overlapping stars apart
 // along whichever axis has the smaller overlap, so a language switch (which
@@ -52,7 +60,10 @@ function resolveCollisions(
     }
   }
 
-  for (let iter = 0; iter < 3; iter++) {
+  // More passes than before — the tweet-style cards are much bigger than the
+  // old bubbles, so a language switch reflowing several of them at once can
+  // need more than a couple of rounds to fully untangle.
+  for (let iter = 0; iter < 8; iter++) {
     let moved = false
     for (let i = 0; i < ids.length; i++) {
       for (let j = i + 1; j < ids.length; j++) {
@@ -166,12 +177,14 @@ const TEXT = {
 }
 
 // Pixel margins for projecting a star's 0-100 xPercent onto the actual field
-// width: a small gutter on the left, and room on the right for the answer
-// card that grows out from the planet (min-width 130px up to max-w-[260px],
-// plus the icon and gap). Capped as a fraction of the field itself so this
-// doesn't eat the whole width on a narrow viewport.
+// width: a small gutter on the left, and room on the right for the star icon
+// plus the tweet-style card that grows out from it (icon + gap + up to
+// 360px card at rest — it widens further on expand, but that's not fed back
+// into this layout, see expandedRef in PlanetQuestion). Capped as a fraction
+// of the field itself so this doesn't eat the whole width on a narrow
+// viewport.
 const LEFT_MARGIN_PX = 16
-const RIGHT_MARGIN_PX = 300
+const RIGHT_MARGIN_PX = 410
 
 function computeBasePositions(
   starPositions: StarPosition[],
@@ -305,7 +318,10 @@ export default function QuestionsPage() {
   // text, most notably) or positions reset to their seed, re-check for
   // overlaps and nudge apart whatever's colliding. Debounced so a burst of
   // resize reports (many stars mounting, or a whole-page language switch)
-  // settles before the pass runs, rather than firing once per star.
+  // settles before the pass runs, rather than firing once per star. `lang`
+  // is also a trigger on its own — if a switch happens to leave every
+  // card's measured size unchanged (same line count in both languages),
+  // there'd otherwise be no cardSizes update to hang this pass off of.
   useEffect(() => {
     if (Object.keys(cardSizes).length === 0) return
     const timer = setTimeout(() => {
@@ -324,7 +340,7 @@ export default function QuestionsPage() {
     }, 400)
     return () => clearTimeout(timer)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cardSizes, resetSignal])
+  }, [cardSizes, resetSignal, lang])
 
   // Each star connects to its single nearest neighbor, "constellation" style,
   // recomputed whenever a star is dragged to a new spot.
@@ -364,10 +380,10 @@ export default function QuestionsPage() {
         const uy = dy / dist
         result.push({
           key,
-          x1: p.x + 12 + ux * LINE_GAP,
-          y1: p.y + 12 + uy * LINE_GAP,
-          x2: q.x + 12 - ux * LINE_GAP,
-          y2: q.y + 12 - uy * LINE_GAP,
+          x1: p.x + ICON_CENTER_PX + ux * LINE_GAP,
+          y1: p.y + ICON_CENTER_PX + uy * LINE_GAP,
+          x2: q.x + ICON_CENTER_PX - ux * LINE_GAP,
+          y2: q.y + ICON_CENTER_PX - uy * LINE_GAP,
         })
       }
     })

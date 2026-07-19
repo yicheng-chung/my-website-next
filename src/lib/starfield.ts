@@ -45,10 +45,12 @@ export function layoutStars<T extends { id: string; date?: string }>(
 
   regions.forEach((region, regionIndex) => {
     region.forEach((item, i) => {
-      // The very first star gets a tight, top-biased spot so it sits close to
-      // the top edge of the field instead of landing anywhere in the region.
+      // The very first star gets a top-biased spot so it sits near the top
+      // edge of the field instead of landing anywhere in the region — but
+      // not flush against it, or a tall card can get clipped by the field's
+      // own rounded, overflow-hidden top-left corner.
       const isVeryFirst = regionIndex === 0 && i === 0;
-      const y = isVeryFirst ? rand() * 8 : 6 + rand() * 88;
+      const y = isVeryFirst ? 10 + rand() * 6 : 6 + rand() * 88;
       const x = rand() * 100;
       positions.push({ id: item.id, xPercent: x, yPercent: y, regionIndex });
     });
