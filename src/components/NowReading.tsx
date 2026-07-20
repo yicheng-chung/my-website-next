@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
 import type { Book } from '@/lib/notion'
 import { readNotionCache, writeNotionCache } from '@/lib/notionCache'
 import ProgressBar from './ProgressBar'
@@ -9,6 +10,7 @@ import Spinner from './Spinner'
 export default function NowReading() {
   const [books, setBooks] = useState<Book[] | null>(null)
   const [index, setIndex] = useState(0)
+  const touchStartX = useRef<number | null>(null)
 
   useEffect(() => {
     const cached = readNotionCache()
@@ -52,14 +54,29 @@ export default function NowReading() {
   if (books.length === 0) return null
 
   const book = books[index]
+  const swipeCount = books.length
+
+  function handleTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  function handleTouchEnd(e: React.TouchEvent) {
+    const startX = touchStartX.current
+    touchStartX.current = null
+    if (startX === null) return
+
+    const deltaX = e.changedTouches[0].clientX - startX
+    const SWIPE_THRESHOLD = 40
+    if (Math.abs(deltaX) < SWIPE_THRESHOLD) return
+
+    setIndex((i) => (deltaX < 0 ? (i + 1) % swipeCount : (i - 1 + swipeCount) % swipeCount))
+  }
 
   return (
-    <div>
-      <a
+    <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      <Link
         key={book.id}
-        href={book.url}
-        target='_blank'
-        rel='noreferrer'
+        href={`/reading/${book.id}`}
         className='flex animate-[fadeIn_0.4s_ease] items-center gap-3 rounded-xl border border-neutral-200 bg-white p-3 transition-shadow hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800'
       >
         {book.cover ? (
@@ -81,7 +98,7 @@ export default function NowReading() {
           <p className='truncate text-xs text-neutral-500 dark:text-neutral-400'>{book.author}</p>
           {book.progress !== null && <ProgressBar percent={book.progress} />}
         </div>
-      </a>
+      </Link>
 
       {books.length > 1 && (
         <div className='mt-2 flex justify-center gap-1.5'>
