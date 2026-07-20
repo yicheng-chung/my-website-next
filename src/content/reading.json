@@ -5,7 +5,15 @@
     "readingHeading": "正在閱讀",
     "finishedHeading": "已完成",
     "emptyReading": "目前沒有正在讀的書。",
-    "emptyFinished": "還沒有標記已完成的書。"
+    "emptyFinished": "還沒有標記已完成的書。",
+    "backToList": "回到書單",
+    "notFound": "找不到這本書。",
+    "openInNotion": "在 Notion 開啟 →",
+    "reflectionHeading": "讀後心得",
+    "emptyContent": "貽丞還沒寫這本書的心得，如你所知，他有點懶惰。",
+    "progressLabel": "進度：",
+    "startDateLabel": "開始閱讀：",
+    "ratingLabel": "評分："
   },
   "en": {
     "heading": "Reading",
@@ -13,6 +21,14 @@
     "readingHeading": "Currently Reading",
     "finishedHeading": "Finished",
     "emptyReading": "Nothing in progress right now.",
-    "emptyFinished": "No finished books yet."
+    "emptyFinished": "No finished books yet.",
+    "backToList": "Back to reading list",
+    "notFound": "Couldn't find this book.",
+    "openInNotion": "Open in Notion →",
+    "reflectionHeading": "Reflections",
+    "emptyContent": "Yi-Cheng hasn't written his thoughts on this book yet. As you might already know about him, he's a bit lazy.",
+    "progressLabel": "Progress: ",
+    "startDateLabel": "Started: ",
+    "ratingLabel": "Rating: "
   }
 }

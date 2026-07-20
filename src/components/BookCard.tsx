@@ -1,12 +1,11 @@
+import Link from "next/link";
 import type { Book } from "@/lib/notion";
 import ProgressBar from "./ProgressBar";
 
 export default function BookCard({ book }: { book: Book }) {
   return (
-    <a
-      href={book.url}
-      target="_blank"
-      rel="noreferrer"
+    <Link
+      href={`/reading/${book.id}`}
       className="group flex flex-col overflow-hidden rounded-lg border border-neutral-200 bg-white transition-shadow hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800"
     >
       <div className="aspect-[3/4] w-full overflow-hidden bg-neutral-100 p-[5%] dark:bg-neutral-700">
@@ -26,6 +25,6 @@ export default function BookCard({ book }: { book: Book }) {
         <p className="truncate text-xs text-neutral-500 dark:text-neutral-400">{book.author}</p>
         {book.progress !== null && <ProgressBar percent={book.progress} />}
       </div>
-    </a>
+    </Link>
   );
 }
