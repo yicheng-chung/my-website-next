@@ -12,6 +12,13 @@ type SpotifyTrack = {
   external_urls: { spotify: string };
 };
 
+// Spotify's own API is occasionally slow to respond — without a timeout, a
+// hung upstream request can drag this route past its own function timeout,
+// which is what was likely behind the "upstream request timeout" surfaced
+// on the site (that, or the old <iframe> embed's own flaky error page —
+// see NowPlaying.tsx, which no longer depends on that embed at all).
+const UPSTREAM_TIMEOUT_MS = 6000;
+
 async function getAccessToken(): Promise<string> {
   const res = await fetch("https://accounts.spotify.com/api/token", {
     method: "POST",
@@ -26,6 +33,7 @@ async function getAccessToken(): Promise<string> {
       refresh_token: process.env.SPOTIFY_REFRESH_TOKEN ?? "",
     }),
     cache: "no-store",
+    signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
   });
 
   if (!res.ok) {
@@ -55,6 +63,7 @@ export async function GET() {
     const nowPlayingRes = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
       headers,
       cache: "no-store",
+      signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
     });
 
     if (nowPlayingRes.status === 200) {
@@ -67,6 +76,7 @@ export async function GET() {
     const recentRes = await fetch("https://api.spotify.com/v1/me/player/recently-played?limit=1", {
       headers,
       cache: "no-store",
+      signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
     });
     const recentData = await recentRes.json();
     const track = recentData?.items?.[0]?.track as SpotifyTrack | undefined;
