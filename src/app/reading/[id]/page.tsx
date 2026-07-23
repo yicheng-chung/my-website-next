@@ -17,27 +17,7 @@ function findBook(data: NotionData, id: string): Book | null {
   return data.reading.find((b) => b.id === id) ?? data.finished.find((b) => b.id === id) ?? null;
 }
 
-// Notion-style tag colors — deterministic per category name (same category
-// always gets the same color across books) rather than a hand-maintained
-// mapping, since the category list is open-ended.
-const TAG_PALETTE = [
-  "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-800/60 dark:bg-rose-950/40 dark:text-rose-300",
-  "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800/60 dark:bg-amber-950/40 dark:text-amber-300",
-  "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-300",
-  "border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-800/60 dark:bg-sky-950/40 dark:text-sky-300",
-  "border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-800/60 dark:bg-violet-950/40 dark:text-violet-300",
-  "border-teal-200 bg-teal-50 text-teal-700 dark:border-teal-800/60 dark:bg-teal-950/40 dark:text-teal-300",
-  "border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-800/60 dark:bg-orange-950/40 dark:text-orange-300",
-  "border-pink-200 bg-pink-50 text-pink-700 dark:border-pink-800/60 dark:bg-pink-950/40 dark:text-pink-300",
-  "border-indigo-200 bg-indigo-50 text-indigo-700 dark:border-indigo-800/60 dark:bg-indigo-950/40 dark:text-indigo-300",
-  "border-lime-200 bg-lime-50 text-lime-700 dark:border-lime-800/60 dark:bg-lime-950/40 dark:text-lime-300",
-];
-
-function tagColorClass(name: string): string {
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
-  return TAG_PALETTE[hash % TAG_PALETTE.length];
-}
+const TAG_CLASS = "bg-black text-[#F2A341] dark:bg-[#F2A341] dark:text-black";
 
 export default function BookDetailPage() {
   const params = useParams<{ id: string }>();
@@ -113,7 +93,7 @@ export default function BookDetailPage() {
       <div className="flex items-center justify-between">
         <Link
           href="/reading"
-          className="inline-flex w-fit items-center gap-1 text-sm text-neutral-500 hover:text-[#F2A341] dark:text-neutral-400 dark:hover:text-[#F6B45E]"
+          className="inline-flex w-fit items-center gap-1 text-sm text-neutral-800 hover:text-black dark:text-neutral-400 dark:hover:text-[#F6B45E]"
         >
           <ArrowLeft size={16} />
           {t.backToList}
@@ -122,7 +102,7 @@ export default function BookDetailPage() {
           href={book.url}
           target="_blank"
           rel="noreferrer"
-          className="text-sm text-[#F2A341] hover:underline dark:text-[#F6B45E]"
+          className="text-sm font-medium text-neutral-800 hover:text-black hover:underline dark:font-normal dark:text-[#F6B45E] dark:hover:text-[#F6B45E]"
         >
           {t.openInNotion}
         </a>
@@ -176,7 +156,7 @@ export default function BookDetailPage() {
             {book.categories.map((cat) => (
               <span
                 key={cat}
-                className={`rounded-full border px-3 py-1 text-xs font-medium ${tagColorClass(cat)}`}
+                className={`rounded-full px-3 py-1 text-xs font-medium ${TAG_CLASS}`}
               >
                 ＃{cat}
               </span>
