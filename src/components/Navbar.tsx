@@ -13,7 +13,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-40 bg-[#577E89] px-4 py-3 shadow-sm transition-colors sm:px-6 sm:py-4 dark:bg-[#33474D]">
+      <header className="fixed top-0 left-0 right-0 z-40 bg-black px-4 py-3 shadow-sm transition-colors sm:px-6 sm:py-4 dark:bg-[#F2A341]">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
             <button
@@ -27,7 +27,7 @@ export default function Navbar() {
 
             <Link
               href="/"
-              className="truncate text-lg font-bold text-white transition-colors hover:text-amber-100 sm:text-xl"
+              className="truncate text-lg font-bold text-white transition-colors hover:text-[#F2A341] sm:text-xl dark:hover:text-black"
             >
               YiCheng&apos;s Page
             </Link>
@@ -57,7 +57,7 @@ export default function Navbar() {
               transition={{ duration: 0.25 }}
             />
             <motion.div
-              className="absolute top-0 left-0 h-full w-64 max-w-[80vw] bg-[#577E89] p-6 shadow-xl dark:bg-[#33474D]"
+              className="absolute top-0 left-0 h-full w-64 max-w-[80vw] bg-black p-6 shadow-xl dark:bg-[#F2A341]"
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}

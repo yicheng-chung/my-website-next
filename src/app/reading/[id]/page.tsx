@@ -92,7 +92,7 @@ export default function BookDetailPage() {
         <p className="text-neutral-500 dark:text-neutral-400">{t.notFound}</p>
         <Link
           href="/reading"
-          className="mt-4 inline-block text-sm text-[#577E89] hover:underline dark:text-[#9BB8C2]"
+          className="mt-4 inline-block text-sm text-[#F2A341] hover:underline dark:text-[#F6B45E]"
         >
           {t.backToList}
         </Link>
@@ -113,7 +113,7 @@ export default function BookDetailPage() {
       <div className="flex items-center justify-between">
         <Link
           href="/reading"
-          className="inline-flex w-fit items-center gap-1 text-sm text-neutral-500 hover:text-[#577E89] dark:text-neutral-400 dark:hover:text-[#9BB8C2]"
+          className="inline-flex w-fit items-center gap-1 text-sm text-neutral-500 hover:text-[#F2A341] dark:text-neutral-400 dark:hover:text-[#F6B45E]"
         >
           <ArrowLeft size={16} />
           {t.backToList}
@@ -122,13 +122,13 @@ export default function BookDetailPage() {
           href={book.url}
           target="_blank"
           rel="noreferrer"
-          className="text-sm text-[#577E89] hover:underline dark:text-[#9BB8C2]"
+          className="text-sm text-[#F2A341] hover:underline dark:text-[#F6B45E]"
         >
           {t.openInNotion}
         </a>
       </div>
 
-      <header className="flex flex-col gap-5 sm:flex-row sm:items-start">
+      <header className="flex flex-col gap-5 rounded-2xl border border-neutral-200 bg-white p-6 sm:flex-row sm:items-start sm:p-8 dark:border-neutral-700 dark:bg-neutral-800">
         {book.cover && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -185,7 +185,7 @@ export default function BookDetailPage() {
         )}
       </div>
 
-      <div>
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-8 dark:border-neutral-700 dark:bg-neutral-800">
         <h2 className="mb-6 text-sm font-semibold tracking-wide text-neutral-400 uppercase dark:text-neutral-500">
           {t.reflectionHeading}
         </h2>

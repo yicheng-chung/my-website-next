@@ -24,7 +24,7 @@ export default function Profile() {
           alt='Yi-Cheng Chung'
           width={150}
           height={150}
-          className='rounded-full border-2 border-[#577E89]/40 object-cover'
+          className='rounded-full border-2 border-[#F2A341]/40 object-cover'
         />
       </div>
       <div className='flex flex-col items-center text-center'>
@@ -33,7 +33,7 @@ export default function Profile() {
         <h6 className='text-lg'>{t.profile.school}</h6>
         <h6 className='text-lg'>{t.profile.years}</h6>
       </div>
-      <p className='mt-6 rounded-xl rounded-br-none bg-[#577E89]/30 p-3 text-base font-normal dark:bg-[#577E89]/25 dark:text-neutral-100'>
+      <p className='mt-6 rounded-xl rounded-br-none bg-[#F2A341]/30 p-3 text-base font-normal dark:bg-[#F2A341]/25 dark:text-neutral-100'>
         {t.profile.intro}
       </p>
       <nav className='mt-4 flex gap-4'>
@@ -44,7 +44,7 @@ export default function Profile() {
             target='_blank'
             rel='noreferrer'
             aria-label={label}
-            className='text-[#3a2709]/70 hover:text-[#577E89] transition-colors dark:text-neutral-400 dark:hover:text-[#9BB8C2]'
+            className='text-[#3a2709]/70 hover:text-[#F2A341] transition-colors dark:text-neutral-400 dark:hover:text-[#F6B45E]'
           >
             <Icon size={32} />
           </a>

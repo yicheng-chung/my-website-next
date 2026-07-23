@@ -110,7 +110,7 @@ export default function NowReading() {
               onClick={() => setIndex(i)}
               className={`h-1.5 rounded-full transition-all ${
                 i === index
-                  ? 'w-4 bg-[#577E89] dark:bg-[#9BB8C2]'
+                  ? 'w-4 bg-[#F2A341] dark:bg-[#F6B45E]'
                   : 'w-1.5 bg-neutral-300 dark:bg-neutral-600'
               }`}
             />

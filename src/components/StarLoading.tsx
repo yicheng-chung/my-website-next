@@ -3,9 +3,9 @@
 import { motion } from "framer-motion";
 import { Sparkle } from "lucide-react";
 
-const GLOW_HEX = "#9BB8C2";
+const GLOW_HEX = "#F6B45E";
 const GLOW_FILTER =
-  "drop-shadow(0 0 6px rgba(155,184,194,0.7)) drop-shadow(0 0 12px rgba(155,184,194,0.4))";
+  "drop-shadow(0 0 6px rgba(246,180,94,0.7)) drop-shadow(0 0 12px rgba(246,180,94,0.4))";
 
 // A loose triangle of three twinkling sparkles, pulsing out of phase —
 // this page's own loading motif, distinct from the site-wide Spinner.

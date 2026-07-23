@@ -44,14 +44,14 @@ function StarSwatch({
 }: {
   variant: 'answered' | 'exploring' | 'favorite'
 }) {
-  const color = variant === 'exploring' ? '#5b5f63' : '#9BB8C2'
+  const color = variant === 'exploring' ? '#5b5f63' : '#F6B45E'
   const size = variant === 'favorite' ? 18 : 14
   const glow =
     variant === 'exploring'
       ? 'none'
-      : `drop-shadow(0 0 4px rgba(155,184,194,0.7)) drop-shadow(0 0 ${
+      : `drop-shadow(0 0 4px rgba(246,180,94,0.7)) drop-shadow(0 0 ${
           variant === 'favorite' ? 10 : 6
-        }px rgba(155,184,194,0.4))`
+        }px rgba(246,180,94,0.4))`
   return (
     <Sparkle
       width={size}
@@ -92,7 +92,7 @@ function GuideContent({
           <p className='text-[10px] text-neutral-400'>{t.total}</p>
         </div>
         <div>
-          <p className='text-lg font-bold text-[#9BB8C2]'>{answered}</p>
+          <p className='text-lg font-bold text-[#F6B45E]'>{answered}</p>
           <p className='text-[10px] text-neutral-400'>{t.answeredCount}</p>
         </div>
         <div>
@@ -127,12 +127,12 @@ function GuidePlanet({ open }: { open: boolean }) {
         className='absolute inset-0 overflow-hidden rounded-full'
         animate={{
           boxShadow: open
-            ? '0 0 16px 3px rgba(155,184,194,0.6), 0 0 30px 8px rgba(155,184,194,0.3)'
-            : '0 0 10px 2px rgba(155,184,194,0.4), 0 0 18px 5px rgba(155,184,194,0.18)',
+            ? '0 0 16px 3px rgba(246,180,94,0.6), 0 0 30px 8px rgba(246,180,94,0.3)'
+            : '0 0 10px 2px rgba(246,180,94,0.4), 0 0 18px 5px rgba(246,180,94,0.18)',
         }}
         whileHover={{
           boxShadow:
-            '0 0 20px 4px rgba(155,184,194,0.75), 0 0 36px 10px rgba(155,184,194,0.4)',
+            '0 0 20px 4px rgba(246,180,94,0.75), 0 0 36px 10px rgba(246,180,94,0.4)',
         }}
         transition={{ duration: 0.25, ease: 'easeOut' }}
       >

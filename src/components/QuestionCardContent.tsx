@@ -100,7 +100,7 @@ export default function QuestionCardContent({
             answer) — the other three icons are still decorative, except
             the heart, which reflects the actual "favorite" flag. Retweet
             is meant to eventually share to other platforms for real. */}
-        <div className={`flex items-center gap-1 ${hasAnswer ? 'text-[#9BB8C2]' : ''}`}>
+        <div className={`flex items-center gap-1 ${hasAnswer ? 'text-[#F6B45E]' : ''}`}>
           <MessageCircle size={iconSize} />
           {hasAnswer && <span className='text-xs'>1</span>}
         </div>

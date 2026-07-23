@@ -74,7 +74,7 @@ export default function ChromeLayout({ children }: { children: ReactNode }) {
             type="button"
             onClick={() => setDrawerOpen(true)}
             aria-label={t.open}
-            className={`fixed top-1/2 left-0 z-30 flex h-12 w-7 -translate-y-1/2 items-center justify-center rounded-r-lg border border-l-0 border-neutral-200 bg-white/60 text-neutral-500 backdrop-blur-md transition-opacity hover:bg-white/90 hover:text-[#577E89] dark:border-neutral-700 dark:bg-neutral-800/60 dark:text-neutral-400 dark:hover:bg-neutral-800/90 dark:hover:text-[#9BB8C2] ${
+            className={`fixed top-1/2 left-0 z-30 flex h-12 w-7 -translate-y-1/2 items-center justify-center rounded-r-lg border border-l-0 border-neutral-200 bg-white/60 text-neutral-500 backdrop-blur-md transition-opacity hover:bg-white/90 hover:text-[#F2A341] dark:border-neutral-700 dark:bg-neutral-800/60 dark:text-neutral-400 dark:hover:bg-neutral-800/90 dark:hover:text-[#F6B45E] ${
               drawerOpen ? "pointer-events-none opacity-0" : "opacity-100"
             }`}
           >

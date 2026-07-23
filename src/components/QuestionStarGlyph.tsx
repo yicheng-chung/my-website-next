@@ -2,8 +2,8 @@
 
 import { Sparkle } from 'lucide-react'
 
-const GLOW_COLOR = '155,184,194' // matches the site's dark-mode accent, #9BB8C2
-const GLOW_HEX = '#9BB8C2'
+const GLOW_COLOR = '246,180,94' // matches the site's dark-mode accent, #F6B45E
+const GLOW_HEX = '#F6B45E'
 const QUIET_HEX = '#5b5f63'
 
 interface QuestionStarGlyphProps {

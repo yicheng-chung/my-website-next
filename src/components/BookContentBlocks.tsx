@@ -22,7 +22,7 @@ function Spans({ spans }: { spans: ContentSpan[] }) {
               href={s.href}
               target="_blank"
               rel="noreferrer"
-              className="text-[#577E89] underline underline-offset-2 dark:text-[#9BB8C2]"
+              className="text-[#F2A341] underline underline-offset-2 dark:text-[#F6B45E]"
             >
               {node}
             </a>

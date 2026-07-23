@@ -140,7 +140,7 @@ export default function LifeTimeline() {
                     className='mb-3 h-32 w-full rounded-lg object-cover'
                   />
                 )}
-                <p className='text-xs font-semibold text-[#577E89] dark:text-[#9BB8C2]'>
+                <p className='text-xs font-semibold text-[#F2A341] dark:text-[#F6B45E]'>
                   {formatEventFull(activeEvent, lang)}
                 </p>
                 <p className='mt-1 text-sm font-bold text-neutral-800 dark:text-neutral-100'>
@@ -200,8 +200,8 @@ export default function LifeTimeline() {
                       <MapPin
                         className={`-mb-1.5 shrink-0 transition-all ${
                           isActive
-                            ? 'h-8 w-8 fill-[#577E89] text-[#577E89] dark:fill-[#9BB8C2] dark:text-[#9BB8C2]'
-                            : 'h-6 w-6 fill-white text-neutral-400 group-hover:scale-110 group-hover:fill-[#577E89]/20 group-hover:text-[#577E89] dark:fill-neutral-800 dark:text-neutral-500 dark:group-hover:text-[#9BB8C2]'
+                            ? 'h-8 w-8 fill-[#F2A341] text-[#F2A341] dark:fill-[#F6B45E] dark:text-[#F6B45E]'
+                            : 'h-6 w-6 fill-white text-neutral-400 group-hover:scale-110 group-hover:fill-[#F2A341]/20 group-hover:text-[#F2A341] dark:fill-neutral-800 dark:text-neutral-500 dark:group-hover:text-[#F6B45E]'
                         }`}
                         strokeWidth={2}
                       />
@@ -238,7 +238,7 @@ export default function LifeTimeline() {
                   <MapPin
                     className={`h-4 w-4 flex-shrink-0 ${
                       isOpen
-                        ? 'fill-[#577E89] text-[#577E89] dark:fill-[#9BB8C2] dark:text-[#9BB8C2]'
+                        ? 'fill-[#F2A341] text-[#F2A341] dark:fill-[#F6B45E] dark:text-[#F6B45E]'
                         : 'fill-neutral-300 text-neutral-400 dark:fill-neutral-600 dark:text-neutral-500'
                     }`}
                     strokeWidth={2}

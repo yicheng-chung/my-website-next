@@ -24,7 +24,7 @@ export default function NowStatus() {
       <NowReading />
       <Link
         href="/reading"
-        className="self-start text-xs text-[#577E89] hover:underline dark:text-[#9BB8C2]"
+        className="self-start text-xs text-[#F2A341] hover:underline dark:text-[#F6B45E]"
       >
         {s.viewAllLabel}
       </Link>
