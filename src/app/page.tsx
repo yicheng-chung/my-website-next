@@ -55,6 +55,13 @@ export default function Home() {
           />
         </HomeNavCard>
 
+        <HomeNavCard href="/blog" title={nav.blog} subtitle={t.navCards.blog}>
+          {/* Same rough-paper texture as the blog page itself, rather than a
+              photo — nothing to source, and it previews what the section
+              looks like before you're even in it. */}
+          <div className="bg-paper h-full w-full" />
+        </HomeNavCard>
+
         <HomeNavCard href="/questions" title={nav.questions} subtitle={t.navCards.questions}>
           <Image
             src="/images/questions-nav-bg.webp"

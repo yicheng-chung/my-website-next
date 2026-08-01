@@ -5,6 +5,7 @@
     "navCards": {
       "about": "關於鍾貽丞的一些事情",
       "reading": "書單、進度、正在讀的東西",
+      "blog": "隨手記下的心情與感想",
       "questions": "腦中一閃而過、想留住的問題"
     }
   },
@@ -14,6 +15,7 @@
     "navCards": {
       "about": "A few things about Yi-Cheng Chung",
       "reading": "What I'm reading, and what's next",
+      "blog": "Thoughts and moods, jotted down as they come",
       "questions": "Fleeting questions I want to hold onto"
     }
   }

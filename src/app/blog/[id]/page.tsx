@@ -176,8 +176,12 @@ export default function BlogPostPage() {
           <h1 className="font-serif text-3xl font-bold text-neutral-900 sm:text-4xl dark:text-neutral-100">
             {displayTitle}
           </h1>
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            {/* Date + tag: same row on both breakpoints. On mobile they're
+                pushed to opposite ends (justify-between); on desktop the
+                tag sits right after the date instead (sm:justify-start),
+                since the button below takes over "far right" duty there. */}
+            <div className="flex items-center justify-between gap-2 sm:justify-start">
               {formattedDate && (
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">{formattedDate}</p>
               )}
@@ -191,7 +195,7 @@ export default function BlogPostPage() {
               type="button"
               onClick={handleTranslateClick}
               disabled={translating}
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-neutral-200 px-3 py-1 text-sm font-medium text-neutral-600 transition-colors hover:border-[#F2A341] hover:text-[#F2A341] disabled:opacity-60 dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-[#F6B45E] dark:hover:text-[#F6B45E]"
+              className="inline-flex shrink-0 items-center gap-1.5 self-end rounded-full border border-neutral-200 px-3 py-1 text-sm font-medium text-neutral-600 transition-colors hover:border-[#F2A341] hover:text-[#F2A341] disabled:opacity-60 sm:self-auto dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-[#F6B45E] dark:hover:text-[#F6B45E]"
             >
               {translating ? (
                 <Spinner size={14} />
