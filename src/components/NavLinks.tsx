@@ -9,6 +9,7 @@ const NAV_ROUTES = [
   { href: "/", key: "home" },
   { href: "/about", key: "about" },
   { href: "/reading", key: "reading" },
+  { href: "/blog", key: "blog" },
   { href: "/questions", key: "questions" },
 ] as const;
 

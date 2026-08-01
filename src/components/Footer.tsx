@@ -26,7 +26,7 @@ export default function Footer() {
             target='_blank'
             rel='noreferrer'
             aria-label={label}
-            className='text-neutral-500 transition-colors hover:text-[#F2A341] dark:text-neutral-400 dark:hover:text-[#F6B45E]'
+            className='text-neutral-500 transition-colors hover:text-white dark:text-neutral-400 dark:hover:text-[#F6B45E]'
           >
             <Icon size={28} />
           </a>

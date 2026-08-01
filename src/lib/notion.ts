@@ -10,6 +10,7 @@ export type Book = {
   url: string;
   startDate: string | null;
   rating: string | null;
+  hasReflection: boolean;
 };
 
 type NotionRichText = { plain_text: string };
@@ -29,6 +30,7 @@ type NotionPage = {
     類別?: { multi_select?: { name: string }[] };
     開始閱讀日期?: { date?: { start: string } | null };
     評分?: { select?: { name: string } | null };
+    心得?: { checkbox?: boolean };
   };
 };
 
@@ -63,6 +65,7 @@ function parseBook(page: NotionPage): Book {
     url: page.url,
     startDate: props.開始閱讀日期?.date?.start ?? null,
     rating: props.評分?.select?.name ?? null,
+    hasReflection: props.心得?.checkbox ?? false,
   };
 }
 
@@ -272,6 +275,91 @@ async function parseBlocks(blocks: NotionBlock[], token: string): Promise<Conten
 
 function isEmptyParagraph(block: NotionBlock): boolean {
   return block.type === "paragraph" && (block.paragraph?.rich_text?.length ?? 0) === 0;
+}
+
+// Generic page-body fetch — unlike getBookReflection below, this applies no
+// book-specific filtering (no callout-unwrapping, no child_database
+// exclusion). Used for pages where the whole body is the content, e.g. blog
+// posts.
+export async function getPageContent(pageId: string): Promise<ContentBlock[]> {
+  const token = process.env.NOTION_TOKEN;
+  if (!token) return [];
+
+  const blocks = await fetchBlockChildren(pageId, token);
+  return parseBlocks(blocks, token);
+}
+
+const EXCERPT_TEXT_TYPES = new Set([
+  "paragraph",
+  "heading_1",
+  "heading_2",
+  "heading_3",
+  "bulleted_list_item",
+  "numbered_list_item",
+  "quote",
+]);
+
+function blockPlainText(block: NotionBlock): string {
+  const richText = (
+    {
+      paragraph: block.paragraph,
+      heading_1: block.heading_1,
+      heading_2: block.heading_2,
+      heading_3: block.heading_3,
+      bulleted_list_item: block.bulleted_list_item,
+      numbered_list_item: block.numbered_list_item,
+      quote: block.quote,
+    } as Record<string, { rich_text: NotionBlockRichText[] } | undefined>
+  )[block.type]?.rich_text;
+  return plainText(richText);
+}
+
+async function fetchLeadingBlocks(pageId: string, token: string): Promise<NotionBlock[]> {
+  const res = await fetch(`https://api.notion.com/v1/blocks/${pageId}/children?page_size=20`, {
+    headers: { Authorization: `Bearer ${token}`, "Notion-Version": "2022-06-28" },
+    cache: "no-store",
+  });
+  if (!res.ok) return [];
+  const data = await res.json();
+  return data.results as NotionBlock[];
+}
+
+function excerptFromBlocks(blocks: NotionBlock[], maxLength: number): string {
+  let text = "";
+  for (const block of blocks) {
+    if (!EXCERPT_TEXT_TYPES.has(block.type)) continue;
+    const blockText = blockPlainText(block);
+    if (!blockText) continue;
+    text = text ? `${text} ${blockText}` : blockText;
+    if (text.length >= maxLength) break;
+  }
+  return text.length > maxLength ? `${text.slice(0, maxLength).trim()}…` : text;
+}
+
+function firstImageFromBlocks(blocks: NotionBlock[]): string | null {
+  for (const block of blocks) {
+    if (block.type !== "image") continue;
+    const url = block.image?.type === "external" ? block.image.external?.url : block.image?.file?.url;
+    if (url) return url;
+  }
+  return null;
+}
+
+// Blog posts have no dedicated excerpt field or cover requirement — the list
+// page's "縮文" and (for the newest post, when it has no Notion page cover)
+// fallback thumbnail are both derived by walking the page's own opening
+// blocks. A single unpaginated fetch covers both, since we only need the
+// leading content either way.
+export async function getPlainTextExcerpt(pageId: string, maxLength = 120): Promise<string> {
+  const token = process.env.NOTION_TOKEN;
+  if (!token) return "";
+  return excerptFromBlocks(await fetchLeadingBlocks(pageId, token), maxLength);
+}
+
+export async function getFirstImageUrl(pageId: string): Promise<string | null> {
+  const token = process.env.NOTION_TOKEN;
+  if (!token) return null;
+  return firstImageFromBlocks(await fetchLeadingBlocks(pageId, token));
 }
 
 // The rule (per yicheng): everything on the page that isn't per-chapter

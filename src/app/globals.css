@@ -54,3 +54,21 @@
   border-radius: 40%;
   background-color: currentColor;
 }
+
+/* Blog-only background: same brand orange/black as every other page, with a
+   grain layer blended on top for a rough-paper feel. The grain is an SVG
+   feTurbulence noise tile (not an image asset) — feComponentTransfer pushes
+   its contrast so light/dark speckles both read clearly, then multiply
+   darkens speckles into the orange, screen lightens them against black, so
+   the same shape of tile works in both themes. */
+.bg-paper {
+  background-color: #f2a341;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch' result='t'/%3E%3CfeColorMatrix in='t' type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='2.2' intercept='-0.6'/%3E%3CfeFuncG type='linear' slope='2.2' intercept='-0.6'/%3E%3CfeFuncB type='linear' slope='2.2' intercept='-0.6'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-blend-mode: multiply;
+}
+
+.dark .bg-paper {
+  background-color: #000000;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch' result='t'/%3E%3CfeColorMatrix in='t' type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='1.1' intercept='-0.15'/%3E%3CfeFuncG type='linear' slope='1.1' intercept='-0.15'/%3E%3CfeFuncB type='linear' slope='1.1' intercept='-0.15'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  background-blend-mode: screen;
+}

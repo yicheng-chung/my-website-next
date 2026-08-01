@@ -1,0 +1,22 @@
+{
+  "zh": {
+    "heading": "部落格",
+    "sourceNote": "我的一些感想、日誌跟廢文的地方",
+    "emptyList": "還沒有文章。",
+    "readMore": "繼續閱讀 →",
+    "backToList": "回到 Blog",
+    "notFound": "找不到這篇文章。",
+    "emptyContent": "這篇還沒寫完。",
+    "translateFailed": "翻譯失敗，請再試一次。"
+  },
+  "en": {
+    "heading": "Blog",
+    "sourceNote": "Thoughts and moods, jotted down as they come.\n Synced from my Notion.",
+    "emptyList": "No posts yet.",
+    "readMore": "Continue reading →",
+    "backToList": "Back to Blog",
+    "notFound": "Couldn't find this post.",
+    "emptyContent": "This one isn't finished yet.",
+    "translateFailed": "Translation failed, please try again."
+  }
+}

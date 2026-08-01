@@ -35,6 +35,7 @@ export default function ChromeLayout({ children }: { children: ReactNode }) {
   const isHome = pathname === HOME_ROUTE;
   const isAbout = pathname === ABOUT_ROUTE;
   const isBookDetail = pathname.startsWith("/reading/");
+  const isBlog = pathname === "/blog" || pathname.startsWith("/blog/");
 
   const showInline = isHome || (isAbout && isDesktop);
   const showDrawerToggle = !showInline && !isBookDetail;
@@ -50,7 +51,7 @@ export default function ChromeLayout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className={`min-h-screen ${isBlog ? "bg-paper" : ""}`}>
       <Navbar />
 
       <main className="mx-auto flex max-w-7xl flex-col gap-6 px-4 pt-20 pb-10 sm:gap-8 sm:px-6 sm:pt-24 md:flex-row md:items-start md:pt-28 lg:px-10">
