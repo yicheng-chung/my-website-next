@@ -43,7 +43,7 @@ export default function BlogCard({
         )
       )}
       <div
-        className={`flex flex-1 flex-col items-center gap-2 text-center ${isLarge ? "p-6 sm:p-10" : "p-4 sm:p-5"}`}
+        className={`flex flex-1 flex-col items-center gap-2 text-center ${!isLarge || !post.cover ? "justify-center" : ""} ${isLarge ? "p-6 sm:p-10" : "p-4 sm:p-5"}`}
       >
         {post.category && (
           <span className="rounded-full bg-black px-2.5 py-0.5 text-xs font-medium text-[#F2A341] dark:bg-[#F2A341] dark:text-black">
@@ -63,7 +63,7 @@ export default function BlogCard({
         {post.excerpt && (
           <p
             className={`max-w-xl text-neutral-600 dark:text-neutral-300 ${
-              isLarge ? "text-base leading-relaxed" : "line-clamp-2 text-sm leading-relaxed"
+              isLarge ? "line-clamp-2 text-base leading-relaxed" : "line-clamp-2 text-sm leading-relaxed"
             }`}
           >
             {post.excerpt}
