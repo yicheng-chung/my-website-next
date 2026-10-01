@@ -124,7 +124,7 @@ export default function QuestionCardContent({
           >
             <div className='mt-4 flex gap-3 border-t border-white/10 pt-4'>
               <Image
-                src='/images/yc.jpg'
+                src='/images/yc-childhood.jpg'
                 alt=''
                 width={replyAvatarSize}
                 height={replyAvatarSize}
@@ -159,7 +159,7 @@ export default function QuestionCardContent({
       )}
       <div className='flex items-center gap-2.5'>
         <Image
-          src='/images/yc.jpg'
+          src='/images/yc-childhood.jpg'
           alt=''
           width={avatarSize}
           height={avatarSize}
