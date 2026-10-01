@@ -25,7 +25,7 @@ export default function BlogCard({
   return (
     <Link
       href={`/blog/${post.id}`}
-      className={`flex h-full flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white transition-transform duration-300 hover:scale-[1.02] hover:shadow-lg dark:border-neutral-700 dark:bg-neutral-800 ${className}`}
+      className={`flex h-full flex-col overflow-hidden rounded-none border border-neutral-200 bg-white transition-transform duration-300 hover:scale-[1.02] hover:shadow-lg dark:border-neutral-700 dark:bg-neutral-800 ${className}`}
     >
       {post.cover ? (
         // eslint-disable-next-line @next/next/no-img-element

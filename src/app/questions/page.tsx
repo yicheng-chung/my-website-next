@@ -395,20 +395,22 @@ export default function QuestionsPage() {
 
   return (
     <div className='flex flex-col gap-6 sm:gap-8'>
-      <div className='rounded-2xl border border-neutral-200 bg-white p-6 sm:p-8 dark:border-neutral-700 dark:bg-neutral-800'>
-        <h1 className='text-2xl font-bold text-neutral-900 sm:text-3xl dark:text-neutral-100'>
-          {t.title}
-        </h1>
-        <p className='mt-1 text-sm text-neutral-500 dark:text-neutral-400'>
-          {t.subtitle}
-        </p>
-        <p className='mt-4 text-base leading-relaxed sm:text-lg'>{t.intro}</p>
-      </div>
+      <div className='overflow-hidden rounded-2xl border border-white/10 bg-[#05080a]'>
+        <div className='relative px-6 pt-6 pb-8 sm:px-8 sm:pt-8 sm:pb-10'>
+          <div aria-hidden className='pointer-events-none absolute inset-0' style={NEBULA} />
+          <div aria-hidden className='pointer-events-none absolute inset-0' style={FAR_DUST} />
+          <div aria-hidden className='pointer-events-none absolute inset-0' style={NEAR_DUST} />
+          <div className='relative z-10'>
+            <h1 className='text-2xl font-bold text-white sm:text-3xl'>{t.title}</h1>
+            <p className='mt-1 text-sm text-white/60'>{t.subtitle}</p>
+            <p className='mt-4 text-base leading-relaxed text-white/85 sm:text-lg'>{t.intro}</p>
+          </div>
+        </div>
 
-      {isDesktop ? (
+        {isDesktop ? (
         <div
           ref={fieldRef}
-          className='relative overflow-hidden rounded-2xl border border-white/10 bg-[#05080a]'
+          className='relative overflow-hidden'
           style={{ height: fieldHeight }}
         >
           {USE_PHOTO_BACKGROUND ? (
@@ -496,7 +498,7 @@ export default function QuestionsPage() {
         // Mobile: a plain, non-draggable feed — no absolute positioning, no
         // collision avoidance needed, since normal document flow already
         // pushes cards apart (and back) as one expands or collapses.
-        <div className='relative overflow-hidden rounded-2xl border border-white/10 bg-[#05080a] p-3'>
+        <div className='relative overflow-hidden p-3'>
           {USE_PHOTO_BACKGROUND ? (
             <Image
               src='/images/questions-page-bg.png'
@@ -542,6 +544,7 @@ export default function QuestionsPage() {
           )}
         </div>
       )}
+      </div>
 
       <StarfieldGuide
         total={(questions ?? []).length}
