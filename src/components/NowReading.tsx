@@ -45,7 +45,7 @@ export default function NowReading() {
 
   if (books === null) {
     return (
-      <div className='flex h-[188px] items-center justify-center rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800'>
+      <div className='flex h-[216px] items-center justify-center rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800'>
         <Spinner />
       </div>
     )
@@ -80,7 +80,7 @@ export default function NowReading() {
         className='flex animate-[fadeIn_0.4s_ease] items-center gap-3 rounded-xl border border-neutral-200 bg-white p-3 transition-shadow hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800'
       >
         {book.cover ? (
-          <div className='flex h-40 w-28 flex-shrink-0 items-center justify-center rounded-md bg-neutral-100 p-[5%] dark:bg-neutral-700'>
+          <div className='flex h-48 w-32 flex-shrink-0 items-center justify-center rounded-md bg-white p-[5%]'>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={book.cover}
@@ -89,7 +89,7 @@ export default function NowReading() {
             />
           </div>
         ) : (
-          <div className='h-40 w-28 flex-shrink-0 rounded-md bg-neutral-100 dark:bg-neutral-700' />
+          <div className='h-48 w-32 flex-shrink-0 rounded-md bg-white' />
         )}
         <div className='min-w-0'>
           <p className='line-clamp-2 text-sm font-semibold text-neutral-800 dark:text-neutral-100'>

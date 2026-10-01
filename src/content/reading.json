@@ -1,7 +1,6 @@
 {
   "zh": {
     "heading": "閱讀",
-    "sourceNote": "閱讀讓我更加貼近自己，也是我撥開內在未知謎霧的途徑。 \n 本書單同步自我的 Notion。",
     "readingHeading": "正在閱讀",
     "finishedHeading": "已完成",
     "emptyReading": "目前沒有正在讀的書。",
@@ -13,11 +12,15 @@
     "emptyContent": "貽丞還沒寫這本書的心得，如你所知，他有點懶惰。",
     "progressLabel": "進度：",
     "startDateLabel": "開始閱讀：",
-    "ratingLabel": "評分："
+    "ratingLabel": "評分：",
+    "countSuffix": "（{count} 本）",
+    "categoriesCaption": "依主題瀏覽（共 {count} 個）",
+    "allTags": "全部",
+    "scrollLeft": "往前",
+    "scrollRight": "往後"
   },
   "en": {
     "heading": "Reading",
-    "sourceNote": "Reading brings me closer to myself, and it is one of the ways I find my way through the unknown fog within.  \n Synced from my Notion book list.",
     "readingHeading": "Currently Reading",
     "finishedHeading": "Finished",
     "emptyReading": "Nothing in progress right now.",
@@ -29,6 +32,11 @@
     "emptyContent": "Yi-Cheng hasn't written his thoughts on this book yet. As you might already know about him, he's a bit lazy.",
     "progressLabel": "Progress: ",
     "startDateLabel": "Started: ",
-    "ratingLabel": "Rating: "
+    "ratingLabel": "Rating: ",
+    "countSuffix": " ({count})",
+    "categoriesCaption": "Browse by topic ({count})",
+    "allTags": "All",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right"
   }
 }

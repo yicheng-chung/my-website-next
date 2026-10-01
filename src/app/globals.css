@@ -10,6 +10,25 @@
   box-sizing: border-box;
 }
 
+/* Image starts at `top: 100%` (just below the fold); the keyframe then
+   carries it from just-below-the-fold up to well past the top of the
+   viewport, so both ends of the loop sit fully off-screen and the jump
+   back to 0% is never visible. */
+@keyframes dreamy-drift {
+  0% {
+    transform: translateY(20vh) rotate(var(--dreamy-rotate, 0deg));
+  }
+  100% {
+    transform: translateY(-170vh) rotate(var(--dreamy-rotate, 0deg));
+  }
+}
+
+.dreamy-drift {
+  animation-name: dreamy-drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -28,6 +47,22 @@
 
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+@keyframes book-pop {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  45% {
+    transform: scale(1.08) rotate(-3deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.animate-book-pop {
+  animation: book-pop 240ms ease-out;
 }
 
 @keyframes spinner-fade {

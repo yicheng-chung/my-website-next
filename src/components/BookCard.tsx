@@ -1,15 +1,50 @@
-import Link from 'next/link'
 import { MessageCircle } from 'lucide-react'
 import type { Book } from '@/lib/notion'
+import InteractiveCard from './InteractiveCard'
 import ProgressBar from './ProgressBar'
 
-export default function BookCard({ book }: { book: Book }) {
+export default function BookCard({
+  book,
+  variant = 'shelf',
+}: {
+  book: Book
+  variant?: 'shelf' | 'featured'
+}) {
+  if (variant === 'featured') {
+    return (
+      <InteractiveCard
+        href={`/reading/${book.id}`}
+        className='group flex gap-4 rounded-xl border border-neutral-200 bg-white p-3 hover:shadow-md sm:p-4 dark:border-neutral-700 dark:bg-neutral-800'
+      >
+        <div className='aspect-[3/4] w-20 flex-shrink-0 overflow-hidden rounded-lg bg-white transition-transform duration-300 group-hover:scale-110 sm:w-28'>
+          {book.cover && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={book.cover} alt={book.title} className='h-full w-full object-contain' />
+          )}
+        </div>
+        <div className='flex min-w-0 flex-1 flex-col justify-center gap-1.5'>
+          <p className='line-clamp-2 text-base font-bold text-neutral-800 sm:text-lg dark:text-neutral-100'>
+            {book.title}
+          </p>
+          <p className='truncate text-sm text-neutral-500 dark:text-neutral-400'>
+            {book.author}
+          </p>
+          {book.progress !== null && (
+            <div className='mt-1 max-w-48'>
+              <ProgressBar percent={book.progress} />
+            </div>
+          )}
+        </div>
+      </InteractiveCard>
+    )
+  }
+
   return (
-    <Link
+    <InteractiveCard
       href={`/reading/${book.id}`}
-      className='group flex flex-col overflow-hidden rounded-lg border border-neutral-200 bg-white transition-shadow hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800'
+      className='group flex flex-col overflow-hidden rounded-lg border border-neutral-200 bg-white hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800'
     >
-      <div className='relative aspect-[3/4] w-full overflow-hidden bg-neutral-100 p-[5%] dark:bg-neutral-700'>
+      <div className='relative aspect-[3/4] w-full overflow-hidden bg-white p-[5%]'>
         {book.cover && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -33,6 +68,6 @@ export default function BookCard({ book }: { book: Book }) {
         </p>
         {book.progress !== null && <ProgressBar percent={book.progress} />}
       </div>
-    </Link>
+    </InteractiveCard>
   )
 }
