@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -10,7 +11,7 @@ const THEME_INIT_SCRIPT = `
   (function () {
     try {
       var stored = localStorage.getItem("my-website-theme");
-      var isDark = stored === "dark" || (!stored && matchMedia("(prefers-color-scheme: dark)").matches);
+      var isDark = stored !== "light";
       if (isDark) document.documentElement.classList.add("dark");
     } catch (e) {}
   })();
@@ -46,6 +47,7 @@ export default function RootLayout({
             <ChromeLayout>{children}</ChromeLayout>
           </LanguageProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );

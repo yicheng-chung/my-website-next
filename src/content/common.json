@@ -17,7 +17,7 @@
       "role": "準諮商心理師",
       "school": "國立政治大學 資訊管理學系",
       "years": "(2014 - 2020)",
-      "intro": "前端工程師做了三年多，去年決定給自己一個新方向，考上了心理諮商研究所，準備朝心理師的路走。這個網站留著，記錄一下工程師時期學到的東西怎麼帶到下一階段。"
+      "intro": "{age}歲 🏳️‍🌈。過去曾擔任軟體工程師三年多，未來會成為心理師。想用這個網站記錄這一路上發現了些什麼。在人生的路上跌撞了很多次，想成為更像貽丞的人。"
     },
     "footer": {
       "copyright": "Copyright ⓒ {year} Yi-Cheng, Chung. All rights reserved."
@@ -41,7 +41,7 @@
       "role": "Counseling Psychologist in Training",
       "school": "National ChengChi Uni. MIS",
       "years": "(2014 - 2020)",
-      "intro": "I spent three years as a front-end engineer before deciding on a new direction last year — I was admitted to a counseling psychology graduate program and am now working toward becoming a therapist. This site stays up as a record of carrying what I learned as an engineer into the next chapter."
+      "intro": "{age} years old 🏳️‍🌈. I spent three-plus years working as a software engineer, and I'm on my way to becoming a therapist. I want to use this site to record what I discover along the way. I've stumbled many times on this path — I want to become someone more like myself."
     },
     "footer": {
       "linksHeading": "My Links",

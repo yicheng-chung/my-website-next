@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "@/lib/useTranslations";
+import { getAge } from "@/lib/age";
 import content from "@/content/about.json";
 import LifeTimeline from "@/components/LifeTimeline";
 
@@ -13,7 +14,9 @@ export default function About() {
         <h1 className="mb-4 text-2xl font-bold text-[#F2A341] sm:text-3xl dark:text-[#F6B45E]">
           {t.heading}
         </h1>
-        <p className="mb-4 whitespace-pre-line text-base leading-relaxed sm:text-lg">{t.intro1}</p>
+        <p className="mb-4 whitespace-pre-line text-base leading-relaxed sm:text-lg">
+          {t.intro1.replace("{age}", String(getAge()))}
+        </p>
         <p className="whitespace-pre-line text-base leading-relaxed sm:text-lg">{t.intro2}</p>
       </div>
 

@@ -62,11 +62,19 @@ export default function ChromeLayout({ children }: { children: ReactNode }) {
           </aside>
         )}
 
-        {showInline && !isDesktop && <Profile />}
+        {showInline && !isDesktop && (
+          <div className="w-full md:w-[28rem] md:flex-shrink-0">
+            <Profile />
+          </div>
+        )}
 
         <div className="min-w-0 flex-1">{children}</div>
 
-        {showInline && !isDesktop && isHome && <NowStatus />}
+        {showInline && !isDesktop && isHome && (
+          <div className="w-full md:hidden">
+            <NowStatus />
+          </div>
+        )}
       </main>
 
       {showDrawerToggle && (

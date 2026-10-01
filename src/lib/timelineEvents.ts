@@ -215,14 +215,14 @@ export const timelineEvents: TimelineEvent[] = [
     location: { lat: 25.0246, lng: 121.5446, zoom: 14 },
   },
   {
-    id: "enroll-ntue-2026-09",
+    id: "au-whv-2026-09",
     year: 2026,
     month: 9,
-    title: { zh: "入學國北教大心理與諮商研究所", en: "Enrolled in NTUE's counseling program" },
+    title: { zh: "準備前往澳洲打工度假", en: "Preparing for a working holiday in Australia" },
     description: {
-      zh: "入學國立台北教育大學心理與諮商學系研究所。",
-      en: "Enrolled in the Graduate Institute of Psychology and Counseling at National Taipei University of Education.",
+      zh: "準備要去澳洲打工度假一年。",
+      en: "Preparing to spend a year on a working holiday in Australia.",
     },
-    location: { lat: 24.9936, lng: 121.301, zoom: 13 },
+    location: { lat: -37.8136, lng: 144.9631, zoom: 11 },
   },
 ];

@@ -16,7 +16,10 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 const STORAGE_KEY = "my-website-theme";
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("light");
+  // Defaults to dark for first-time visitors (no stored preference) — matches
+  // the inline THEME_INIT_SCRIPT in layout.tsx, which paints dark before this
+  // ever mounts.
+  const [theme, setThemeState] = useState<Theme>("dark");
   // Counter, not a boolean, so nested/overlapping forcers (or React StrictMode's
   // double-invoked effects in dev) can't clear each other's force prematurely.
   const [forceCount, setForceCount] = useState(0);
@@ -25,8 +28,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const stored = window.localStorage.getItem(STORAGE_KEY);
     if (stored === "light" || stored === "dark") {
       setThemeState(stored);
-    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      setThemeState("dark");
     }
   }, []);
 

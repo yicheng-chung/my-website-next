@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { FaGithub, FaLinkedin, FaFacebook, FaInstagram } from 'react-icons/fa'
 import { useTranslations } from '@/lib/useTranslations'
+import { getAge } from '@/lib/age'
 import common from '@/content/common.json'
 import links from '@/content/links.json'
 
@@ -20,21 +21,18 @@ export default function Profile() {
     <div className='flex w-full flex-col items-center rounded-2xl border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-neutral-800'>
       <div className='mb-4'>
         <Image
-          src='/images/yc.jpg'
+          src='/images/yc-childhood.jpg'
           alt='Yi-Cheng Chung'
           width={150}
           height={150}
-          className='rounded-full border-2 border-[#F2A341]/40 object-cover'
+          className='h-[150px] w-[150px] rounded-full border-2 border-[#F2A341]/40 object-cover'
         />
       </div>
       <div className='flex flex-col items-center text-center'>
         <span className='text-2xl font-extrabold'>{t.profile.name}</span>
-        <h6 className='mt-1 text-lg'>{t.profile.role}</h6>
-        <h6 className='text-lg'>{t.profile.school}</h6>
-        <h6 className='text-lg'>{t.profile.years}</h6>
       </div>
       <p className='mt-6 rounded-xl rounded-br-none bg-[#F2A341]/30 p-3 text-base font-normal dark:bg-[#F2A341]/25 dark:text-neutral-100'>
-        {t.profile.intro}
+        {t.profile.intro.replace('{age}', String(getAge()))}
       </p>
       <nav className='mt-4 flex gap-4'>
         {SOCIAL_LINKS.map(({ href, label, Icon }) => (
