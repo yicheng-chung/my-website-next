@@ -187,7 +187,7 @@ export default function ReadingPage() {
                 {t.emptyReading}
               </p>
             )}
-            <div className='grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4'>
+            <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3'>
               <AnimatePresence initial={false}>
                 {filteredReading.map((book) => (
                   <motion.div
@@ -233,7 +233,7 @@ export default function ReadingPage() {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.96 }}
                       transition={{ duration: 0.2 }}
-                      className='w-28 flex-shrink-0 snap-center sm:w-32 md:w-36'
+                      className='w-40 flex-shrink-0 snap-center sm:w-44 lg:w-48'
                     >
                       <div className='origin-center scale-100 transition-transform duration-200 ease-out hover:z-10 hover:scale-[1.1]'>
                         <BookCard book={book} variant='shelf' />
