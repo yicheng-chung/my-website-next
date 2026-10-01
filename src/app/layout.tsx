@@ -38,7 +38,7 @@ export default function RootLayout({
       className={`${montserrat.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full bg-[#F2A341] font-sans text-neutral-900 dark:bg-black dark:text-neutral-100">
+      <body className="min-h-full bg-[#F5EFE4] font-sans text-neutral-900 dark:bg-black dark:text-neutral-100">
         <Script id="theme-init" strategy="beforeInteractive">
           {THEME_INIT_SCRIPT}
         </Script>

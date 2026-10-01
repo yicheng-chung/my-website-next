@@ -186,7 +186,7 @@ export default function BlogPostPage() {
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">{formattedDate}</p>
               )}
               {post.category && (
-                <span className="rounded-full bg-black px-2.5 py-0.5 text-xs font-medium text-[#F2A341] dark:bg-[#F2A341] dark:text-black">
+                <span className="rounded-full bg-[#F2A341] px-2.5 py-0.5 text-xs font-medium text-black">
                   ＃{post.category}
                 </span>
               )}

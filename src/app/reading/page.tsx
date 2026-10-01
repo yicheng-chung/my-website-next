@@ -16,7 +16,7 @@ import {
 } from '@/lib/notionCache'
 import type { Book } from '@/lib/notion'
 
-const TAG_ACTIVE = 'bg-black text-[#F2A341] dark:bg-[#F2A341] dark:text-black'
+const TAG_ACTIVE = 'bg-[#F2A341] text-black'
 const TAG_INACTIVE =
   'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-600'
 
@@ -222,7 +222,7 @@ export default function ReadingPage() {
                 ref={finishedStripRef}
                 onWheel={handleFinishedWheel}
                 onScroll={handleFinishedScroll}
-                className='hide-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto py-6 pr-[12%] sm:pr-[18%]'
+                className='hide-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto py-6'
               >
                 <AnimatePresence initial={false}>
                   {filteredFinished.map((book) => (

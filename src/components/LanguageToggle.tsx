@@ -11,7 +11,11 @@ export default function LanguageToggle() {
   const t = useTranslations(common);
 
   return (
-    <div className="flex items-center rounded-full bg-white/15 p-1" role="group" aria-label="Language">
+    <div
+      className="flex items-center rounded-full bg-white/15 p-1 dark:bg-black/10"
+      role="group"
+      aria-label="Language"
+    >
       {OPTIONS.map((option) => {
         const active = lang === option;
         return (
@@ -22,8 +26,8 @@ export default function LanguageToggle() {
             onClick={() => setLang(option)}
             className={
               active
-                ? "rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#F2A341]"
-                : "cursor-pointer rounded-full px-3 py-1 text-xs font-semibold text-white/70 hover:text-white"
+                ? "rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#F2A341] dark:bg-black dark:text-[#F6B45E]"
+                : "cursor-pointer rounded-full px-3 py-1 text-xs font-semibold text-white/70 hover:text-white dark:text-black/60 dark:hover:text-black"
             }
           >
             {t.languageSwitch[option]}

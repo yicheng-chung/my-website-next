@@ -46,7 +46,7 @@ export default function BlogCard({
         className={`flex flex-1 flex-col items-center gap-2 text-center ${!isLarge || !post.cover ? "justify-center" : ""} ${isLarge ? "p-6 sm:p-10" : "p-4 sm:p-5"}`}
       >
         {post.category && (
-          <span className="rounded-full bg-black px-2.5 py-0.5 text-xs font-medium text-[#F2A341] dark:bg-[#F2A341] dark:text-black">
+          <span className="rounded-full bg-[#F2A341] px-2.5 py-0.5 text-xs font-medium text-black">
             ＃{post.category}
           </span>
         )}
