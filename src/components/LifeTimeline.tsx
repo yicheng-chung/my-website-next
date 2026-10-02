@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react'
 import maplibregl from 'maplibre-gl'
@@ -133,12 +134,15 @@ export default function LifeTimeline() {
                 className='absolute left-4 right-4 top-4 max-w-sm rounded-xl border border-neutral-200 bg-white/95 p-4 shadow-lg backdrop-blur dark:border-neutral-700 dark:bg-neutral-800/95'
               >
                 {activeEvent.image && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={activeEvent.image}
-                    alt={activeEvent.title[lang]}
-                    className='mb-3 h-32 w-full rounded-lg object-cover'
-                  />
+                  <div className='relative mb-3 h-32 w-full'>
+                    <Image
+                      src={activeEvent.image}
+                      alt={activeEvent.title[lang]}
+                      fill
+                      sizes='384px'
+                      className='rounded-lg object-cover'
+                    />
+                  </div>
                 )}
                 <p className='text-xs font-semibold text-[#F2A341] dark:text-[#F6B45E]'>
                   {formatEventFull(activeEvent, lang)}
@@ -258,12 +262,15 @@ export default function LifeTimeline() {
                     >
                       <div className='px-4 pb-4'>
                         {event.image && (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={event.image}
-                            alt={event.title[lang]}
-                            className='mb-3 h-40 w-full rounded-lg object-cover'
-                          />
+                          <div className='relative mb-3 h-40 w-full'>
+                            <Image
+                              src={event.image}
+                              alt={event.title[lang]}
+                              fill
+                              sizes='400px'
+                              className='rounded-lg object-cover'
+                            />
+                          </div>
                         )}
                         <p className='text-sm leading-relaxed text-neutral-600 dark:text-neutral-300'>
                           {event.description[lang]}

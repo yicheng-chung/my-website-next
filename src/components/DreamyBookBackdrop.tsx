@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, type CSSProperties } from 'react'
+import Image from 'next/image'
 import type { Book } from '@/lib/notion'
 
 // Fixed background layer of a few giant, softly blurred book covers that
@@ -39,17 +40,23 @@ export default function DreamyBookBackdrop({ books }: { books: Book[] }) {
   return (
     <div aria-hidden className='pointer-events-none fixed inset-0 -z-10 overflow-hidden'>
       {covers.map((c) => (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           key={c.key}
           src={c.src}
           alt=''
+          width={c.size}
+          height={Math.round(c.size * 1.3)}
           className='dreamy-drift absolute top-full rounded-[2rem] object-cover opacity-[0.25] blur-[28px] dark:opacity-[0.32]'
           style={
             {
               left: `${c.left}%`,
+              // Tailwind's preflight resets img height to auto, which
+              // fights with next/image's own width/height attributes
+              // (hence Next's dev-only "width or height modified, but not
+              // the other" warning) — pinning both explicitly here wins
+              // over that reset instead of silently deferring to it.
               width: c.size,
-              height: c.size * 1.3,
+              height: Math.round(c.size * 1.3),
               '--dreamy-rotate': `${c.rotate}deg`,
               animationDuration: `${c.duration}s`,
               animationDelay: `${c.delay}s`,

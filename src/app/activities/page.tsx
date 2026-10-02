@@ -1,7 +1,9 @@
 "use client";
 
 import { useTranslations } from "@/lib/useTranslations";
+import { useDocumentTitle } from "@/lib/useDocumentTitle";
 import content from "@/content/activities.json";
+import common from "@/content/common.json";
 import Marquee from "@/components/Marquee";
 
 // Deliberately not using the site's usual neutral/cream, thin-border,
@@ -19,6 +21,8 @@ import Marquee from "@/components/Marquee";
 // state when nothing is.
 export default function ActivitiesPage() {
   const t = useTranslations(content);
+  const { siteName } = useTranslations(common);
+  useDocumentTitle(`${t.title} · ${siteName}`);
 
   return (
     <div className="flex flex-col gap-6">

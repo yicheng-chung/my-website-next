@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
 import { useTranslations } from '@/lib/useTranslations'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 import { useLanguage } from '@/context/LanguageContext'
 import content from '@/content/reading.json'
+import common from '@/content/common.json'
 import {
   readNotionCache,
   writeNotionCache,
@@ -34,6 +37,8 @@ export default function BookDetailPage() {
   const { lang } = useLanguage()
   const [book, setBook] = useState<Book | null | undefined>(undefined)
   const [blocks, setBlocks] = useState<ContentBlock[] | null>(null)
+  const { nav, siteName } = useTranslations(common)
+  useDocumentTitle(`${book?.title ?? nav.reading} · ${siteName}`)
 
   useEffect(() => {
     let cancelled = false
@@ -107,11 +112,15 @@ export default function BookDetailPage() {
           aria-hidden
           className='pointer-events-none fixed inset-0 -z-10 overflow-hidden'
         >
-          <img
-            src={book.cover}
-            alt=''
-            className='absolute top-40 bottom-0 left-1/2 w-[80%] -translate-x-1/2 origin-top scale-110 object-cover object-top opacity-30 blur-[18px] dark:opacity-40'
-          />
+          <div className='absolute top-40 bottom-0 left-1/2 w-[80%] -translate-x-1/2 origin-top scale-110'>
+            <Image
+              src={book.cover}
+              alt=''
+              fill
+              sizes='80vw'
+              className='object-cover object-top opacity-30 blur-[18px] dark:opacity-40'
+            />
+          </div>
         </div>
       )}
 

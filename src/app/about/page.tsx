@@ -1,12 +1,16 @@
 "use client";
 
 import { useTranslations } from "@/lib/useTranslations";
+import { useDocumentTitle } from "@/lib/useDocumentTitle";
 import { getAge } from "@/lib/age";
 import content from "@/content/about.json";
+import common from "@/content/common.json";
 import LifeTimeline from "@/components/LifeTimeline";
 
 export default function About() {
   const t = useTranslations(content);
+  const { nav, siteName } = useTranslations(common);
+  useDocumentTitle(`${nav.about} · ${siteName}`);
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8">

@@ -2,8 +2,10 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslations } from '@/lib/useTranslations'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 import { useLanguage } from '@/context/LanguageContext'
 import content from '@/content/blog.json'
+import common from '@/content/common.json'
 import BlogCard from '@/components/BlogCard'
 import BlogLayoutToggle, {
   type BlogLayout,
@@ -22,6 +24,8 @@ const LAYOUT_KEY = 'blog-layout'
 export default function BlogPage() {
   const t = useTranslations(content)
   const { lang } = useLanguage()
+  const { nav, siteName } = useTranslations(common)
+  useDocumentTitle(`${nav.blog} · ${siteName}`)
   const [posts, setPosts] = useState<BlogPost[] | null>(null)
   const [nextCursor, setNextCursor] = useState<string | null>(null)
   const [hasMore, setHasMore] = useState(false)

@@ -23,6 +23,12 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "prod-files-secure.s3.us-west-2.amazonaws.com",
       },
+      // Some book covers are set as an external URL (books.com.tw) rather
+      // than a Notion-hosted cover.
+      {
+        protocol: "https",
+        hostname: "www.books.com.tw",
+      },
     ],
   },
 };

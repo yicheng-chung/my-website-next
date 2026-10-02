@@ -2,13 +2,15 @@
 
 import Image from 'next/image'
 import { useTranslations } from '@/lib/useTranslations'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 import content from '@/content/home.json'
 import common from '@/content/common.json'
 import HomeNavCard from '@/components/HomeNavCard'
 
 export default function Home() {
   const t = useTranslations(content)
-  const nav = useTranslations(common).nav
+  const { nav, siteName } = useTranslations(common)
+  useDocumentTitle(siteName)
 
   return (
     <div className='flex flex-col gap-6 sm:gap-8'>

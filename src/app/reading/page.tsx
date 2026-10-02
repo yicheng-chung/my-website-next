@@ -4,8 +4,10 @@ import { useEffect, useMemo, useRef, useState, type WheelEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTranslations } from '@/lib/useTranslations'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 import { useCountUp } from '@/lib/useCountUp'
 import content from '@/content/reading.json'
+import common from '@/content/common.json'
 import BookCard from '@/components/BookCard'
 import DreamyBookBackdrop from '@/components/DreamyBookBackdrop'
 import Spinner from '@/components/Spinner'
@@ -29,6 +31,8 @@ function matchesTags(book: Book, activeTags: string[]): boolean {
 
 export default function ReadingPage() {
   const t = useTranslations(content)
+  const { nav, siteName } = useTranslations(common)
+  useDocumentTitle(`${nav.reading} · ${siteName}`)
   const [data, setData] = useState<NotionData | null>(null)
   const [activeTags, setActiveTags] = useState<string[]>([])
 

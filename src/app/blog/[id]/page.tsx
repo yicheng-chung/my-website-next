@@ -5,8 +5,10 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Languages } from "lucide-react";
 import { useTranslations } from "@/lib/useTranslations";
+import { useDocumentTitle } from "@/lib/useDocumentTitle";
 import { useLanguage } from "@/context/LanguageContext";
 import content from "@/content/blog.json";
+import common from "@/content/common.json";
 import { readBlogCache } from "@/lib/blogCache";
 import type { BlogPost } from "@/lib/blog";
 import type { ContentBlock } from "@/lib/notion";
@@ -49,6 +51,8 @@ export default function BlogPostPage() {
   const [post, setPost] = useState<BlogPost | null | undefined>(undefined);
   const [blocks, setBlocks] = useState<ContentBlock[] | null>(null);
   const [adjacent, setAdjacent] = useState<Adjacent>({ prev: null, next: null });
+  const { nav, siteName } = useTranslations(common);
+  useDocumentTitle(`${post?.title ?? nav.blog} · ${siteName}`);
   // Cached once translated, since re-translating on every toggle would waste
   // requests against the free endpoint (see lib/translate.ts) for no benefit
   // — the content doesn't change mid-visit.

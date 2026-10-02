@@ -6,6 +6,9 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { useLanguage } from '@/context/LanguageContext'
 import { useTheme } from '@/context/ThemeContext'
 import { useIsDesktop } from '@/lib/useIsDesktop'
+import { useTranslations } from '@/lib/useTranslations'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
+import common from '@/content/common.json'
 import type { QuestionEntry } from '@/lib/questions'
 import { layoutStars, type StarPosition } from '@/lib/starfield'
 import { NEBULA, FAR_DUST, NEAR_DUST } from '@/lib/starfieldBackground'
@@ -180,6 +183,8 @@ function computeBasePositions(
 
 export default function QuestionsPage() {
   const { lang } = useLanguage()
+  const { nav, siteName } = useTranslations(common)
+  useDocumentTitle(`${nav.questions} · ${siteName}`)
   const { forceDark, clearForceDark } = useTheme()
   const isDesktop = useIsDesktop()
   const t = TEXT[lang]
