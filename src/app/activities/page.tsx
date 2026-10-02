@@ -46,7 +46,7 @@ export default function ActivitiesPage() {
 
       <div className="flex flex-col items-center gap-3 rounded-[2rem] border-4 border-black bg-white px-6 py-16 text-center shadow-[8px_8px_0_0_#000]">
         <p className="text-2xl font-black text-black sm:text-3xl">{t.emptyTitle}</p>
-        <p className="whitespace-nowrap text-xs font-medium text-neutral-600 sm:text-base">
+        <p className="text-xs font-medium text-neutral-600 sm:whitespace-nowrap sm:text-base">
           {t.emptyBody}
         </p>
       </div>

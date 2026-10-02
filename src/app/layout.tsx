@@ -23,7 +23,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "YiCheng's Page",
+  title: "YiCheng Chung",
   description: "鍾貽丞 (Yi-Cheng Chung) — personal resume site",
 };
 

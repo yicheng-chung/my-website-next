@@ -4,12 +4,15 @@ import { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { useTranslations } from "@/lib/useTranslations";
+import common from "@/content/common.json";
 import NavLinks from "./NavLinks";
 import LanguageToggle from "./LanguageToggle";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { siteName } = useTranslations(common);
 
   return (
     <>
@@ -29,7 +32,7 @@ export default function Navbar() {
               href="/"
               className="truncate text-lg font-bold text-white transition-colors hover:text-[#F2A341] sm:text-xl dark:text-black dark:hover:text-[#F2A341]"
             >
-              YiCheng&apos;s Page
+              {siteName}
             </Link>
           </div>
 
