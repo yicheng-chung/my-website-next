@@ -37,7 +37,9 @@ export default function ChromeLayout({ children }: { children: ReactNode }) {
   const isBookDetail = pathname.startsWith("/reading/");
 
   const showInline = isHome || (isAbout && isDesktop);
-  const showDrawerToggle = !showInline && !isBookDetail;
+  // Desktop-only — on mobile this drawer (profile tucked behind a side
+  // button) is dropped entirely rather than shown, per yicheng.
+  const showDrawerToggle = !showInline && !isBookDetail && isDesktop;
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [lastPathname, setLastPathname] = useState(pathname);
