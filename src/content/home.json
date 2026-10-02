@@ -6,7 +6,8 @@
       "about": "關於鍾貽丞的一些事情",
       "reading": "書單、進度、正在讀的東西",
       "blog": "隨手記下的心情與感想",
-      "questions": "腦中一閃而過、想留住的問題"
+      "questions": "腦中一閃而過、想留住的問題",
+      "activities": "有想到什麼活動會放在這裡"
     }
   },
   "en": {
@@ -16,7 +17,8 @@
       "about": "A few things about Yi-Cheng Chung",
       "reading": "What I'm reading, and what's next",
       "blog": "Thoughts and moods, jotted down as they come",
-      "questions": "Fleeting questions I want to hold onto"
+      "questions": "Fleeting questions I want to hold onto",
+      "activities": "Whatever activity I come up with shows up here"
     }
   }
 }

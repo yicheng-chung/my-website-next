@@ -65,6 +65,22 @@
   animation: book-pop 240ms ease-out;
 }
 
+/* Content is duplicated twice in the track (see Marquee.tsx), so sliding by
+   exactly half its width loops seamlessly — the point where the jump back
+   to 0% happens is never visible since the second copy is already there. */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 16s linear infinite;
+}
+
 @keyframes spinner-fade {
   0% {
     opacity: 1;

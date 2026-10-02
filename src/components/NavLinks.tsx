@@ -11,6 +11,7 @@ const NAV_ROUTES = [
   { href: "/reading", key: "reading" },
   { href: "/blog", key: "blog" },
   { href: "/questions", key: "questions" },
+  { href: "/activities", key: "activities" },
 ] as const;
 
 export default function NavLinks({ onNavigate }: { onNavigate?: () => void }) {

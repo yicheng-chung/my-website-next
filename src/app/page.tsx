@@ -73,6 +73,25 @@ export default function Home() {
             className='object-cover'
           />
         </HomeNavCard>
+
+        <HomeNavCard
+          href='/activities'
+          title={nav.activities}
+          subtitle={t.navCards.activities}
+          overlay={false}
+        >
+          {/* Same orange diagonal-stripe treatment as the Activities page's
+              own hero block, rather than a photo — this card should look
+              like a preview of that page's distinct style. */}
+          <div
+            className='h-full w-full'
+            style={{
+              backgroundColor: '#FF6B35',
+              backgroundImage:
+                'repeating-linear-gradient(45deg, rgba(0,0,0,0.08) 0px, rgba(0,0,0,0.08) 14px, transparent 14px, transparent 28px)',
+            }}
+          />
+        </HomeNavCard>
       </div>
     </div>
   )
