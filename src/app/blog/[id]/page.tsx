@@ -7,7 +7,7 @@ import { ArrowLeft, Languages } from "lucide-react";
 import { useTranslations } from "@/lib/useTranslations";
 import { useLanguage } from "@/context/LanguageContext";
 import content from "@/content/blog.json";
-import { readBlogCache, writeBlogCache } from "@/lib/blogCache";
+import { readBlogCache } from "@/lib/blogCache";
 import type { BlogPost } from "@/lib/blog";
 import type { ContentBlock } from "@/lib/notion";
 import Spinner from "@/components/Spinner";
@@ -58,30 +58,26 @@ export default function BlogPostPage() {
   useEffect(() => {
     let cancelled = false;
 
-    const cached = readBlogCache();
-    const listPromise: Promise<BlogPost[]> = cached
-      ? Promise.resolve(cached)
-      : fetch("/api/blog")
-          .then((res) => res.json())
-          .then((json: { posts: BlogPost[] }) => json.posts ?? []);
-
-    listPromise
-      .then((posts) => {
-        if (cancelled) return;
-        if (!cached) writeBlogCache(posts);
-        setPost(posts.find((p) => p.id === params.id) ?? null);
-      })
-      .catch(() => {
-        if (!cancelled) setPost(null);
-      });
+    // The listing page's cache only holds whatever's been loaded so far
+    // (it's paginated now) — check it first for an instant result, but
+    // don't treat a miss as "not found": fall back to the per-post lookup
+    // bundled into the content request below, which covers direct links
+    // and posts the reader hasn't scrolled to yet.
+    const cachedPost = readBlogCache()?.posts.find((p) => p.id === params.id) ?? null;
+    if (cachedPost) setPost(cachedPost);
 
     fetch(`/api/blog/${params.id}`)
       .then((res) => res.json())
-      .then((json: { content: ContentBlock[] }) => {
-        if (!cancelled) setBlocks(json.content);
+      .then((json: { content: ContentBlock[]; post: BlogPost | null }) => {
+        if (cancelled) return;
+        setBlocks(json.content);
+        if (!cachedPost) setPost(json.post ?? null);
       })
       .catch(() => {
-        if (!cancelled) setBlocks([]);
+        if (!cancelled) {
+          setBlocks([]);
+          if (!cachedPost) setPost(null);
+        }
       });
 
     return () => {
