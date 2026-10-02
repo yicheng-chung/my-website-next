@@ -5,7 +5,10 @@
     "backToList": "回到 Blog",
     "notFound": "找不到這篇文章。",
     "emptyContent": "這篇還沒寫完。",
-    "translateFailed": "翻譯失敗，請再試一次。"
+    "translateFailed": "翻譯失敗，請再試一次。",
+    "previousPost": "上一篇",
+    "nextPost": "下一篇",
+    "allCategories": "全部"
   },
   "en": {
     "emptyList": "No posts yet.",
@@ -13,6 +16,9 @@
     "backToList": "Back to Blog",
     "notFound": "Couldn't find this post.",
     "emptyContent": "This one isn't finished yet.",
-    "translateFailed": "Translation failed, please try again."
+    "translateFailed": "Translation failed, please try again.",
+    "previousPost": "Previous",
+    "nextPost": "Next",
+    "allCategories": "All"
   }
 }

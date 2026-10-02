@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { BlogPost } from "@/lib/blog";
 
@@ -45,12 +46,13 @@ export default function BlogCard({
           )}
         </div>
         {post.cover && (
-          <div className="h-24 w-24 flex-shrink-0 overflow-hidden sm:h-28 sm:w-28">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+          <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden sm:h-28 sm:w-28">
+            <Image
               src={post.cover}
               alt=""
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              fill
+              sizes="112px"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </div>
         )}
@@ -70,8 +72,15 @@ export default function BlogCard({
     >
       {isLarge &&
         (post.cover ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={post.cover} alt="" className="aspect-[3/2] w-full object-cover sm:aspect-[2/1]" />
+          <div className="relative aspect-[3/2] w-full sm:aspect-[2/1]">
+            <Image
+              src={post.cover}
+              alt=""
+              fill
+              sizes="(min-width: 640px) 50vw, 100vw"
+              className="object-cover"
+            />
+          </div>
         ) : (
           <div className="aspect-[3/2] w-full bg-gradient-to-br from-[#F2A341] to-[#F6B45E] sm:aspect-[2/1]" />
         ))}

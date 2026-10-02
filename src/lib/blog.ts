@@ -61,12 +61,17 @@ export type BlogPostPage = {
 export async function getBlogPosts(options?: {
   pageSize?: number;
   cursor?: string | null;
+  category?: string | null;
 }): Promise<BlogPostPage> {
   const token = process.env.NOTION_TOKEN;
   const databaseId = process.env.NOTION_BLOG_DATABASE_ID;
   if (!token || !databaseId) return { posts: [], nextCursor: null, hasMore: false };
 
   const pageSize = options?.pageSize ?? 5;
+  const statusFilter = { property: "狀態", status: { equals: "已發布" } };
+  const filter = options?.category
+    ? { and: [statusFilter, { property: "類型", select: { equals: options.category } }] }
+    : statusFilter;
 
   const res = await fetch(`https://api.notion.com/v1/databases/${databaseId}/query`, {
     method: "POST",
@@ -76,7 +81,7 @@ export async function getBlogPosts(options?: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      filter: { property: "狀態", status: { equals: "已發布" } },
+      filter,
       sorts: [{ timestamp: "created_time", direction: "descending" }],
       page_size: pageSize,
       ...(options?.cursor ? { start_cursor: options.cursor } : {}),
@@ -143,4 +148,107 @@ export async function getBlogPostById(id: string): Promise<BlogPost | null> {
   }
 
   return { ...base, excerpt };
+}
+
+// The category pills on the list page need every category that has at
+// least one *published* post — not every option configured on the 類型
+// property, which can include categories nothing is tagged with yet (or
+// only drafts), and would otherwise show a pill that filters to nothing.
+// Cross-references the schema's own option order (for a stable, intentional
+// display order matching how yicheng ordered them in Notion) against which
+// of those options actually turn up among published posts.
+export async function getBlogCategories(): Promise<string[]> {
+  const token = process.env.NOTION_TOKEN;
+  const databaseId = process.env.NOTION_BLOG_DATABASE_ID;
+  if (!token || !databaseId) return [];
+
+  const schemaRes = await fetch(`https://api.notion.com/v1/databases/${databaseId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Notion-Version": "2022-06-28",
+    },
+    cache: "no-store",
+  });
+  if (!schemaRes.ok) return [];
+  const schema = await schemaRes.json();
+  const options = (schema.properties?.類型?.select?.options as { name: string }[] | undefined) ?? [];
+  if (options.length === 0) return [];
+
+  const used = new Set<string>();
+  let cursor: string | null = null;
+  do {
+    const res: Response = await fetch(`https://api.notion.com/v1/databases/${databaseId}/query`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Notion-Version": "2022-06-28",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        filter: { property: "狀態", status: { equals: "已發布" } },
+        page_size: 100,
+        ...(cursor ? { start_cursor: cursor } : {}),
+      }),
+      cache: "no-store",
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    for (const page of data.results as NotionBlogPage[]) {
+      const name = page.properties.類型?.select?.name;
+      if (name) used.add(name);
+    }
+    cursor = data.has_more ? data.next_cursor : null;
+  } while (cursor);
+
+  return options.map((o) => o.name).filter((name) => used.has(name));
+}
+
+type AdjacentPost = { id: string; title: string };
+
+// Previous/next navigation needs each post's position among *every*
+// published post in the same creation-time order the list page uses —
+// the paginated list itself only ever has a handful loaded client-side, so
+// this re-walks the whole database (id + title only, cheap) to find them.
+// "Previous" is the older post, "next" the newer one — normal reading
+// order, independent of the list's newest-first sort.
+export async function getAdjacentPosts(
+  id: string
+): Promise<{ prev: AdjacentPost | null; next: AdjacentPost | null }> {
+  const token = process.env.NOTION_TOKEN;
+  const databaseId = process.env.NOTION_BLOG_DATABASE_ID;
+  if (!token || !databaseId) return { prev: null, next: null };
+
+  const all: AdjacentPost[] = [];
+  let cursor: string | null = null;
+  do {
+    const res: Response = await fetch(`https://api.notion.com/v1/databases/${databaseId}/query`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Notion-Version": "2022-06-28",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        filter: { property: "狀態", status: { equals: "已發布" } },
+        sorts: [{ timestamp: "created_time", direction: "descending" }],
+        page_size: 100,
+        ...(cursor ? { start_cursor: cursor } : {}),
+      }),
+      cache: "no-store",
+    });
+    if (!res.ok) return { prev: null, next: null };
+    const data = await res.json();
+    for (const page of data.results as NotionBlogPage[]) {
+      const title = plainText(page.properties.標題?.title).trim();
+      if (title) all.push({ id: page.id, title });
+    }
+    cursor = data.has_more ? data.next_cursor : null;
+  } while (cursor);
+
+  const index = all.findIndex((p) => p.id === id);
+  if (index === -1) return { prev: null, next: null };
+  return {
+    prev: all[index + 1] ?? null,
+    next: all[index - 1] ?? null,
+  };
 }

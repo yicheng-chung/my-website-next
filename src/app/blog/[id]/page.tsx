@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Languages } from "lucide-react";
+import { ArrowLeft, ArrowRight, Languages } from "lucide-react";
 import { useTranslations } from "@/lib/useTranslations";
 import { useLanguage } from "@/context/LanguageContext";
 import content from "@/content/blog.json";
@@ -39,12 +39,16 @@ function withTranslatedText(block: ContentBlock, text: string): ContentBlock {
   return { ...block, spans: [{ text }] };
 }
 
+type AdjacentPost = { id: string; title: string };
+type Adjacent = { prev: AdjacentPost | null; next: AdjacentPost | null };
+
 export default function BlogPostPage() {
   const params = useParams<{ id: string }>();
   const t = useTranslations(content);
   const { lang, setLang } = useLanguage();
   const [post, setPost] = useState<BlogPost | null | undefined>(undefined);
   const [blocks, setBlocks] = useState<ContentBlock[] | null>(null);
+  const [adjacent, setAdjacent] = useState<Adjacent>({ prev: null, next: null });
   // Cached once translated, since re-translating on every toggle would waste
   // requests against the free endpoint (see lib/translate.ts) for no benefit
   // — the content doesn't change mid-visit.
@@ -68,10 +72,11 @@ export default function BlogPostPage() {
 
     fetch(`/api/blog/${params.id}`)
       .then((res) => res.json())
-      .then((json: { content: ContentBlock[]; post: BlogPost | null }) => {
+      .then((json: { content: ContentBlock[]; post: BlogPost | null; adjacent?: Adjacent }) => {
         if (cancelled) return;
         setBlocks(json.content);
         if (!cachedPost) setPost(json.post ?? null);
+        setAdjacent(json.adjacent ?? { prev: null, next: null });
       })
       .catch(() => {
         if (!cancelled) {
@@ -225,6 +230,43 @@ export default function BlogPostPage() {
         <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-700">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={post.cover} alt="" className="h-auto w-full object-contain" />
+        </div>
+      )}
+
+      {(adjacent.prev || adjacent.next) && (
+        <div className="grid grid-cols-2 gap-4 border-t border-neutral-200 pt-6 dark:border-neutral-700">
+          {adjacent.prev ? (
+            <Link
+              href={`/blog/${adjacent.prev.id}`}
+              className="group flex flex-col gap-1 p-3 text-left"
+            >
+              <span className="inline-flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
+                <ArrowLeft size={12} />
+                {t.previousPost}
+              </span>
+              <span className="line-clamp-1 font-serif text-sm font-bold text-neutral-900 group-hover:underline dark:text-neutral-100">
+                {adjacent.prev.title}
+              </span>
+            </Link>
+          ) : (
+            <div />
+          )}
+          {adjacent.next ? (
+            <Link
+              href={`/blog/${adjacent.next.id}`}
+              className="group flex flex-col items-end gap-1 p-3 text-right"
+            >
+              <span className="inline-flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
+                {t.nextPost}
+                <ArrowRight size={12} />
+              </span>
+              <span className="line-clamp-1 font-serif text-sm font-bold text-neutral-900 group-hover:underline dark:text-neutral-100">
+                {adjacent.next.title}
+              </span>
+            </Link>
+          ) : (
+            <div />
+          )}
         </div>
       )}
     </div>
