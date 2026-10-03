@@ -81,6 +81,27 @@
   animation: marquee 16s linear infinite;
 }
 
+/* Same seamless-loop trick as .animate-marquee, along Y instead of X.
+   The reverse variant reuses this same keyframe with animation-direction
+   flipped, rather than a second one, so the two sides of a box can scroll
+   opposite ways without duplicating the animation logic. */
+@keyframes marquee-vertical {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+.animate-marquee-vertical {
+  animation: marquee-vertical 16s linear infinite;
+}
+
+.animate-marquee-vertical-reverse {
+  animation: marquee-vertical 16s linear infinite reverse;
+}
+
 @keyframes spinner-fade {
   0% {
     opacity: 1;

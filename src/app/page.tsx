@@ -9,12 +9,14 @@ import { useLanguage } from '@/context/LanguageContext'
 import { getAge } from '@/lib/age'
 import content from '@/content/home.json'
 import aboutContent from '@/content/about.json'
+import activitiesContent from '@/content/activities.json'
 import common from '@/content/common.json'
 import status from '@/content/status.json'
 import links from '@/content/links.json'
 import LifeTimeline from '@/components/LifeTimeline'
 import NowPlaying from '@/components/NowPlaying'
 import NowReading from '@/components/NowReading'
+import { VerticalMarquee } from '@/components/Marquee'
 
 const SOCIAL_LINKS = [
   { href: links.instagram, label: 'Instagram', Icon: FaInstagram },
@@ -41,6 +43,7 @@ const BLEED = '-mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10'
 export default function Home() {
   const t = useTranslations(content)
   const about = useTranslations(aboutContent)
+  const activities = useTranslations(activitiesContent)
   const { siteName, profile } = useTranslations(common)
   const s = useTranslations(status)
   const { lang } = useLanguage()
@@ -177,43 +180,16 @@ export default function Home() {
           <h2 className="text-3xl font-black tracking-tight text-neutral-900 uppercase sm:text-4xl dark:text-neutral-100">
             {lang === 'zh' ? '最近在做的事' : "What I'm Into Lately"}
           </h2>
-          {/* One row of two: music and reading side by side. Activity sits
-              below music in the same (left) column, rather than as a third
-              column alongside reading — per yicheng. */}
+          {/* Two equal-width columns (grid, not flex-1 — flex-1 let each
+              column's intrinsic content width win, which is what made them
+              look uneven). Three flat items in a 2-col grid auto-flows as
+              music+reading on row one, activity alone on row two — per
+              yicheng. */}
           <div className="mt-8 grid gap-10 sm:grid-cols-2">
-            <div className="flex flex-col gap-10">
-              <div>
-                <p className="text-sm text-neutral-500 dark:text-neutral-400">{s.musicLabel}</p>
-                <div className="mt-2">
-                  <NowPlaying />
-                </div>
-              </div>
-              <div>
-                <p className="text-sm text-neutral-500 dark:text-neutral-400">{s.activityLabel}</p>
-                {/* No Notion-backed activity to pull a real cover from yet
-                    — this reuses the Activities page's own orange-stripe
-                    visual as a stand-in "主視覺" rather than inventing a
-                    fake photo. Swap for the real cover once that page has
-                    actual data. */}
-                <Link
-                  href="/activities"
-                  className="mt-2 block overflow-hidden rounded-lg border-2 border-black transition-transform hover:scale-[1.02]"
-                >
-                  <div
-                    className="aspect-[4/3] w-full"
-                    style={{
-                      backgroundColor: '#FF6B35',
-                      backgroundImage:
-                        'repeating-linear-gradient(45deg, rgba(0,0,0,0.08) 0px, rgba(0,0,0,0.08) 14px, transparent 14px, transparent 28px)',
-                    }}
-                  />
-                </Link>
-                <Link
-                  href="/activities"
-                  className="mt-3 inline-block text-sm text-[#F2A341] hover:underline dark:text-[#F6B45E]"
-                >
-                  {s.viewActivityLabel}
-                </Link>
+            <div>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">{s.musicLabel}</p>
+              <div className="mt-2">
+                <NowPlaying />
               </div>
             </div>
             <div>
@@ -226,6 +202,42 @@ export default function Home() {
                 className="mt-3 inline-block text-sm text-[#F2A341] hover:underline dark:text-[#F6B45E]"
               >
                 {s.viewAllLabel}
+              </Link>
+            </div>
+            <div className="sm:col-span-2">
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">{s.activityLabel}</p>
+              {/* No Notion-backed activity to show yet, so this reuses the
+                  Activities page's own empty-state card verbatim (same
+                  text, same white/border-4/hard-shadow treatment) rather
+                  than a bare color swatch. Swap for the real activity's
+                  cover + title once that page actually has data. */}
+              {/* Vertical marquees flank the card — same "COMING SOON"
+                  ticker as the Activities page's own horizontal ones, just
+                  rotated, and scrolling opposite ways on each side. */}
+              {/* Explicit height on the row itself — without it, `h-full`
+                  on the marquees has no definite parent height to resolve
+                  against, so the flex row ends up stretching to the
+                  marquees' own enormous (pre-clip) content height instead
+                  of the other way around. */}
+              <div className="mt-2 flex h-56 items-stretch">
+                <VerticalMarquee text="COMING SOON" />
+                <Link href="/activities" className="min-w-0 flex-1">
+                  <div className="flex h-full flex-col items-center justify-center gap-3 border-4 border-black bg-white px-4 py-10 text-center shadow-[4px_4px_0_0_#000] transition-transform hover:scale-[1.02] dark:bg-neutral-900">
+                    <p className="text-2xl font-black text-black sm:text-3xl dark:text-white">
+                      {activities.emptyTitle}
+                    </p>
+                    <p className="text-xs font-medium text-neutral-600 sm:text-base dark:text-neutral-400">
+                      {activities.emptyBody}
+                    </p>
+                  </div>
+                </Link>
+                <VerticalMarquee text="COMING SOON" reverse />
+              </div>
+              <Link
+                href="/activities"
+                className="mt-3 inline-block text-sm text-[#F2A341] hover:underline dark:text-[#F6B45E]"
+              >
+                {s.viewActivityLabel}
               </Link>
             </div>
           </div>

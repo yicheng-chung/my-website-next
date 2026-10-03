@@ -26,3 +26,38 @@ export default function Marquee({ text }: { text: string }) {
     </div>
   );
 }
+
+// Same idea, rotated — each repeat is laid out top-to-bottom (writing-mode,
+// not a rotated transform, so the glyphs themselves stay upright reading
+// vertically) and the whole stack scrolls along Y instead of X. `reverse`
+// flips the scroll direction via animation-direction rather than a second
+// keyframe, so the left/right sides of a box can run opposite ways.
+function VerticalTrack({ text }: { text: string }) {
+  return (
+    <span className="flex shrink-0 flex-col items-center gap-8 pb-8 text-sm font-black tracking-widest text-white sm:text-base">
+      {Array.from({ length: 10 }).map((_, i) => (
+        <span
+          key={i}
+          className="flex flex-col items-center gap-8"
+          style={{ writingMode: "vertical-rl" }}
+        >
+          {text}
+          <span aria-hidden>✦</span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+export function VerticalMarquee({ text, reverse = false }: { text: string; reverse?: boolean }) {
+  return (
+    <div className="h-full overflow-hidden border-x-4 border-black bg-black px-2">
+      <div
+        className={`flex h-max flex-col ${reverse ? "animate-marquee-vertical-reverse" : "animate-marquee-vertical"}`}
+      >
+        <VerticalTrack text={text} />
+        <VerticalTrack text={text} />
+      </div>
+    </div>
+  );
+}

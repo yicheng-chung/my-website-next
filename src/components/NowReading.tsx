@@ -47,7 +47,7 @@ export default function NowReading({ bare = false }: { bare?: boolean }) {
   if (books === null) {
     return (
       <div
-        className={`flex h-[216px] items-center justify-center ${
+        className={`flex items-center justify-center ${bare ? 'h-[152px]' : 'h-[216px]'} ${
           bare ? '' : 'rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800'
         }`}
       >
@@ -89,7 +89,11 @@ export default function NowReading({ bare = false }: { bare?: boolean }) {
         }`}
       >
         {book.cover ? (
-          <div className='relative h-48 w-32 flex-shrink-0 rounded-md bg-white p-[5%]'>
+          <div
+            className={`relative flex-shrink-0 rounded-md bg-white p-[5%] ${
+              bare ? 'h-38 w-26' : 'h-48 w-32'
+            }`}
+          >
             <Image
               src={book.cover}
               alt={book.title}
@@ -100,7 +104,7 @@ export default function NowReading({ bare = false }: { bare?: boolean }) {
             />
           </div>
         ) : (
-          <div className='h-48 w-32 flex-shrink-0 rounded-md bg-white' />
+          <div className={`flex-shrink-0 rounded-md bg-white ${bare ? 'h-38 w-26' : 'h-48 w-32'}`} />
         )}
         <div className='min-w-0'>
           <p className='line-clamp-2 text-sm font-semibold text-neutral-800 dark:text-neutral-100'>
