@@ -16,7 +16,7 @@ import {
   writeNotionCache,
   type NotionData,
 } from '@/lib/notionCache'
-import type { Book, ContentBlock } from '@/lib/notion'
+import { canOptimizeCover, type Book, type ContentBlock } from '@/lib/notion'
 import Spinner from '@/components/Spinner'
 import BlockList from '@/components/BookContentBlocks'
 import ProgressBar from '@/components/ProgressBar'
@@ -118,6 +118,7 @@ export default function BookDetailPage() {
               alt=''
               fill
               sizes='80vw'
+              unoptimized={!canOptimizeCover(book.cover)}
               className='object-cover object-top opacity-30 blur-[18px] dark:opacity-40'
             />
           </div>

@@ -1,6 +1,6 @@
 import { MessageCircle } from 'lucide-react'
 import Image from 'next/image'
-import type { Book } from '@/lib/notion'
+import { canOptimizeCover, type Book } from '@/lib/notion'
 import InteractiveCard from './InteractiveCard'
 import ProgressBar from './ProgressBar'
 
@@ -19,7 +19,14 @@ export default function BookCard({
       >
         <div className='relative aspect-[3/4] w-20 flex-shrink-0 overflow-hidden rounded-lg bg-white transition-transform duration-300 group-hover:scale-110 sm:w-28'>
           {book.cover && (
-            <Image src={book.cover} alt={book.title} fill sizes='112px' className='object-contain' />
+            <Image
+              src={book.cover}
+              alt={book.title}
+              fill
+              sizes='112px'
+              unoptimized={!canOptimizeCover(book.cover)}
+              className='object-contain'
+            />
           )}
         </div>
         <div className='flex min-w-0 flex-1 flex-col justify-center gap-1.5'>
@@ -51,6 +58,7 @@ export default function BookCard({
             alt={book.title}
             fill
             sizes='(max-width: 640px) 50vw, 300px'
+            unoptimized={!canOptimizeCover(book.cover)}
             className='object-contain transition-transform duration-300 group-hover:scale-105'
           />
         )}

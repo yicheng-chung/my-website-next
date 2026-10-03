@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import type { Book } from '@/lib/notion'
+import { canOptimizeCover, type Book } from '@/lib/notion'
 import { readNotionCache, writeNotionCache } from '@/lib/notionCache'
 import ProgressBar from './ProgressBar'
 import Spinner from './Spinner'
@@ -82,7 +82,14 @@ export default function NowReading() {
       >
         {book.cover ? (
           <div className='relative h-48 w-32 flex-shrink-0 rounded-md bg-white p-[5%]'>
-            <Image src={book.cover} alt={book.title} fill sizes='128px' className='object-contain' />
+            <Image
+              src={book.cover}
+              alt={book.title}
+              fill
+              sizes='128px'
+              unoptimized={!canOptimizeCover(book.cover)}
+              className='object-contain'
+            />
           </div>
         ) : (
           <div className='h-48 w-32 flex-shrink-0 rounded-md bg-white' />

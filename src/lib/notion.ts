@@ -13,6 +13,18 @@ export type Book = {
   hasReflection: boolean;
 };
 
+// Covers aren't all from the same place: most are Notion-hosted (that S3
+// bucket), but some are set as an external URL instead (e.g. books.com.tw)
+// — and books.com.tw's Cloudflare hotlink protection 403s Next's image
+// optimizer when it tries to fetch the original server-side, even though a
+// real browser loading the same URL directly is unaffected. `unoptimized`
+// on next/image skips that proxy and fetches straight from the browser,
+// same as a plain <img> always did, so only the known-safe host gets
+// optimization.
+export function canOptimizeCover(url: string): boolean {
+  return url.includes(".amazonaws.com/");
+}
+
 type NotionRichText = { plain_text: string };
 
 type NotionPage = {

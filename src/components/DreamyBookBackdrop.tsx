@@ -2,7 +2,7 @@
 
 import { useMemo, type CSSProperties } from 'react'
 import Image from 'next/image'
-import type { Book } from '@/lib/notion'
+import { canOptimizeCover, type Book } from '@/lib/notion'
 
 // Fixed background layer of a few giant, softly blurred book covers that
 // rise up the screen, each at its own speed and phase so they never look
@@ -46,6 +46,7 @@ export default function DreamyBookBackdrop({ books }: { books: Book[] }) {
           alt=''
           width={c.size}
           height={Math.round(c.size * 1.3)}
+          unoptimized={!canOptimizeCover(c.src)}
           className='dreamy-drift absolute top-full rounded-[2rem] object-cover opacity-[0.25] blur-[28px] dark:opacity-[0.32]'
           style={
             {
