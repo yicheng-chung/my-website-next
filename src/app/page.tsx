@@ -106,25 +106,45 @@ export default function Home() {
           by half its own height — 80px mobile, 104px sm+ — plus some
           breathing room after it). */}
       <section className={`bg-white pt-28 pb-14 sm:pt-36 sm:pb-20 ${BLEED} dark:bg-neutral-950`}>
-        <div className="mx-auto grid max-w-5xl gap-10 sm:grid-cols-2 sm:gap-12">
-          <div>
-            <h2 className="text-3xl font-black leading-tight text-neutral-900 sm:text-4xl dark:text-neutral-100">
-              {t.title}
-            </h2>
-            <p className="mt-4 whitespace-pre-line text-base leading-relaxed text-neutral-600 dark:text-neutral-300">
-              {t.body}
-            </p>
-          </div>
-          <div>
-            <h3 className="text-sm font-bold tracking-widest text-[#F2A341] uppercase dark:text-[#F6B45E]">
-              {about.heading}
-            </h3>
-            <p className="mt-3 whitespace-pre-line text-base leading-relaxed text-neutral-600 dark:text-neutral-300">
-              {about.intro1.replace('{age}', String(getAge()))}
-            </p>
-            <p className="mt-3 whitespace-pre-line text-base leading-relaxed text-neutral-600 dark:text-neutral-300">
-              {about.intro2}
-            </p>
+        <div className="mx-auto max-w-5xl">
+          <h3 className="text-sm font-bold tracking-widest text-[#F2A341] uppercase dark:text-[#F6B45E]">
+            {about.heading}
+          </h3>
+          <h2 className="mt-2 text-3xl font-black leading-tight text-neutral-900 sm:text-4xl dark:text-neutral-100">
+            {t.title}
+          </h2>
+
+          <div className="mt-8 grid gap-10 sm:grid-cols-2 sm:gap-12">
+            {/* Each \n in the source text is a real paragraph break here —
+                a single whitespace-pre-line block read as one dense wall of
+                text; splitting it into actual <p> tags with even spacing is
+                what both columns needed to stop feeling cluttered. */}
+            <div className="flex flex-col gap-3">
+              {t.body.split('\n').map((paragraph, i) => (
+                <p
+                  key={i}
+                  className="text-base leading-relaxed text-neutral-600 dark:text-neutral-300"
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+            <div className="flex flex-col gap-3">
+              {about.intro1
+                .replace('{age}', String(getAge()))
+                .split('\n')
+                .map((paragraph, i) => (
+                  <p
+                    key={i}
+                    className="text-base leading-relaxed text-neutral-600 dark:text-neutral-300"
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+              <p className="text-base leading-relaxed text-neutral-600 dark:text-neutral-300">
+                {about.intro2}
+              </p>
+            </div>
           </div>
         </div>
       </section>
