@@ -136,8 +136,8 @@ export default function ReadingPage() {
   }
 
   const categoryCount = useCountUp(allTags.length)
-  const readingCount = useCountUp(data?.reading.length ?? 0)
-  const finishedCount = useCountUp(data?.finished.length ?? 0)
+  const readingCount = useCountUp(filteredReading.length)
+  const finishedCount = useCountUp(filteredFinished.length)
 
   return (
     <div className='flex flex-col gap-6 sm:gap-8'>
@@ -179,57 +179,17 @@ export default function ReadingPage() {
             </div>
           )}
 
-          <section>
-            <h2 className='mb-4 text-lg font-bold text-neutral-800 sm:text-xl dark:text-neutral-100'>
-              {t.readingHeading}
-              <span className='ml-1 text-sm font-normal text-neutral-400 dark:text-neutral-500'>
-                {t.countSuffix.replace('{count}', String(readingCount))}
-              </span>
-            </h2>
-            {filteredReading.length === 0 && (
-              <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-                {t.emptyReading}
-              </p>
-            )}
-            <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3'>
-              <AnimatePresence initial={false}>
-                {filteredReading.map((book) => (
-                  <motion.div
-                    key={book.id}
-                    layout
-                    initial={{ opacity: 0, scale: 0.96 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.96 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <BookCard book={book} variant='featured' />
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
-          </section>
-
-          <section>
-            <h2 className='mb-4 text-lg font-bold text-neutral-800 sm:text-xl dark:text-neutral-100'>
-              {t.finishedHeading}
-              <span className='ml-1 text-sm font-normal text-neutral-400 dark:text-neutral-500'>
-                {t.countSuffix.replace('{count}', String(finishedCount))}
-              </span>
-            </h2>
-            {filteredFinished.length === 0 && (
-              <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-                {t.emptyFinished}
-              </p>
-            )}
-            <div className='relative'>
-              <div
-                ref={finishedStripRef}
-                onWheel={handleFinishedWheel}
-                onScroll={handleFinishedScroll}
-                className='hide-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto py-6'
-              >
+          {filteredReading.length > 0 && (
+            <section>
+              <h2 className='mb-4 text-lg font-bold text-neutral-800 sm:text-xl dark:text-neutral-100'>
+                {t.readingHeading}
+                <span className='ml-1 text-sm font-normal text-neutral-400 dark:text-neutral-500'>
+                  {t.countSuffix.replace('{count}', String(readingCount))}
+                </span>
+              </h2>
+              <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3'>
                 <AnimatePresence initial={false}>
-                  {filteredFinished.map((book) => (
+                  {filteredReading.map((book) => (
                     <motion.div
                       key={book.id}
                       layout
@@ -237,44 +197,78 @@ export default function ReadingPage() {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.96 }}
                       transition={{ duration: 0.2 }}
-                      className='w-40 flex-shrink-0 snap-center sm:w-44 lg:w-48'
                     >
-                      <div className='origin-center scale-100 transition-transform duration-200 ease-out hover:z-10 hover:scale-[1.1]'>
-                        <BookCard book={book} variant='shelf' />
-                      </div>
+                      <BookCard book={book} variant='featured' />
                     </motion.div>
                   ))}
                 </AnimatePresence>
               </div>
+            </section>
+          )}
 
-              <button
-                type='button'
-                aria-label={t.scrollLeft}
-                onClick={() => scrollFinishedBy(-1)}
-                disabled={!canScrollLeft}
-                className={`absolute top-1/2 left-0 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border shadow-sm transition-opacity ${
-                  canScrollLeft
-                    ? 'cursor-pointer border-neutral-200 bg-white/90 text-neutral-600 hover:bg-white dark:border-neutral-600 dark:bg-neutral-800/90 dark:text-neutral-300 dark:hover:bg-neutral-800'
-                    : 'cursor-not-allowed border-neutral-200/50 bg-white/40 text-neutral-400 opacity-40 dark:border-neutral-700/50 dark:bg-neutral-800/40 dark:text-neutral-600'
-                }`}
-              >
-                <ChevronLeft size={18} />
-              </button>
-              <button
-                type='button'
-                aria-label={t.scrollRight}
-                onClick={() => scrollFinishedBy(1)}
-                disabled={!canScrollRight}
-                className={`absolute top-1/2 right-0 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border shadow-sm transition-opacity ${
-                  canScrollRight
-                    ? 'cursor-pointer border-neutral-200 bg-white/90 text-neutral-600 hover:bg-white dark:border-neutral-600 dark:bg-neutral-800/90 dark:text-neutral-300 dark:hover:bg-neutral-800'
-                    : 'cursor-not-allowed border-neutral-200/50 bg-white/40 text-neutral-400 opacity-40 dark:border-neutral-700/50 dark:bg-neutral-800/40 dark:text-neutral-600'
-                }`}
-              >
-                <ChevronRight size={18} />
-              </button>
-            </div>
-          </section>
+          {filteredFinished.length > 0 && (
+            <section>
+              <h2 className='mb-4 text-lg font-bold text-neutral-800 sm:text-xl dark:text-neutral-100'>
+                {t.finishedHeading}
+                <span className='ml-1 text-sm font-normal text-neutral-400 dark:text-neutral-500'>
+                  {t.countSuffix.replace('{count}', String(finishedCount))}
+                </span>
+              </h2>
+              <div className='relative'>
+                <div
+                  ref={finishedStripRef}
+                  onWheel={handleFinishedWheel}
+                  onScroll={handleFinishedScroll}
+                  className='hide-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto py-6'
+                >
+                  <AnimatePresence initial={false}>
+                    {filteredFinished.map((book) => (
+                      <motion.div
+                        key={book.id}
+                        layout
+                        initial={{ opacity: 0, scale: 0.96 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.96 }}
+                        transition={{ duration: 0.2 }}
+                        className='w-40 flex-shrink-0 snap-center sm:w-44 lg:w-48'
+                      >
+                        <div className='origin-center scale-100 transition-transform duration-200 ease-out hover:z-10 hover:scale-[1.1]'>
+                          <BookCard book={book} variant='shelf' />
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+
+                <button
+                  type='button'
+                  aria-label={t.scrollLeft}
+                  onClick={() => scrollFinishedBy(-1)}
+                  disabled={!canScrollLeft}
+                  className={`absolute top-1/2 left-0 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border shadow-sm transition-opacity ${
+                    canScrollLeft
+                      ? 'cursor-pointer border-neutral-200 bg-white/90 text-neutral-600 hover:bg-white dark:border-neutral-600 dark:bg-neutral-800/90 dark:text-neutral-300 dark:hover:bg-neutral-800'
+                      : 'cursor-not-allowed border-neutral-200/50 bg-white/40 text-neutral-400 opacity-40 dark:border-neutral-700/50 dark:bg-neutral-800/40 dark:text-neutral-600'
+                  }`}
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <button
+                  type='button'
+                  aria-label={t.scrollRight}
+                  onClick={() => scrollFinishedBy(1)}
+                  disabled={!canScrollRight}
+                  className={`absolute top-1/2 right-0 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border shadow-sm transition-opacity ${
+                    canScrollRight
+                      ? 'cursor-pointer border-neutral-200 bg-white/90 text-neutral-600 hover:bg-white dark:border-neutral-600 dark:bg-neutral-800/90 dark:text-neutral-300 dark:hover:bg-neutral-800'
+                      : 'cursor-not-allowed border-neutral-200/50 bg-white/40 text-neutral-400 opacity-40 dark:border-neutral-700/50 dark:bg-neutral-800/40 dark:text-neutral-600'
+                  }`}
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+            </section>
+          )}
         </>
       )}
     </div>
