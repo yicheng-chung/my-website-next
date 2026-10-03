@@ -120,8 +120,7 @@ export default function Home() {
                 {about.heading}
               </h2>
               <div className="mt-4 flex flex-col gap-3">
-                {about.intro1
-                  .replace('{age}', String(getAge()))
+                {`${about.intro1.replace('{age}', String(getAge()))}\n${about.intro2}`
                   .split('\n')
                   .map((paragraph, i) => (
                     <p
@@ -131,9 +130,6 @@ export default function Home() {
                       {paragraph}
                     </p>
                   ))}
-                <p className="text-base leading-relaxed text-neutral-600 dark:text-neutral-300">
-                  {about.intro2}
-                </p>
               </div>
             </div>
             <div>
