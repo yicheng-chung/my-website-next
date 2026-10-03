@@ -59,6 +59,9 @@ export default function Home() {
         >
           {profile.name}
         </h1>
+        <p className="mt-4 max-w-md text-sm leading-relaxed sm:text-base" style={{ color: CREAM }}>
+          {profile.intro.replace('{age}', String(getAge()))}
+        </p>
         <div className="mt-5 flex gap-5">
           {SOCIAL_LINKS.map(({ href, label, Icon }) => (
             <a
@@ -78,8 +81,13 @@ export default function Home() {
 
       {/* Photo deliberately overlaps the hero/about seam (negative margin
           pulling it up into the green band above) — the one visual borrowed
-          directly from the reference image. */}
-      <div className="relative -mt-16 flex justify-center sm:-mt-20">
+          directly from the reference image. The overlap has to be at least
+          half the photo's width/height: rounded-t-full's dome only reaches
+          full width at that point, so a smaller overlap leaves a sliver on
+          each side — past where the green band ends, short of where the
+          dome has rounded out — where neither the band nor the photo
+          covers, exposing the page background underneath. */}
+      <div className="relative -mt-24 flex justify-center sm:-mt-28">
         <div className="relative h-40 w-40 overflow-hidden rounded-t-full border-4 border-white shadow-xl sm:h-52 sm:w-52 dark:border-neutral-900">
           <Image
             src="/images/yc-childhood.jpg"
