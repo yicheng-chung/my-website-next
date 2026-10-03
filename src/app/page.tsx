@@ -100,40 +100,48 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About — left is the personal/informal voice (home.json), right is
-          the factual bio (about.json, formerly its own /about page). Top
-          padding clears the overlaid photo (which extends past the seam
-          by half its own height — 80px mobile, 104px sm+ — plus some
+      {/* About — left is the factual bio (about.json, formerly its own
+          /about page), right is the personal/informal voice (home.json).
+          Top padding clears the overlaid photo (which extends past the
+          seam by half its own height — 80px mobile, 104px sm+ — plus some
           breathing room after it). */}
       <section className={`bg-white pt-28 pb-14 sm:pt-36 sm:pb-20 ${BLEED} dark:bg-neutral-950`}>
         <div className="mx-auto max-w-5xl">
-          <h3 className="text-sm font-bold tracking-widest text-[#F2A341] uppercase dark:text-[#F6B45E]">
-            {about.heading}
-          </h3>
-          <h2 className="mt-2 text-3xl font-black leading-tight text-neutral-900 sm:text-4xl dark:text-neutral-100">
-            {t.title}
-          </h2>
-
-          <div className="mt-8 grid gap-10 sm:grid-cols-2 sm:gap-12">
-            {/* Each \n in the source text is a real paragraph break here —
-                a single whitespace-pre-line block read as one dense wall of
-                text; splitting it into actual <p> tags with even spacing is
-                what both columns needed to stop feeling cluttered. */}
-            <div className="flex flex-col gap-3">
-              {t.body.split('\n').map((paragraph, i) => (
-                <p
-                  key={i}
-                  className="text-base leading-relaxed text-neutral-600 dark:text-neutral-300"
-                >
-                  {paragraph}
+          <div className="grid gap-10 sm:grid-cols-2 sm:gap-12">
+            {/* Left: self-intro (about.json). Right: site intro (home.json).
+                Each column's own heading sits at its own top-left, both the
+                same size — rather than one big heading shared above both
+                columns with the other reduced to a small label. Each \n in
+                the source text is a real paragraph break — split into
+                actual <p> tags with even spacing instead of relying on
+                whitespace-pre-line's bare line-height gap. */}
+            <div>
+              <h2 className="text-3xl font-black leading-tight text-[#F2A341] sm:text-4xl dark:text-[#F6B45E]">
+                {about.heading}
+              </h2>
+              <div className="mt-4 flex flex-col gap-3">
+                {about.intro1
+                  .replace('{age}', String(getAge()))
+                  .split('\n')
+                  .map((paragraph, i) => (
+                    <p
+                      key={i}
+                      className="text-base leading-relaxed text-neutral-600 dark:text-neutral-300"
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+                <p className="text-base leading-relaxed text-neutral-600 dark:text-neutral-300">
+                  {about.intro2}
                 </p>
-              ))}
+              </div>
             </div>
-            <div className="flex flex-col gap-3">
-              {about.intro1
-                .replace('{age}', String(getAge()))
-                .split('\n')
-                .map((paragraph, i) => (
+            <div>
+              <h2 className="text-3xl font-black leading-tight text-neutral-900 sm:text-4xl dark:text-neutral-100">
+                {t.title}
+              </h2>
+              <div className="mt-4 flex flex-col gap-3">
+                {t.body.split('\n').map((paragraph, i) => (
                   <p
                     key={i}
                     className="text-base leading-relaxed text-neutral-600 dark:text-neutral-300"
@@ -141,9 +149,7 @@ export default function Home() {
                     {paragraph}
                   </p>
                 ))}
-              <p className="text-base leading-relaxed text-neutral-600 dark:text-neutral-300">
-                {about.intro2}
-              </p>
+              </div>
             </div>
           </div>
         </div>
