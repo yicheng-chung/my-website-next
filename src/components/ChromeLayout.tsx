@@ -31,6 +31,9 @@ export default function ChromeLayout({ children }: { children: ReactNode }) {
   const t = TEXT[lang];
 
   const isHome = pathname === HOME_ROUTE;
+  const isActivities = pathname === "/activities";
+  const isQuestions = pathname === "/questions";
+  const isFullBleed = isHome || isActivities || isQuestions;
   const isBookDetail = pathname.startsWith("/reading/");
 
   // Desktop-only — on mobile this drawer (profile tucked behind a side
@@ -51,7 +54,20 @@ export default function ChromeLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen">
       <Navbar />
 
-      <main className="mx-auto flex max-w-7xl flex-col gap-6 px-4 pt-20 pb-10 sm:gap-8 sm:px-6 sm:pt-24 md:pt-28 lg:px-10">
+      {/* Home and Activities both build their own full-bleed bands (see
+          app/page.tsx and app/activities/page.tsx) and don't want the cream
+          page background showing on either side of them — or above/below,
+          which is why neither gets top/bottom padding here either: each
+          page's own first/last element absorbs what this padding used to
+          provide. Every other route keeps the centered reading column and
+          this spacing. */}
+      <main
+        className={
+          isFullBleed
+            ? "flex flex-col"
+            : "mx-auto flex max-w-7xl flex-col gap-6 px-4 pt-20 pb-10 sm:gap-8 sm:px-6 sm:pt-24 md:pt-28 lg:px-10"
+        }
+      >
         <div className="min-w-0 flex-1">{children}</div>
       </main>
 
@@ -107,7 +123,18 @@ export default function ChromeLayout({ children }: { children: ReactNode }) {
         </>
       )}
 
-      <Footer />
+      {/* On Home, this matches the Into Lately section's own white/
+          neutral-950 band exactly, and spans full viewport width the same
+          way — Footer itself keeps its usual max-w-7xl centered content,
+          just with this full-bleed color wrapped around it instead of the
+          plain cream/black page background every other route leaves it on. */}
+      {isHome ? (
+        <div className="bg-white dark:bg-neutral-950">
+          <Footer />
+        </div>
+      ) : (
+        <Footer />
+      )}
     </div>
   );
 }

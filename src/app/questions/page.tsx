@@ -2,7 +2,6 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
-import { motion, useScroll, useTransform } from 'framer-motion'
 import { useLanguage } from '@/context/LanguageContext'
 import { useTheme } from '@/context/ThemeContext'
 import { useIsDesktop } from '@/lib/useIsDesktop'
@@ -14,6 +13,7 @@ import { layoutStars, type StarPosition } from '@/lib/starfield'
 import { NEBULA, FAR_DUST, NEAR_DUST } from '@/lib/starfieldBackground'
 import PlanetQuestion from '@/components/PlanetQuestion'
 import QuestionListItem from '@/components/QuestionListItem'
+import ShootingStars from '@/components/ShootingStars'
 import StarfieldGuide from '@/components/StarfieldGuide'
 import StarLoading from '@/components/StarLoading'
 
@@ -373,46 +373,43 @@ export default function QuestionsPage() {
     return result
   }, [positions])
 
-  // On mobile the field div (and its ref) never renders at all — passing a
-  // ref that's defined but permanently un-hydrated throws at runtime, so the
-  // scroll target is only wired up in desktop mode. The resulting
-  // scrollYProgress is unused on mobile anyway (no parallax there).
-  const { scrollYProgress } = useScroll({
-    target: isDesktop ? fieldRef : undefined,
-    offset: ['start start', 'end end'],
-  })
-  const nebulaY = useTransform(
-    scrollYProgress,
-    (v) => `${v * fieldHeight * 0.08}px`
-  )
-  const farY = useTransform(
-    scrollYProgress,
-    (v) => `${v * fieldHeight * 0.15}px`
-  )
-  const nearY = useTransform(
-    scrollYProgress,
-    (v) => `${v * fieldHeight * 0.32}px`
-  )
-
   const answeredCount = (questions ?? []).filter(
     (q) => q.answer || q.answerEn
   ).length
 
+  // marginTop (not the header's own padding) so the backdrop below —
+  // absolutely positioned via inset-0 against this same root — starts
+  // shifted down together with everything else, flush under the fixed
+  // navbar, rather than the old pt-20+ main padding ChromeLayout no longer
+  // applies to this now-full-bleed route.
   return (
-    <div className='flex flex-col gap-6 sm:gap-8'>
-      <div className='overflow-hidden rounded-2xl border border-white/10 bg-[#05080a]'>
-        <div className='relative px-6 pt-6 pb-8 sm:px-8 sm:pt-8 sm:pb-10'>
-          <div aria-hidden className='pointer-events-none absolute inset-0' style={NEBULA} />
-          <div aria-hidden className='pointer-events-none absolute inset-0' style={FAR_DUST} />
-          <div aria-hidden className='pointer-events-none absolute inset-0' style={NEAR_DUST} />
-          <div className='relative z-10'>
-            <h1 className='text-2xl font-bold text-white sm:text-3xl'>{t.title}</h1>
-            <p className='mt-1 text-sm text-white/60'>{t.subtitle}</p>
-            <p className='mt-4 text-base leading-relaxed text-white/85 sm:text-lg'>{t.intro}</p>
-          </div>
+    <div
+      className='relative flex flex-col gap-6 bg-[#05080a] sm:gap-8'
+      style={{ marginTop: 'var(--navbar-height, 84px)' }}
+    >
+      {/* Header keeps its own dreamy nebula/dust gradient exactly as
+          before (not gated by USE_PHOTO_BACKGROUND — that flag only ever
+          swapped out the *stars field's* background, never the intro
+          text's). What changed from before is just the outer framing: no
+          more rounded-2xl/border/bg card around all of this — it now
+          bleeds the full viewport width (ChromeLayout gives this route's
+          <main> no side padding to cancel) with nothing boxing it in. */}
+      <div className='relative px-4 pt-6 pb-6 sm:px-6 sm:pt-8 sm:pb-8 lg:px-10'>
+        <div aria-hidden className='pointer-events-none absolute inset-0' style={NEBULA} />
+        <div aria-hidden className='pointer-events-none absolute inset-0' style={FAR_DUST} />
+        <div aria-hidden className='pointer-events-none absolute inset-0' style={NEAR_DUST} />
+        {/* No meteors in this band — it's small and almost entirely
+            covered by the title/subtitle/intro text, so there's no real
+            empty sky here for one to cross without passing behind/near the
+            text; the stars field and mobile list below have real room. */}
+        <div className='relative z-10'>
+          <h1 className='text-2xl font-bold text-white sm:text-3xl'>{t.title}</h1>
+          <p className='mt-1 text-sm text-white/60'>{t.subtitle}</p>
+          <p className='mt-4 text-base leading-relaxed text-white/85 sm:text-lg'>{t.intro}</p>
         </div>
+      </div>
 
-        {isDesktop ? (
+      {isDesktop ? (
         <div
           ref={fieldRef}
           className='relative overflow-hidden'
@@ -429,23 +426,12 @@ export default function QuestionsPage() {
             />
           ) : (
             <>
-              <motion.div
-                aria-hidden
-                className='pointer-events-none absolute inset-0'
-                style={{ ...NEBULA, backgroundPositionY: nebulaY }}
-              />
-              <motion.div
-                aria-hidden
-                className='pointer-events-none absolute inset-0'
-                style={{ ...FAR_DUST, backgroundPositionY: farY }}
-              />
-              <motion.div
-                aria-hidden
-                className='pointer-events-none absolute inset-0'
-                style={{ ...NEAR_DUST, backgroundPositionY: nearY }}
-              />
+              <div aria-hidden className='pointer-events-none absolute inset-0' style={NEBULA} />
+              <div aria-hidden className='pointer-events-none absolute inset-0' style={FAR_DUST} />
+              <div aria-hidden className='pointer-events-none absolute inset-0' style={NEAR_DUST} />
             </>
           )}
+          <ShootingStars />
 
           {questions === null ? (
             <div className='absolute inset-0 flex items-center justify-center'>
@@ -514,23 +500,12 @@ export default function QuestionsPage() {
             />
           ) : (
             <>
-              <div
-                aria-hidden
-                className='pointer-events-none absolute inset-0'
-                style={NEBULA}
-              />
-              <div
-                aria-hidden
-                className='pointer-events-none absolute inset-0'
-                style={FAR_DUST}
-              />
-              <div
-                aria-hidden
-                className='pointer-events-none absolute inset-0'
-                style={NEAR_DUST}
-              />
+              <div aria-hidden className='pointer-events-none absolute inset-0' style={NEBULA} />
+              <div aria-hidden className='pointer-events-none absolute inset-0' style={FAR_DUST} />
+              <div aria-hidden className='pointer-events-none absolute inset-0' style={NEAR_DUST} />
             </>
           )}
+          <ShootingStars />
 
           {questions === null ? (
             <div className='relative flex min-h-[320px] items-center justify-center'>
@@ -549,7 +524,6 @@ export default function QuestionsPage() {
           )}
         </div>
       )}
-      </div>
 
       <StarfieldGuide
         total={(questions ?? []).length}

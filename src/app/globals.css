@@ -102,6 +102,57 @@
   animation: marquee-vertical 16s linear infinite reverse;
 }
 
+/* A quick diagonal flash-and-fade rather than a continuous loop — each bar
+   (see ShootingStars.tsx) starts rotated and invisible, flashes on, travels
+   a short diagonal distance while fading out, then stays invisible for the
+   rest of its own (long, per-instance) duration before repeating. Angle and
+   travel distance come from each instance's own --meteor-* custom
+   properties rather than being baked into the keyframe, so every meteor can
+   point and travel a different way instead of all repeating one fixed
+   diagonal. */
+@keyframes shooting-star {
+  0%,
+  78% {
+    transform: translate(0, 0) rotate(var(--meteor-angle, 125deg));
+    opacity: 0;
+  }
+  80% {
+    opacity: 1;
+  }
+  92%,
+  100% {
+    transform: translate(var(--meteor-dx, 170px), var(--meteor-dy, 120px))
+      rotate(var(--meteor-angle, 125deg));
+    opacity: 0;
+  }
+}
+
+.animate-shooting-star {
+  animation: shooting-star linear infinite;
+}
+
+/* Reuses .animate-marquee's own keyframe (translateX 0 -> -50%) but in
+   reverse, so the pattern drifts left-to-right instead of right-to-left,
+   and much slower — this is a background divider, not scrolling text. */
+.animate-wave {
+  animation: marquee 9s linear infinite reverse;
+}
+
+/* Each streak slides fully across and off-screen on both sides, rather
+   than looping a tiled track — see OceanCurrents.tsx for why. */
+@keyframes current-flow {
+  from {
+    transform: translateX(120vw);
+  }
+  to {
+    transform: translateX(-120vw);
+  }
+}
+
+.animate-current {
+  animation: current-flow linear infinite;
+}
+
 @keyframes spinner-fade {
   0% {
     opacity: 1;
