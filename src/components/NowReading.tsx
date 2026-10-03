@@ -8,7 +8,7 @@ import { readNotionCache, writeNotionCache } from '@/lib/notionCache'
 import ProgressBar from './ProgressBar'
 import Spinner from './Spinner'
 
-export default function NowReading() {
+export default function NowReading({ bare = false }: { bare?: boolean }) {
   const [books, setBooks] = useState<Book[] | null>(null)
   const [index, setIndex] = useState(0)
   const touchStartX = useRef<number | null>(null)
@@ -46,7 +46,11 @@ export default function NowReading() {
 
   if (books === null) {
     return (
-      <div className='flex h-[216px] items-center justify-center rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800'>
+      <div
+        className={`flex h-[216px] items-center justify-center ${
+          bare ? '' : 'rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800'
+        }`}
+      >
         <Spinner />
       </div>
     )
@@ -78,7 +82,11 @@ export default function NowReading() {
       <Link
         key={book.id}
         href={`/reading/${book.id}`}
-        className='flex animate-[fadeIn_0.4s_ease] items-center gap-3 rounded-xl border border-neutral-200 bg-white p-3 transition-shadow hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800'
+        className={`flex animate-[fadeIn_0.4s_ease] items-center gap-3 p-3 transition-shadow ${
+          bare
+            ? ''
+            : 'rounded-xl border border-neutral-200 bg-white hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800'
+        }`}
       >
         {book.cover ? (
           <div className='relative h-48 w-32 flex-shrink-0 rounded-md bg-white p-[5%]'>

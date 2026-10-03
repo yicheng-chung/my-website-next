@@ -114,10 +114,7 @@ export default function LifeTimeline() {
   }
 
   return (
-    <div className='mt-8'>
-      <h2 className='mb-4 text-xl font-bold text-neutral-800 dark:text-neutral-100'>
-        {lang === 'zh' ? '年代記事' : 'Timeline'}
-      </h2>
+    <div>
 
       {isDesktop ? (
         <div className='relative overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-700'>

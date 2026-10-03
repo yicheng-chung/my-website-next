@@ -11,15 +11,13 @@ import Profile from "./Profile";
 import NowStatus from "./NowStatus";
 import Footer from "./Footer";
 
-// Home always keeps the profile/music/reading info inline (reordered to the
-// end on mobile, so the page's own content isn't pushed below the fold by
-// it). About keeps it inline only on desktop — on mobile it collapses into
-// the same drawer every other route uses, since a second full profile block
-// stacked above the bio is redundant on a narrow screen. Book detail pages
-// don't show it at all: the drawer toggle sat right where the cover/meta
-// card starts and covered part of it.
+// Home builds its own hero/profile presentation directly into the page now
+// (see app/page.tsx), so it no longer needs this inline sidebar treatment —
+// and isn't offered the drawer either, since everything the drawer would
+// surface is already front-and-center there. Book detail pages don't get
+// the drawer toggle either: it sat right where the cover/meta card starts
+// and covered part of it.
 const HOME_ROUTE = "/";
-const ABOUT_ROUTE = "/about";
 
 const TEXT = {
   zh: { open: "打開個人資訊欄", close: "收起個人資訊欄" },
@@ -33,13 +31,11 @@ export default function ChromeLayout({ children }: { children: ReactNode }) {
   const t = TEXT[lang];
 
   const isHome = pathname === HOME_ROUTE;
-  const isAbout = pathname === ABOUT_ROUTE;
   const isBookDetail = pathname.startsWith("/reading/");
 
-  const showInline = isHome || (isAbout && isDesktop);
   // Desktop-only — on mobile this drawer (profile tucked behind a side
   // button) is dropped entirely rather than shown, per yicheng.
-  const showDrawerToggle = !showInline && !isBookDetail && isDesktop;
+  const showDrawerToggle = !isHome && !isBookDetail && isDesktop;
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [lastPathname, setLastPathname] = useState(pathname);
@@ -55,27 +51,8 @@ export default function ChromeLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen">
       <Navbar />
 
-      <main className="mx-auto flex max-w-7xl flex-col gap-6 px-4 pt-20 pb-10 sm:gap-8 sm:px-6 sm:pt-24 md:flex-row md:items-start md:pt-28 lg:px-10">
-        {showInline && isDesktop && (
-          <aside className="flex w-full flex-col md:sticky md:top-24 md:w-[28rem] md:flex-shrink-0">
-            <Profile />
-            <NowStatus />
-          </aside>
-        )}
-
-        {showInline && !isDesktop && (
-          <div className="w-full md:w-[28rem] md:flex-shrink-0">
-            <Profile />
-          </div>
-        )}
-
+      <main className="mx-auto flex max-w-7xl flex-col gap-6 px-4 pt-20 pb-10 sm:gap-8 sm:px-6 sm:pt-24 md:pt-28 lg:px-10">
         <div className="min-w-0 flex-1">{children}</div>
-
-        {showInline && !isDesktop && isHome && (
-          <div className="w-full md:hidden">
-            <NowStatus />
-          </div>
-        )}
       </main>
 
       {showDrawerToggle && (
