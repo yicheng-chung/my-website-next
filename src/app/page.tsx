@@ -68,7 +68,7 @@ export default function Home() {
         >
           {profile.name}
         </h1>
-        <p className="mt-4 max-w-md text-sm leading-relaxed sm:text-base" style={{ color: CREAM }}>
+        <p className="mt-4 max-w-md text-sm leading-relaxed sm:max-w-xl sm:text-base" style={{ color: CREAM }}>
           {profile.intro.replace('{age}', String(getAge()))}
         </p>
         <div className="mt-5 flex gap-5">
@@ -151,7 +151,7 @@ export default function Home() {
           card — NowReading's `bare` prop strips that chrome; NowPlaying's
           rounded corners are Spotify's own embed styling, left alone. */}
       <section className={`bg-white py-14 sm:py-20 ${BLEED} dark:bg-neutral-950`}>
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-5xl">
           <h2 className="text-3xl font-black tracking-tight text-neutral-900 uppercase sm:text-4xl dark:text-neutral-100">
             {lang === 'zh' ? '最近在做的事' : "What I'm Into Lately"}
           </h2>
