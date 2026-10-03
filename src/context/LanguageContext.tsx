@@ -3,10 +3,11 @@
 import {
   createContext,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useState,
   type ReactNode,
 } from 'react'
+import { LANGUAGE_STORAGE_KEY } from '@/lib/languageCookie'
 
 export type Lang = 'zh' | 'en'
 
@@ -19,21 +20,41 @@ const LanguageContext = createContext<LanguageContextValue | undefined>(
   undefined
 )
 
-const STORAGE_KEY = 'my-website-lang'
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 365
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>('en')
+function writeCookie(value: Lang) {
+  document.cookie = `${LANGUAGE_STORAGE_KEY}=${value}; path=/; max-age=${COOKIE_MAX_AGE}; SameSite=Lax`
+}
 
-  useEffect(() => {
-    const stored = window.localStorage.getItem(STORAGE_KEY)
+export function LanguageProvider({
+  children,
+  initialLang,
+}: {
+  children: ReactNode
+  initialLang: Lang
+}) {
+  const [lang, setLangState] = useState<Lang>(initialLang)
+
+  // One-time migration: a visitor from before this cookie-based fix existed
+  // may have a 'zh' preference sitting only in localStorage, which the
+  // server can't see. If so, adopt it and write the cookie so every future
+  // load is correct from the server's very first HTML byte — this
+  // useLayoutEffect flash only ever happens once, after which the cookie
+  // takes over. Visitors who already have the cookie (initialLang reflects
+  // it) never hit this branch at all.
+  useLayoutEffect(() => {
+    if (document.cookie.includes(`${LANGUAGE_STORAGE_KEY}=`)) return
+    const stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY)
     if (stored === 'zh' || stored === 'en') {
       setLangState(stored)
+      writeCookie(stored)
     }
   }, [])
 
   const setLang = (next: Lang) => {
     setLangState(next)
-    window.localStorage.setItem(STORAGE_KEY, next)
+    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, next)
+    writeCookie(next)
   }
 
   return (

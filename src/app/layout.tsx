@@ -1,18 +1,41 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import Script from "next/script";
+import { headers } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
-import { LanguageProvider } from "@/context/LanguageContext";
-import { ThemeProvider } from "@/context/ThemeContext";
+import { ThemeProvider, type Theme } from "@/context/ThemeContext";
+import { LanguageProvider, type Lang } from "@/context/LanguageContext";
+import { LANGUAGE_STORAGE_KEY } from "@/lib/languageCookie";
+import { THEME_STORAGE_KEY } from "@/lib/themeCookie";
 import ChromeLayout from "@/components/ChromeLayout";
 
+// Reading the raw cookie header and parsing it by hand, rather than using
+// next/headers' cookies() — both work fine once the key constants come
+// from a plain (non-'use client') module, but this was already written
+// and tested against the raw header, so kept as-is.
+function readCookie(cookieHeader: string | null, key: string): string | undefined {
+  if (!cookieHeader) return undefined;
+  for (const pair of cookieHeader.split(";")) {
+    const [k, ...rest] = pair.trim().split("=");
+    if (k === key) return rest.join("=");
+  }
+  return undefined;
+}
+
+// Migration fallback only, for a visitor from before the theme cookie
+// existed: the server already bakes the right "dark" class into <html>
+// below when the cookie is present, so this script only has work to do
+// when it isn't (no cookie yet, but an old localStorage-only preference
+// might still be sitting there) — matching the language cookie's own
+// one-time migration path in ThemeContext.tsx.
 const THEME_INIT_SCRIPT = `
   (function () {
     try {
+      if (document.cookie.indexOf("my-website-theme=") !== -1) return;
       var stored = localStorage.getItem("my-website-theme");
       var isDark = stored !== "light";
-      if (isDark) document.documentElement.classList.add("dark");
+      document.documentElement.classList.toggle("dark", isDark);
     } catch (e) {}
   })();
 `;
@@ -27,15 +50,29 @@ export const metadata: Metadata = {
   description: "鍾貽丞 (Yi-Cheng Chung) — personal resume site",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Computed once per full page load (layout instances persist across
+  // client-side navigations — unlike a template, which would remount and
+  // reset this on every nav), so a returning visitor's cached language
+  // is already correct in the server's very first HTML byte, with no
+  // flash, and no reset when clicking between pages afterwards.
+  const cookieHeader = (await headers()).get("cookie");
+  const cookieLang = readCookie(cookieHeader, LANGUAGE_STORAGE_KEY);
+  const initialLang: Lang = cookieLang === "zh" ? "zh" : "en";
+  // No stored cookie yet (brand-new visitor, or one from before this cookie
+  // existed) defaults to dark — matches the previous localStorage-only
+  // default and the migration script above.
+  const cookieTheme = readCookie(cookieHeader, THEME_STORAGE_KEY);
+  const initialTheme: Theme = cookieTheme === "light" ? "light" : "dark";
+
   return (
     <html
       lang="zh-TW"
-      className={`${montserrat.variable} h-full antialiased`}
+      className={`${montserrat.variable} h-full antialiased${initialTheme === "dark" ? " dark" : ""}`}
       suppressHydrationWarning
     >
       <head>
@@ -54,8 +91,8 @@ export default function RootLayout({
         <Script id="theme-init" strategy="beforeInteractive">
           {THEME_INIT_SCRIPT}
         </Script>
-        <ThemeProvider>
-          <LanguageProvider>
+        <ThemeProvider initialTheme={initialTheme}>
+          <LanguageProvider initialLang={initialLang}>
             <ChromeLayout>{children}</ChromeLayout>
           </LanguageProvider>
         </ThemeProvider>
