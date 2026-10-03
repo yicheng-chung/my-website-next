@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { BlogPost } from "@/lib/blog";
+import { canOptimizeCover, toDisplayableImageSrc } from "@/lib/notion";
 
 export default function BlogCard({
   post,
@@ -17,6 +18,14 @@ export default function BlogCard({
   size?: "large" | "small";
   className?: string;
 }) {
+  // Routed through the HEIC-conversion proxy when needed (see
+  // toDisplayableImageSrc) before either Image below ever sees it —
+  // `unoptimized` is then based on *that* src, not the original Notion
+  // url, so a converted cover (now a local /api/image-proxy url) is
+  // treated like any other same-origin image instead of being judged by
+  // the host it used to live at.
+  const coverSrc = post.cover ? toDisplayableImageSrc(post.cover) : null;
+
   // Medium-style list row: title/excerpt/meta on the left, a small
   // thumbnail on the right if there's a cover. No card chrome — a thin
   // rule below separates it from the next post. The whole row is the
@@ -45,13 +54,20 @@ export default function BlogCard({
             </p>
           )}
         </div>
-        {post.cover && (
+        {coverSrc && (
           <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden sm:h-28 sm:w-28">
+            {/* A post's cover can be an "external" Notion image pointing at
+                an arbitrary host (pasted from the web) rather than Notion's
+                own S3 bucket — unoptimized for anything but that one known
+                host, same as book covers in NowReading/BookCard, since
+                Next's image optimizer otherwise rejects unlisted hosts
+                outright instead of just skipping optimization for them. */}
             <Image
-              src={post.cover}
+              src={coverSrc}
               alt=""
               fill
               sizes="112px"
+              unoptimized={!canOptimizeCover(coverSrc)}
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </div>
@@ -71,13 +87,14 @@ export default function BlogCard({
       className={`group flex h-full flex-col overflow-hidden rounded-none border border-neutral-200 bg-white transition-transform duration-300 hover:scale-[1.02] hover:shadow-lg dark:border-neutral-700 dark:bg-neutral-800 ${className}`}
     >
       {isLarge &&
-        (post.cover ? (
+        (coverSrc ? (
           <div className="relative aspect-[3/2] w-full sm:aspect-[2/1]">
             <Image
-              src={post.cover}
+              src={coverSrc}
               alt=""
               fill
               sizes="(min-width: 640px) 50vw, 100vw"
+              unoptimized={!canOptimizeCover(coverSrc)}
               className="object-cover"
             />
           </div>

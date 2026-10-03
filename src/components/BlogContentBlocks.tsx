@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import type { ContentBlock, ContentSpan } from '@/lib/notion'
+import { toDisplayableImageSrc } from '@/lib/notion'
 
 // Notion doesn't expose the resized width (see the comment below), but the
 // browser can measure the image itself once loaded — portrait photos get
@@ -11,7 +12,7 @@ function BlogImage({ src, alt }: { src: string; alt: string }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={src}
+      src={toDisplayableImageSrc(src)}
       alt={alt}
       onLoad={(e) => {
         const img = e.currentTarget

@@ -25,6 +25,24 @@ export function canOptimizeCover(url: string): boolean {
   return url.includes(".amazonaws.com/");
 }
 
+// An iPhone photo dropped straight into a Notion page (as a blog post's
+// cover, or inline in its body) is stored in whatever format the phone
+// shot it in — often HEIC — which no browser but Safari can decode in an
+// <img>, and which this project's own sharp build can't decode either (no
+// libheif input support), so even routing it through next/image's
+// optimizer doesn't help. /api/image-proxy converts it with a pure-JS HEIC
+// decoder instead; this just decides when a URL needs that detour.
+export function isHeicUrl(url: string): boolean {
+  const path = url.split("?")[0].toLowerCase();
+  return path.endsWith(".heic") || path.endsWith(".heif");
+}
+
+// Routes a HEIC/HEIF source through the conversion proxy; leaves every
+// other URL untouched.
+export function toDisplayableImageSrc(url: string): string {
+  return isHeicUrl(url) ? `/api/image-proxy?url=${encodeURIComponent(url)}` : url;
+}
+
 type NotionRichText = { plain_text: string };
 
 type NotionPage = {

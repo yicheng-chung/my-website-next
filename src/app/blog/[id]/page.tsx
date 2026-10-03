@@ -12,6 +12,7 @@ import common from "@/content/common.json";
 import { readBlogCache } from "@/lib/blogCache";
 import type { BlogPost } from "@/lib/blog";
 import type { ContentBlock } from "@/lib/notion";
+import { toDisplayableImageSrc } from "@/lib/notion";
 import Spinner from "@/components/Spinner";
 import BlockList from "@/components/BlogContentBlocks";
 
@@ -233,7 +234,11 @@ export default function BlogPostPage() {
       {post.cover && !post.coverFromContent && (
         <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-700">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={post.cover} alt="" className="h-auto w-full object-contain" />
+          <img
+            src={toDisplayableImageSrc(post.cover)}
+            alt=""
+            className="h-auto w-full object-contain"
+          />
         </div>
       )}
 
