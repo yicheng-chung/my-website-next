@@ -4,13 +4,17 @@
     "nowPlayingLabel": "正在聽",
     "recentlyPlayedLabel": "最近在聽",
     "readingLabel": "正在讀：",
-    "viewAllLabel": "看完整書單 →"
+    "viewAllLabel": "看完整書單 →",
+    "activityLabel": "正在進行活動：",
+    "viewActivityLabel": "看活動頁面 →"
   },
   "en": {
     "musicLabel": "Recently played on Spotify:",
     "nowPlayingLabel": "Now playing",
     "recentlyPlayedLabel": "Recently played",
     "readingLabel": "Now reading:",
-    "viewAllLabel": "See full reading list →"
+    "viewAllLabel": "See full reading list →",
+    "activityLabel": "Ongoing activity:",
+    "viewActivityLabel": "See activities page →"
   }
 }
