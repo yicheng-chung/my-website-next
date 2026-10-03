@@ -53,18 +53,12 @@ export default function Home() {
         className={`flex flex-col items-center pt-14 pb-20 text-center sm:pt-20 sm:pb-28 ${BLEED}`}
         style={{ backgroundColor: GREEN }}
       >
-        <p className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: CREAM }}>
-          {profile.role}
-        </p>
         <h1
-          className="mt-3 text-4xl font-black tracking-tight uppercase sm:text-6xl"
+          className="text-4xl font-black tracking-tight uppercase sm:text-6xl"
           style={{ color: CREAM }}
         >
           {profile.name}
         </h1>
-        <p className="mt-2 text-sm" style={{ color: CREAM, opacity: 0.75 }}>
-          {profile.school} {profile.years}
-        </p>
         <div className="mt-5 flex gap-5">
           {SOCIAL_LINKS.map(({ href, label, Icon }) => (
             <a
