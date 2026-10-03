@@ -106,7 +106,7 @@ export default function NowReading({ bare = false }: { bare?: boolean }) {
         ) : (
           <div className={`flex-shrink-0 rounded-md bg-white ${bare ? 'h-38 w-26' : 'h-48 w-32'}`} />
         )}
-        <div className='min-w-0'>
+        <div className='min-w-0 flex-1'>
           <p className='line-clamp-2 text-sm font-semibold text-neutral-800 dark:text-neutral-100'>
             {book.title}
           </p>

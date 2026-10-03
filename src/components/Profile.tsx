@@ -32,7 +32,15 @@ export default function Profile() {
         <span className='text-2xl font-extrabold'>{t.profile.name}</span>
       </div>
       <p className='mt-4 rounded-xl rounded-br-none bg-[#F2A341]/30 p-3 text-base font-normal dark:bg-[#F2A341]/25 dark:text-neutral-100'>
-        {t.profile.intro.replace('{age}', String(getAge()))}
+        {t.profile.intro
+          .replace('{age}', String(getAge()))
+          .split('\n')
+          .map((line, i, arr) => (
+            <span key={i}>
+              {line}
+              {i < arr.length - 1 && <br />}
+            </span>
+          ))}
       </p>
       <nav className='mt-4 flex gap-4'>
         {SOCIAL_LINKS.map(({ href, label, Icon }) => (

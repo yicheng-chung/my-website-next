@@ -72,7 +72,15 @@ export default function Home() {
           {profile.name}
         </h1>
         <p className="mt-4 max-w-md text-sm leading-relaxed sm:max-w-xl sm:text-base" style={{ color: CREAM }}>
-          {profile.intro.replace('{age}', String(getAge()))}
+          {profile.intro
+            .replace('{age}', String(getAge()))
+            .split('\n')
+            .map((line, i, arr) => (
+              <span key={i}>
+                {line}
+                {i < arr.length - 1 && <br />}
+              </span>
+            ))}
         </p>
         <div className="mt-5 flex gap-5">
           {SOCIAL_LINKS.map(({ href, label, Icon }) => (
@@ -194,7 +202,7 @@ export default function Home() {
             </div>
             <div>
               <p className="text-sm text-neutral-500 dark:text-neutral-400">{s.readingLabel}</p>
-              <div className="mt-2">
+              <div className="mt-2 rounded-xl bg-neutral-50 p-3 dark:bg-neutral-900/60">
                 <NowReading bare />
               </div>
               <Link
