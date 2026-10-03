@@ -48,9 +48,18 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      {/* Hero */}
+      {/* Hero. The two color bands (this section and the white one right
+          after it) are now plain adjacent siblings with nothing between
+          them — guaranteed to touch regardless of content height. The
+          photo is an absolutely-positioned overlay anchored to this
+          section's own bottom edge (top-full) and shifted up by half its
+          own height (-translate-y-1/2), so it's centered exactly on the
+          seam — half sitting on the green, half on the white — without
+          needing to know either section's actual rendered height. A full
+          circle rather than the earlier arch shape, since that symmetry is
+          what makes this positioning trick work cleanly. */}
       <section
-        className={`flex flex-col items-center pt-14 pb-20 text-center sm:pt-20 sm:pb-28 ${BLEED}`}
+        className={`relative flex flex-col items-center pt-14 pb-28 text-center sm:pt-20 sm:pb-36 ${BLEED}`}
         style={{ backgroundColor: GREEN }}
       >
         <h1
@@ -77,31 +86,26 @@ export default function Home() {
             </a>
           ))}
         </div>
+
+        <div className="absolute top-full left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="relative h-40 w-40 overflow-hidden rounded-full border-4 border-white shadow-xl sm:h-52 sm:w-52 dark:border-neutral-900">
+            <Image
+              src="/images/yc-childhood.jpg"
+              alt={profile.name}
+              fill
+              sizes="208px"
+              className="object-cover object-[center_30%]"
+            />
+          </div>
+        </div>
       </section>
 
-      {/* Photo deliberately overlaps the hero/about seam (negative margin
-          pulling it up into the green band above) — the one visual borrowed
-          directly from the reference image. The overlap has to be at least
-          half the photo's width/height: rounded-t-full's dome only reaches
-          full width at that point, so a smaller overlap leaves a sliver on
-          each side — past where the green band ends, short of where the
-          dome has rounded out — where neither the band nor the photo
-          covers, exposing the page background underneath. */}
-      <div className="relative -mt-24 flex justify-center sm:-mt-28">
-        <div className="relative h-40 w-40 overflow-hidden rounded-t-full border-4 border-white shadow-xl sm:h-52 sm:w-52 dark:border-neutral-900">
-          <Image
-            src="/images/yc-childhood.jpg"
-            alt={profile.name}
-            fill
-            sizes="208px"
-            className="object-cover object-[center_30%]"
-          />
-        </div>
-      </div>
-
       {/* About — left is the personal/informal voice (home.json), right is
-          the factual bio (about.json, formerly its own /about page) */}
-      <section className={`bg-white pt-10 pb-14 sm:pb-20 ${BLEED} dark:bg-neutral-950`}>
+          the factual bio (about.json, formerly its own /about page). Top
+          padding clears the overlaid photo (which extends past the seam
+          by half its own height — 80px mobile, 104px sm+ — plus some
+          breathing room after it). */}
+      <section className={`bg-white pt-28 pb-14 sm:pt-36 sm:pb-20 ${BLEED} dark:bg-neutral-950`}>
         <div className="mx-auto grid max-w-5xl gap-10 sm:grid-cols-2 sm:gap-12">
           <div>
             <h2 className="text-3xl font-black leading-tight text-neutral-900 sm:text-4xl dark:text-neutral-100">
