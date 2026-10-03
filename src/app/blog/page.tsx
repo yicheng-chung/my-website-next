@@ -210,7 +210,7 @@ export default function BlogPage() {
           with the grid cards — rather than an arbitrary offset. Outer div
           is pointer-events-none since it spans the full viewport width;
           only the button itself should be clickable. */}
-      <div className='pointer-events-none fixed inset-x-0 bottom-4 z-30 md:top-22 md:bottom-auto'>
+      <div className='pointer-events-none fixed inset-x-0 bottom-4 z-30 md:top-28 md:bottom-auto'>
         <div className='mx-auto flex max-w-7xl justify-end px-4 sm:px-6 lg:px-10'>
           <div className='pointer-events-auto'>
             <BlogLayoutToggle layout={layout} onChange={handleLayoutChange} />
