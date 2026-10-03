@@ -34,11 +34,11 @@ export default function Marquee({ text }: { text: string }) {
 // keyframe, so the left/right sides of a box can run opposite ways.
 function VerticalTrack({ text }: { text: string }) {
   return (
-    <span className="flex shrink-0 flex-col items-center gap-8 pb-8 text-sm font-black tracking-widest text-white sm:text-base">
+    <span className="flex shrink-0 flex-col items-center gap-6 pb-6 text-xs font-black tracking-widest text-black">
       {Array.from({ length: 10 }).map((_, i) => (
         <span
           key={i}
-          className="flex flex-col items-center gap-8"
+          className="flex flex-col items-center gap-6"
           style={{ writingMode: "vertical-rl" }}
         >
           {text}
@@ -51,7 +51,7 @@ function VerticalTrack({ text }: { text: string }) {
 
 export function VerticalMarquee({ text, reverse = false }: { text: string; reverse?: boolean }) {
   return (
-    <div className="h-full overflow-hidden border-x-4 border-black bg-black px-2">
+    <div className="h-full overflow-hidden bg-[#F2A341] px-1">
       <div
         className={`flex h-max flex-col ${reverse ? "animate-marquee-vertical-reverse" : "animate-marquee-vertical"}`}
       >

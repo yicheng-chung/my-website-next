@@ -211,28 +211,30 @@ export default function Home() {
                   text, same white/border-4/hard-shadow treatment) rather
                   than a bare color swatch. Swap for the real activity's
                   cover + title once that page actually has data. */}
-              {/* Vertical marquees flank the card — same "COMING SOON"
-                  ticker as the Activities page's own horizontal ones, just
-                  rotated, and scrolling opposite ways on each side. */}
-              {/* Explicit height on the row itself — without it, `h-full`
-                  on the marquees has no definite parent height to resolve
-                  against, so the flex row ends up stretching to the
-                  marquees' own enormous (pre-clip) content height instead
-                  of the other way around. */}
-              <div className="mt-2 flex h-56 items-stretch">
+              {/* Vertical marquees now live inside the card's own border
+                  (one shared border/shadow/hover-scale around the whole
+                  assembly) rather than as separate strips glued onto the
+                  outside of it — per yicheng. Explicit height on the row
+                  itself — without it, `h-full` on the marquees has no
+                  definite parent height to resolve against, so the row
+                  ends up stretching to the marquees' own enormous
+                  (pre-clip) content height instead of the other way
+                  around. */}
+              <Link
+                href="/activities"
+                className="mt-2 flex h-56 items-stretch overflow-hidden border-4 border-black shadow-[4px_4px_0_0_#000] transition-transform hover:scale-[1.02]"
+              >
                 <VerticalMarquee text="COMING SOON" />
-                <Link href="/activities" className="min-w-0 flex-1">
-                  <div className="flex h-full flex-col items-center justify-center gap-3 border-4 border-black bg-white px-4 py-10 text-center shadow-[4px_4px_0_0_#000] transition-transform hover:scale-[1.02] dark:bg-neutral-900">
-                    <p className="text-2xl font-black text-black sm:text-3xl dark:text-white">
-                      {activities.emptyTitle}
-                    </p>
-                    <p className="text-xs font-medium text-neutral-600 sm:text-base dark:text-neutral-400">
-                      {activities.emptyBody}
-                    </p>
-                  </div>
-                </Link>
+                <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-3 bg-white px-4 py-10 text-center dark:bg-neutral-900">
+                  <p className="text-2xl font-black text-black sm:text-3xl dark:text-white">
+                    {activities.emptyTitle}
+                  </p>
+                  <p className="text-xs font-medium text-neutral-600 sm:text-base dark:text-neutral-400">
+                    {activities.emptyBody}
+                  </p>
+                </div>
                 <VerticalMarquee text="COMING SOON" reverse />
-              </div>
+              </Link>
               <Link
                 href="/activities"
                 className="mt-3 inline-block text-sm text-[#F2A341] hover:underline dark:text-[#F6B45E]"
