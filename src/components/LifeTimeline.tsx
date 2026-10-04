@@ -50,6 +50,10 @@ export default function LifeTimeline() {
       center: first ? [first.location.lng, first.location.lat] : [0, 20],
       zoom: first?.location.zoom ?? DEFAULT_ZOOM,
       attributionControl: { compact: true },
+      // Off — a mouse scroll that merely passes over the map while the
+      // visitor is scrolling the page would otherwise zoom the map instead
+      // of continuing to scroll past it.
+      scrollZoom: false,
     })
     mapRef.current = map
 
