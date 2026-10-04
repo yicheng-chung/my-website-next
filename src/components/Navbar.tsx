@@ -1,22 +1,22 @@
-"use client";
+'use client'
 
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
-import { useTranslations } from "@/lib/useTranslations";
-import { useIsDesktop } from "@/lib/useIsDesktop";
-import common from "@/content/common.json";
-import NavLinks from "./NavLinks";
-import LanguageToggle from "./LanguageToggle";
-import ThemeToggle from "./ThemeToggle";
+import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Menu, X } from 'lucide-react'
+import { useTranslations } from '@/lib/useTranslations'
+import { useIsDesktop } from '@/lib/useIsDesktop'
+import common from '@/content/common.json'
+import NavLinks from './NavLinks'
+import LanguageToggle from './LanguageToggle'
+import ThemeToggle from './ThemeToggle'
 
 export default function Navbar() {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const { siteName } = useTranslations(common);
-  const headerRef = useRef<HTMLElement>(null);
-  const isDesktop = useIsDesktop();
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const { siteName } = useTranslations(common)
+  const headerRef = useRef<HTMLElement>(null)
+  const isDesktop = useIsDesktop()
 
   // Exposes the navbar's real rendered height as a CSS var, so a page that
   // needs to sit flush against this fixed header (Activities' full-bleed
@@ -27,7 +27,10 @@ export default function Navbar() {
     const el = headerRef.current
     if (!el) return
     const update = () =>
-      document.documentElement.style.setProperty('--navbar-height', `${el.offsetHeight}px`)
+      document.documentElement.style.setProperty(
+        '--navbar-height',
+        `${el.offsetHeight}px`
+      )
     update()
     const ro = new ResizeObserver(update)
     ro.observe(el)
@@ -65,7 +68,7 @@ export default function Navbar() {
   useEffect(() => {
     if (isDesktop) return
 
-    const EDGE_ZONE = 24
+    const EDGE_ZONE = 25
     const OPEN_THRESHOLD = 60
 
     let startX: number | null = null
@@ -78,7 +81,8 @@ export default function Navbar() {
       if (!touch) return
       if (touch.clientX < window.innerWidth - EDGE_ZONE) return
       const target = touch.target
-      if (target instanceof Element && target.closest("[data-swipe-local]")) return
+      if (target instanceof Element && target.closest('[data-swipe-local]'))
+        return
       startX = touch.clientX
       startY = touch.clientY
       tracking = true
@@ -92,7 +96,7 @@ export default function Navbar() {
       // just where it started — belt-and-suspenders alongside the same
       // check in onTouchStart.
       const current = document.elementFromPoint(touch.clientX, touch.clientY)
-      if (current && current.closest("[data-swipe-local]")) {
+      if (current && current.closest('[data-swipe-local]')) {
         tracking = false
         return
       }
@@ -129,11 +133,14 @@ export default function Navbar() {
     <>
       <header
         ref={headerRef}
-        className="fixed top-0 left-0 right-0 z-40 bg-black px-4 py-3 shadow-sm transition-colors sm:px-6 sm:py-4 dark:bg-white"
+        className='fixed top-0 left-0 right-0 z-40 bg-black px-4 py-3 shadow-sm transition-colors sm:px-6 sm:py-4 dark:bg-white'
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between">
-          <div className="flex min-w-0 items-center gap-2 sm:gap-3">
-            <Link href="/" className="flex-shrink-0 transition-opacity hover:opacity-70">
+        <div className='mx-auto flex max-w-7xl items-center justify-between'>
+          <div className='flex min-w-0 items-center gap-2 sm:gap-3'>
+            <Link
+              href='/'
+              className='flex-shrink-0 transition-opacity hover:opacity-70'
+            >
               {/* Hand-drawn signature, stored as black ink on a transparent
                   background (public/images/signature.png). The header bar
                   itself flips black/white with theme (see className below),
@@ -142,26 +149,26 @@ export default function Navbar() {
                   header, and `dark:invert-0` switches it back to its native
                   black ink on the white (dark-theme) header. */}
               <Image
-                src="/images/signature.png"
+                src='/images/signature.png'
                 alt={siteName}
                 width={261}
                 height={100}
                 priority
-                className="h-11 w-auto invert sm:h-13 dark:invert-0"
+                className='h-11 w-auto invert sm:h-13 dark:invert-0'
               />
             </Link>
           </div>
 
-          <div className="flex flex-shrink-0 items-center gap-3 sm:gap-6">
-            <nav className="hidden md:block">
+          <div className='flex flex-shrink-0 items-center gap-3 sm:gap-6'>
+            <nav className='hidden md:block'>
               <NavLinks />
             </nav>
             <ThemeToggle />
             <LanguageToggle />
             <button
-              type="button"
-              className="flex-shrink-0 text-white md:hidden dark:text-black"
-              aria-label="Open menu"
+              type='button'
+              className='flex-shrink-0 text-white md:hidden dark:text-black'
+              aria-label='Open menu'
               onClick={() => setDrawerOpen(true)}
             >
               <Menu size={26} />
@@ -172,11 +179,11 @@ export default function Navbar() {
 
       <AnimatePresence>
         {drawerOpen && (
-          <div className="fixed inset-0 z-50 md:hidden">
+          <div className='fixed inset-0 z-50 md:hidden'>
             <motion.button
-              type="button"
-              aria-label="Close menu"
-              className="absolute inset-0 bg-black/50"
+              type='button'
+              aria-label='Close menu'
+              className='absolute inset-0 bg-black/50'
               onClick={() => setDrawerOpen(false)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -184,16 +191,16 @@ export default function Navbar() {
               transition={{ duration: 0.25 }}
             />
             <motion.div
-              className="absolute top-0 right-0 h-full w-64 max-w-[80vw] bg-black p-6 shadow-xl dark:bg-white"
-              initial={{ x: "100%" }}
+              className='absolute top-0 right-0 h-full w-64 max-w-[80vw] bg-black p-6 shadow-xl dark:bg-white'
+              initial={{ x: '100%' }}
               animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
+              exit={{ x: '100%' }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
             >
               <button
-                type="button"
-                className="mb-8 ml-auto block text-white dark:text-black"
-                aria-label="Close menu"
+                type='button'
+                className='mb-8 ml-auto block text-white dark:text-black'
+                aria-label='Close menu'
                 onClick={() => setDrawerOpen(false)}
               >
                 <X size={28} />
@@ -204,5 +211,5 @@ export default function Navbar() {
         )}
       </AnimatePresence>
     </>
-  );
+  )
 }

@@ -142,6 +142,18 @@ export default function Home() {
                     {paragraph}
                   </p>
                 ))}
+                {about.quote && (
+                  <blockquote className='mt-10 border-l-2 border-[#F2A341] pl-4 dark:border-[#F6B45E]'>
+                    <p className='text-base leading-relaxed text-neutral-900 dark:text-neutral-100'>
+                      <span className='font-bold italic'>{about.quote}</span>
+                      {about.quoteSource && (
+                        <span className='ml-2 text-sm font-normal text-neutral-500 not-italic dark:text-neutral-400'>
+                          {about.quoteSource}
+                        </span>
+                      )}
+                    </p>
+                  </blockquote>
+                )}
               </div>
             </div>
           </div>
