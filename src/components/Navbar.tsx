@@ -34,22 +34,38 @@ export default function Navbar() {
     return () => ro.disconnect()
   }, [])
 
-  // App-like swipe: a leftward drag past OPEN_THRESHOLD starting anywhere
-  // on screen (not just the right edge — yicheng wanted it to work from
-  // the middle of the page too, like a native app's panel) opens the
-  // drawer. Desktop-only skips this since there's no drawer there to open.
+  // iOS Safari's own swipe-to-go-back gesture shows a snapshot of the
+  // previous page mid-transition — if the drawer happened to be open when
+  // you navigated away from that page, swiping back can briefly flash that
+  // old, stale "open" snapshot, which looks like the drawer reopening on
+  // its own even though no gesture of ours fired. Closing it proactively
+  // on pagehide (fires for back/forward navigation, not just unload) means
+  // there's nothing open left to be caught in that snapshot.
+  useEffect(() => {
+    const close = () => setDrawerOpen(false)
+    window.addEventListener('pagehide', close)
+    return () => window.removeEventListener('pagehide', close)
+  }, [])
+
+  // Edge swipe: a touch starting within EDGE_ZONE of the right edge,
+  // dragged left past OPEN_THRESHOLD, opens the drawer — same gesture
+  // iOS/Android system edge panels use. Tried "starting anywhere on
+  // screen" first for a more app-like feel, but that kept conflicting with
+  // real interactions on a real device (the Reading page's book carousel,
+  // and what was probably just Safari's own back-swipe snapshot showing a
+  // stale "open" drawer) in ways that were hard to track down without a
+  // touch device to test on — pulling back to the edge-only zone trades
+  // that reach for being far less likely to collide with anything.
+  // Desktop-only skips this since there's no drawer there to open.
   // Listeners stay passive (no preventDefault) so this never fights a
   // normal vertical scroll; the real limit is that on some mobile browsers
   // the very edge pixels are already claimed by the OS/browser's own
   // back-or-forward swipe before this ever sees the touch, which no page
-  // script can override. Tracking from anywhere does mean this can now
-  // fire alongside a component with its own local left-swipe (NowReading's
-  // book carousel) — a touch starting inside anything marked
-  // data-swipe-local is left alone so that component's own gesture keeps
-  // working without also popping the drawer open.
+  // script can override.
   useEffect(() => {
     if (isDesktop) return
 
+    const EDGE_ZONE = 24
     const OPEN_THRESHOLD = 60
 
     let startX: number | null = null
@@ -60,6 +76,7 @@ export default function Navbar() {
       if (drawerOpen) return
       const touch = e.touches[0]
       if (!touch) return
+      if (touch.clientX < window.innerWidth - EDGE_ZONE) return
       const target = touch.target
       if (target instanceof Element && target.closest("[data-swipe-local]")) return
       startX = touch.clientX
@@ -71,6 +88,14 @@ export default function Navbar() {
       if (!tracking || startX === null || startY === null) return
       const touch = e.touches[0]
       if (!touch) return
+      // Re-check the exclusion zone against where the finger is *now*, not
+      // just where it started — belt-and-suspenders alongside the same
+      // check in onTouchStart.
+      const current = document.elementFromPoint(touch.clientX, touch.clientY)
+      if (current && current.closest("[data-swipe-local]")) {
+        tracking = false
+        return
+      }
       const dx = touch.clientX - startX
       const dy = touch.clientY - startY
       // Mostly-vertical movement means this is a scroll that merely started
