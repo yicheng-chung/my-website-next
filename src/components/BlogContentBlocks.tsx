@@ -19,7 +19,9 @@ function BlogImage({ src, alt }: { src: string; alt: string }) {
         setPortrait(img.naturalHeight > img.naturalWidth)
       }}
       className={
-        portrait ? 'max-h-[550px] w-auto rounded-lg' : 'w-[65%] rounded-lg'
+        portrait
+          ? 'max-h-[550px] w-auto rounded-lg'
+          : 'w-full rounded-lg sm:w-[65%]'
       }
     />
   )
@@ -136,7 +138,7 @@ function SingleBlock({ block }: { block: ContentBlock }) {
       // every image to a fixed, centered width with margin on both sides
       // instead (per yicheng), rather than the book page's full-bleed image.
       return (
-        <figure className='mb-3 flex flex-col items-center'>
+        <figure className='mb-3 mt-15 flex flex-col items-center'>
           <BlogImage src={block.url} alt='' />
           {block.caption.length > 0 && (
             <figcaption className='mt-2 text-center text-sm text-neutral-500 dark:text-neutral-400'>

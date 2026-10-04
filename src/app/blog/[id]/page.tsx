@@ -177,7 +177,7 @@ export default function BlogPostPage() {
         {t.backToList}
       </Link>
 
-      <div className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-8 dark:border-neutral-700 dark:bg-neutral-800">
+      <div className="-mx-4 bg-white p-4 dark:bg-neutral-800 sm:mx-0 sm:rounded-2xl sm:border sm:border-neutral-200 sm:p-8 sm:dark:border-neutral-700">
         <header className="flex flex-col gap-3">
           <h1 className="font-serif text-3xl font-bold text-neutral-900 sm:text-4xl dark:text-neutral-100">
             {displayTitle}
