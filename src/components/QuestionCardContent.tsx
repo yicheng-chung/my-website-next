@@ -10,7 +10,7 @@ import QuestionStarGlyph from './QuestionStarGlyph'
 
 // Decorative — not a registered account, just the "poster" for every card
 // on this page (it's all one person's questions).
-const HANDLE = '@yicheng_chung'
+const HANDLE = '@yicheng_0817'
 const TWITTER_BLUE = '#1d9bf0'
 
 const TEXT = {
@@ -77,13 +77,17 @@ export default function QuestionCardContent({
           className='flex-shrink-0'
         />
       </div>
-      <p className={`leading-tight text-neutral-500 ${handleTextClass}`}>{HANDLE}</p>
+      <p className={`leading-tight text-neutral-500 ${handleTextClass}`}>
+        {HANDLE}
+      </p>
     </div>
   )
 
   const body = (
     <>
-      <p className={`mt-2 leading-relaxed break-words text-neutral-100 ${titleTextClass}`}>
+      <p
+        className={`mt-2 leading-relaxed break-words text-neutral-100 ${titleTextClass}`}
+      >
         {title}
       </p>
 
@@ -100,7 +104,11 @@ export default function QuestionCardContent({
             answer) — the other three icons are still decorative, except
             the heart, which reflects the actual "favorite" flag. Retweet
             is meant to eventually share to other platforms for real. */}
-        <div className={`flex items-center gap-1 ${hasAnswer ? 'text-[#F6B45E]' : ''}`}>
+        <div
+          className={`flex items-center gap-1 ${
+            hasAnswer ? 'text-[#F6B45E]' : ''
+          }`}
+        >
           <MessageCircle size={iconSize} />
           {hasAnswer && <span className='text-xs'>1</span>}
         </div>
@@ -133,11 +141,20 @@ export default function QuestionCardContent({
               />
               <div className='min-w-0 flex-1'>
                 <div className='flex items-center gap-1 text-xs'>
-                  <span className='font-bold text-neutral-100'>{profile.name}</span>
-                  <BadgeCheck size={12} fill={TWITTER_BLUE} stroke='#fff' strokeWidth={1.5} />
+                  <span className='font-bold text-neutral-100'>
+                    {profile.name}
+                  </span>
+                  <BadgeCheck
+                    size={12}
+                    fill={TWITTER_BLUE}
+                    stroke='#fff'
+                    strokeWidth={1.5}
+                  />
                   <span className='text-neutral-500'>{HANDLE}</span>
                 </div>
-                <p className='mt-1 text-sm leading-relaxed text-neutral-100'>{answer}</p>
+                <p className='mt-1 text-sm leading-relaxed text-neutral-100'>
+                  {answer}
+                </p>
               </div>
             </div>
           </motion.div>
@@ -154,7 +171,11 @@ export default function QuestionCardContent({
     <div className='relative'>
       {compact && (
         <div className='absolute top-0 right-0'>
-          <QuestionStarGlyph size={16} hasAnswer={hasAnswer} favorite={question.favorite} />
+          <QuestionStarGlyph
+            size={16}
+            hasAnswer={hasAnswer}
+            favorite={question.favorite}
+          />
         </div>
       )}
       <div className='flex items-center gap-2.5'>

@@ -46,8 +46,8 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "YiCheng Chung",
-  description: "鍾貽丞 (Yi-Cheng Chung) — personal resume site",
+  title: "YiCheng",
+  description: "貽丞 (Yi-Cheng) — personal resume site",
 };
 
 export default async function RootLayout({

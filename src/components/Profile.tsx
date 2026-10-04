@@ -22,7 +22,7 @@ export default function Profile() {
       <div className='mb-4'>
         <Image
           src='/images/yc-childhood.jpg'
-          alt='Yi-Cheng Chung'
+          alt='Yi-Cheng'
           width={150}
           height={150}
           className='h-[150px] w-[150px] rounded-full border-2 border-[#F2A341]/40 object-cover'

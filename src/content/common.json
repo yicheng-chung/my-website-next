@@ -1,6 +1,6 @@
 {
   "zh": {
-    "siteName": "YiCheng Chung",
+    "siteName": "YiCheng",
     "nav": {
       "home": "首頁",
       "reading": "閱讀",
@@ -13,15 +13,15 @@
       "en": "ENG"
     },
     "profile": {
-      "name": "鍾貽丞",
+      "name": "貽丞",
       "intro": "{age}歲 🏳️‍🌈。過去曾擔任軟體工程師三年多，未來會成為心理師。\n在人生的路上跌倒、迷路了很多次，但現在我想成為更像貽丞的人。"
     },
     "footer": {
-      "copyright": "Copyright ⓒ {year} Yi-Cheng, Chung. All rights reserved."
+      "copyright": "Copyright ⓒ {year} Yi-Cheng. All rights reserved."
     }
   },
   "en": {
-    "siteName": "YiCheng Chung",
+    "siteName": "YiCheng",
     "nav": {
       "home": "Main",
       "reading": "Reading",
@@ -34,12 +34,12 @@
       "en": "ENG"
     },
     "profile": {
-      "name": "Yi-Cheng, Chung",
+      "name": "Yi-Cheng",
       "intro": "{age} 🏳️‍🌈. I spent over three years working as a software engineer, and I’m now on my way to becoming a therapist. \nI’ve stumbled, lost my way, and taken many wrong turns along the road. \nBut now, I want to become more like myself—more like Yicheng."
     },
     "footer": {
       "linksHeading": "My Links",
-      "copyright": "Copyright ⓒ {year} Yi-Cheng, Chung. All rights reserved."
+      "copyright": "Copyright ⓒ {year} Yi-Cheng. All rights reserved."
     }
   }
 }

@@ -1,12 +1,12 @@
 {
   "zh": {
     "heading": "關於我",
-    "intro1": "你好！我是鍾貽丞，今年{age}歲。\n我喜歡用雙手親手做東西，例如做菜或是畫畫、寫程式。我也是一個熱愛旅行的人，2016年暑假獨自到歐洲打工換宿了兩個月。\n我也喜歡學習英文，這也是我把這個網站做成雙語切換的原因。",
+    "intro1": "你好！我是貽丞，今年{age}歲。\n我喜歡用雙手親手做東西，例如做菜或是畫畫、寫程式。我也是一個熱愛旅行的人，2016年暑假獨自到歐洲打工換宿了兩個月。\n我也喜歡學習英文，這也是我把這個網站做成雙語切換的原因。",
     "intro2": "去年做了人生稍微轉向的決定：離開做了三年多的軟體工程師工作。考上了心理諮商研究所，未來會成為心理師。\n考上後的現在決定休學一年，目前在準備前往澳洲打工度假事宜。"
   },
   "en": {
     "heading": "About Me",
-    "intro1": "Hello! I'm Yi-Cheng Chung, {age} years old.\nI like making things with my own hands — cooking, painting, coding. I'm also someone who loves to travel: in the summer of 2016, I spent two months in Europe on my own, work-exchanging for food and lodging along the way.\nI also enjoy learning English, which is part of why I built this site with a language toggle.",
+    "intro1": "Hello! I'm Yi-Cheng, {age} years old.\nI like making things with my own hands — cooking, painting, coding. I'm also someone who loves to travel: in the summer of 2016, I spent two months in Europe on my own, work-exchanging for food and lodging along the way.\nI also enjoy learning English, which is part of why I built this site with a language toggle.",
     "intro2": "Last year I made a decision that shifted my life's direction a little: I left my job as a software engineer after three-plus years. I got into a counseling psychology graduate program and will become a therapist down the road.\nNow that I've been admitted, I've decided to take a year off, and I'm currently preparing to go to Australia on a working holiday."
   }
 }
