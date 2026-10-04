@@ -34,19 +34,22 @@ export default function Navbar() {
     return () => ro.disconnect()
   }, [])
 
-  // App-like edge swipe: a touch starting within EDGE_ZONE of the right
-  // edge, dragged left past OPEN_THRESHOLD, opens the drawer — same gesture
-  // iOS/Android system edge panels use. Desktop-only skips this since
-  // there's no drawer there to open. Listeners stay passive (no
-  // preventDefault) so this never fights a normal vertical scroll that
-  // happens to start near the edge; the real limit is that on some mobile
-  // browsers the very edge pixels are already claimed by the OS/browser's
-  // own back-or-forward swipe before this ever sees the touch, which no
-  // page script can override.
+  // App-like swipe: a leftward drag past OPEN_THRESHOLD starting anywhere
+  // on screen (not just the right edge — yicheng wanted it to work from
+  // the middle of the page too, like a native app's panel) opens the
+  // drawer. Desktop-only skips this since there's no drawer there to open.
+  // Listeners stay passive (no preventDefault) so this never fights a
+  // normal vertical scroll; the real limit is that on some mobile browsers
+  // the very edge pixels are already claimed by the OS/browser's own
+  // back-or-forward swipe before this ever sees the touch, which no page
+  // script can override. Tracking from anywhere does mean this can now
+  // fire alongside a component with its own local left-swipe (NowReading's
+  // book carousel) — a touch starting inside anything marked
+  // data-swipe-local is left alone so that component's own gesture keeps
+  // working without also popping the drawer open.
   useEffect(() => {
     if (isDesktop) return
 
-    const EDGE_ZONE = 24
     const OPEN_THRESHOLD = 60
 
     let startX: number | null = null
@@ -57,7 +60,8 @@ export default function Navbar() {
       if (drawerOpen) return
       const touch = e.touches[0]
       if (!touch) return
-      if (touch.clientX < window.innerWidth - EDGE_ZONE) return
+      const target = touch.target
+      if (target instanceof Element && target.closest("[data-swipe-local]")) return
       startX = touch.clientX
       startY = touch.clientY
       tracking = true

@@ -72,7 +72,7 @@ export default async function RootLayout({
   return (
     <html
       lang="zh-TW"
-      className={`${montserrat.variable} h-full antialiased${initialTheme === "dark" ? " dark" : ""}`}
+      className={`${montserrat.variable} h-full overflow-x-hidden antialiased${initialTheme === "dark" ? " dark" : ""}`}
       suppressHydrationWarning
     >
       <head>
@@ -87,7 +87,7 @@ export default async function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap"
         />
       </head>
-      <body className="min-h-full bg-[#F5EFE4] font-sans text-neutral-900 dark:bg-black dark:text-neutral-100">
+      <body className="min-h-full overflow-x-hidden bg-[#F5EFE4] font-sans text-neutral-900 dark:bg-black dark:text-neutral-100">
         <Script id="theme-init" strategy="beforeInteractive">
           {THEME_INIT_SCRIPT}
         </Script>

@@ -78,7 +78,11 @@ export default function NowReading({ bare = false }: { bare?: boolean }) {
   }
 
   return (
-    <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+    // data-swipe-local tells Navbar's global edge-swipe-to-open-drawer
+    // listener to leave touches here alone — this carousel already has its
+    // own left/right swipe meaning (switch book), which was firing at the
+    // same time as the drawer opening.
+    <div data-swipe-local onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <Link
         key={book.id}
         href={`/reading/${book.id}`}
