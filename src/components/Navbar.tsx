@@ -6,6 +6,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useTranslations } from "@/lib/useTranslations";
+import { useIsDesktop } from "@/lib/useIsDesktop";
 import common from "@/content/common.json";
 import NavLinks from "./NavLinks";
 import LanguageToggle from "./LanguageToggle";
@@ -15,6 +16,7 @@ export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { siteName } = useTranslations(common);
   const headerRef = useRef<HTMLElement>(null);
+  const isDesktop = useIsDesktop();
 
   // Exposes the navbar's real rendered height as a CSS var, so a page that
   // needs to sit flush against this fixed header (Activities' full-bleed
@@ -32,6 +34,68 @@ export default function Navbar() {
     return () => ro.disconnect()
   }, [])
 
+  // App-like edge swipe: a touch starting within EDGE_ZONE of the right
+  // edge, dragged left past OPEN_THRESHOLD, opens the drawer — same gesture
+  // iOS/Android system edge panels use. Desktop-only skips this since
+  // there's no drawer there to open. Listeners stay passive (no
+  // preventDefault) so this never fights a normal vertical scroll that
+  // happens to start near the edge; the real limit is that on some mobile
+  // browsers the very edge pixels are already claimed by the OS/browser's
+  // own back-or-forward swipe before this ever sees the touch, which no
+  // page script can override.
+  useEffect(() => {
+    if (isDesktop) return
+
+    const EDGE_ZONE = 24
+    const OPEN_THRESHOLD = 60
+
+    let startX: number | null = null
+    let startY: number | null = null
+    let tracking = false
+
+    function onTouchStart(e: TouchEvent) {
+      if (drawerOpen) return
+      const touch = e.touches[0]
+      if (!touch) return
+      if (touch.clientX < window.innerWidth - EDGE_ZONE) return
+      startX = touch.clientX
+      startY = touch.clientY
+      tracking = true
+    }
+
+    function onTouchMove(e: TouchEvent) {
+      if (!tracking || startX === null || startY === null) return
+      const touch = e.touches[0]
+      if (!touch) return
+      const dx = touch.clientX - startX
+      const dy = touch.clientY - startY
+      // Mostly-vertical movement means this is a scroll that merely started
+      // near the edge, not a deliberate horizontal swipe.
+      if (Math.abs(dy) > Math.abs(dx)) return
+      if (dx <= -OPEN_THRESHOLD) {
+        setDrawerOpen(true)
+        tracking = false
+      }
+    }
+
+    function onTouchEnd() {
+      tracking = false
+      startX = null
+      startY = null
+    }
+
+    document.addEventListener('touchstart', onTouchStart, { passive: true })
+    document.addEventListener('touchmove', onTouchMove, { passive: true })
+    document.addEventListener('touchend', onTouchEnd, { passive: true })
+    document.addEventListener('touchcancel', onTouchEnd, { passive: true })
+    return () => {
+      document.removeEventListener('touchstart', onTouchStart)
+      document.removeEventListener('touchmove', onTouchMove)
+      document.removeEventListener('touchend', onTouchEnd)
+      document.removeEventListener('touchcancel', onTouchEnd)
+    }
+  }, [isDesktop, drawerOpen])
+
   return (
     <>
       <header
@@ -40,15 +104,6 @@ export default function Navbar() {
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
-            <button
-              type="button"
-              className="flex-shrink-0 text-white md:hidden dark:text-black"
-              aria-label="Open menu"
-              onClick={() => setDrawerOpen(true)}
-            >
-              <Menu size={26} />
-            </button>
-
             <Link href="/" className="flex-shrink-0 transition-opacity hover:opacity-70">
               {/* Hand-drawn signature, stored as black ink on a transparent
                   background (public/images/signature.png). The header bar
@@ -74,6 +129,14 @@ export default function Navbar() {
             </nav>
             <ThemeToggle />
             <LanguageToggle />
+            <button
+              type="button"
+              className="flex-shrink-0 text-white md:hidden dark:text-black"
+              aria-label="Open menu"
+              onClick={() => setDrawerOpen(true)}
+            >
+              <Menu size={26} />
+            </button>
           </div>
         </div>
       </header>
@@ -92,15 +155,15 @@ export default function Navbar() {
               transition={{ duration: 0.25 }}
             />
             <motion.div
-              className="absolute top-0 left-0 h-full w-64 max-w-[80vw] bg-black p-6 shadow-xl dark:bg-white"
-              initial={{ x: "-100%" }}
+              className="absolute top-0 right-0 h-full w-64 max-w-[80vw] bg-black p-6 shadow-xl dark:bg-white"
+              initial={{ x: "100%" }}
               animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
+              exit={{ x: "100%" }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
               <button
                 type="button"
-                className="mb-8 text-white dark:text-black"
+                className="mb-8 ml-auto block text-white dark:text-black"
                 aria-label="Close menu"
                 onClick={() => setDrawerOpen(false)}
               >
