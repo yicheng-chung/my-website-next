@@ -127,6 +127,34 @@
   }
 }
 
+/* Parked off-screen left and invisible for most of the cycle, fades in,
+   sweeps across to off-screen right, fades back out — see SeamShimmer.tsx.
+   translateX(100vw) rather than a percentage so the sweep always clears the
+   full viewport width regardless of this element's own (much narrower)
+   size. */
+@keyframes seam-shimmer {
+  0%,
+  70% {
+    transform: translateX(-16rem);
+    opacity: 0;
+  }
+  74% {
+    opacity: 1;
+  }
+  96% {
+    transform: translateX(100vw);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100vw);
+    opacity: 0;
+  }
+}
+
+.animate-seam-shimmer {
+  animation: seam-shimmer 5s ease-in-out infinite;
+}
+
 .animate-shooting-star {
   animation: shooting-star linear infinite;
 }

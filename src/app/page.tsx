@@ -2,7 +2,6 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { FaGithub, FaLinkedin, FaFacebook, FaInstagram } from 'react-icons/fa'
 import { useTranslations } from '@/lib/useTranslations'
 import { useDocumentTitle } from '@/lib/useDocumentTitle'
 import { useLanguage } from '@/context/LanguageContext'
@@ -12,20 +11,13 @@ import aboutContent from '@/content/about.json'
 import activitiesContent from '@/content/activities.json'
 import common from '@/content/common.json'
 import status from '@/content/status.json'
-import links from '@/content/links.json'
 import LifeTimeline from '@/components/LifeTimeline'
 import NowPlaying from '@/components/NowPlaying'
 import NowReading from '@/components/NowReading'
 import { VerticalMarquee } from '@/components/Marquee'
 import WaveDivider from '@/components/WaveDivider'
 import OceanCurrents from '@/components/OceanCurrents'
-
-const SOCIAL_LINKS = [
-  { href: links.instagram, label: 'Instagram', Icon: FaInstagram },
-  { href: links.facebook, label: 'Facebook', Icon: FaFacebook },
-  { href: links.github, label: 'GitHub', Icon: FaGithub },
-  { href: links.linkedin, label: 'LinkedIn', Icon: FaLinkedin },
-]
+import SeamShimmer from '@/components/SeamShimmer'
 
 // Fixed regardless of light/dark mode — this is the page's own palette
 // (per the reference design yicheng gave), not the rest of the site's
@@ -68,15 +60,9 @@ export default function Home() {
           circle rather than the earlier arch shape, since that symmetry is
           what makes this positioning trick work cleanly. */}
       <section
-        className={`relative z-10 flex flex-col items-center pt-34 pb-28 text-center sm:pt-44 sm:pb-36 md:pt-48 ${GUTTER}`}
+        className={`relative z-10 flex flex-col items-center pt-24 pb-28 text-center sm:pt-28 sm:pb-36 ${GUTTER}`}
         style={{ backgroundColor: GREEN }}
       >
-        <h1
-          className='text-4xl font-black tracking-tight uppercase sm:text-6xl'
-          style={{ color: CREAM }}
-        >
-          {profile.name}
-        </h1>
         <p
           className='mt-4 max-w-md text-sm leading-relaxed sm:max-w-xl sm:text-base'
           style={{ color: CREAM }}
@@ -91,21 +77,8 @@ export default function Home() {
               </span>
             ))}
         </p>
-        <div className='mt-5 flex gap-5'>
-          {SOCIAL_LINKS.map(({ href, label, Icon }) => (
-            <a
-              key={label}
-              href={href}
-              target='_blank'
-              rel='noreferrer'
-              aria-label={label}
-              style={{ color: CREAM }}
-              className='transition-opacity hover:opacity-70'
-            >
-              <Icon size={22} />
-            </a>
-          ))}
-        </div>
+
+        <SeamShimmer />
 
         <div className='absolute top-full left-1/2 -translate-x-1/2 -translate-y-1/2'>
           <div className='relative h-40 w-40 overflow-hidden rounded-full border-4 border-white shadow-xl sm:h-52 sm:w-52 dark:border-neutral-900'>
