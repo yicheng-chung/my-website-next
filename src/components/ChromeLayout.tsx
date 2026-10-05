@@ -33,7 +33,10 @@ export default function ChromeLayout({ children }: { children: ReactNode }) {
   const isHome = pathname === HOME_ROUTE;
   const isActivities = pathname === "/activities";
   const isQuestions = pathname === "/questions";
-  const isFullBleed = isHome || isActivities || isQuestions;
+  // The reading list only — book detail pages (/reading/[id]) keep the
+  // usual centered column.
+  const isReading = pathname === "/reading";
+  const isFullBleed = isHome || isActivities || isQuestions || isReading;
   const isBookDetail = pathname.startsWith("/reading/");
 
   // Desktop-only — on mobile this drawer (profile tucked behind a side
@@ -128,11 +131,13 @@ export default function ChromeLayout({ children }: { children: ReactNode }) {
           way — Footer itself keeps its usual max-w-7xl centered content,
           just with this full-bleed color wrapped around it instead of the
           plain cream/black page background every other route leaves it on. */}
+      {/* The reading list renders its own Footer, floated over its bottom
+          bookmark photo (see app/reading/page.tsx). */}
       {isHome ? (
         <div className="bg-white dark:bg-neutral-950">
           <Footer />
         </div>
-      ) : (
+      ) : isReading ? null : (
         <Footer />
       )}
     </div>

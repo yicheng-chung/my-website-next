@@ -12,12 +12,18 @@ const SOCIAL_LINKS = [
   { href: links.linkedin, label: 'LinkedIn', Icon: FaLinkedin },
 ]
 
-export default function Footer() {
+// `onImage`: white text/icons for sitting on top of a photo (the reading
+// page's bottom bookmark) instead of the plain page background.
+export default function Footer({ onImage = false }: { onImage?: boolean }) {
   const t = useTranslations(common)
   const year = new Date().getFullYear()
 
   return (
-    <footer className='mx-auto flex max-w-7xl flex-col items-center gap-4  border-neutral-200 px-4 py-6 sm:px-6 lg:px-10 dark:border-neutral-700'>
+    <footer
+      className={`mx-auto flex max-w-7xl flex-col items-center border-neutral-200 px-4 sm:px-6 lg:px-10 dark:border-neutral-700 ${
+        onImage ? 'gap-3 py-4' : 'gap-4 py-6'
+      }`}
+    >
       <div className='flex items-center gap-5'>
         {SOCIAL_LINKS.map(({ href, label, Icon }) => (
           <a
@@ -26,13 +32,21 @@ export default function Footer() {
             target='_blank'
             rel='noreferrer'
             aria-label={label}
-            className='text-neutral-500 transition-colors hover:text-white dark:text-neutral-400 dark:hover:text-[#F6B45E]'
+            className={
+              onImage
+                ? 'text-white/80 transition-colors hover:text-white'
+                : 'text-neutral-500 transition-colors hover:text-white dark:text-neutral-400 dark:hover:text-[#F6B45E]'
+            }
           >
             <Icon size={28} />
           </a>
         ))}
       </div>
-      <p className='text-sm text-slate-600 dark:text-slate-400'>
+      <p
+        className={
+          onImage ? 'text-sm text-white/80' : 'text-sm text-slate-600 dark:text-slate-400'
+        }
+      >
         {t.footer.copyright.replace('{year}', String(year))}
       </p>
     </footer>

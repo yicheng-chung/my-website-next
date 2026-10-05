@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type WheelEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import Image from 'next/image'
 import { useTranslations } from '@/lib/useTranslations'
 import { useDocumentTitle } from '@/lib/useDocumentTitle'
 import { useCountUp } from '@/lib/useCountUp'
@@ -10,6 +11,7 @@ import content from '@/content/reading.json'
 import common from '@/content/common.json'
 import BookCard from '@/components/BookCard'
 import DreamyBookBackdrop from '@/components/DreamyBookBackdrop'
+import Footer from '@/components/Footer'
 import Spinner from '@/components/Spinner'
 import {
   readNotionCache,
@@ -142,87 +144,73 @@ export default function ReadingPage() {
   return (
     <div className='flex flex-col gap-6 sm:gap-8'>
       <DreamyBookBackdrop books={backdropBooks} />
-      {data === null ? (
-        <div className='flex justify-center py-16'>
-          <Spinner size={36} />
-        </div>
-      ) : (
-        <>
-          {allTags.length > 0 && (
-            <div>
-              <p className='mb-2 text-xs text-neutral-500 dark:text-neutral-400'>
-                {t.categoriesCaption.replace('{count}', String(categoryCount))}
-              </p>
-              <div className='flex flex-wrap gap-2'>
-                <button
-                  type='button'
-                  onClick={() => setActiveTags([])}
-                  className={`cursor-pointer rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                    activeTags.length === 0 ? TAG_ACTIVE : TAG_INACTIVE
-                  }`}
-                >
-                  {t.allTags}
-                </button>
-                {allTags.map((tag) => (
+      {/* Two 有河書店 bookmarks bookend the page at full viewport width —
+          this one on top, flush against the fixed navbar (same
+          --navbar-height offset as Activities), the other at the very
+          bottom. Photographed and pre-rotated to lie flat (the files
+          themselves are landscape — no CSS rotation), and shown
+          independent of the Notion fetch. */}
+      <Image
+        src='/images/bookmark-resistance.jpg'
+        alt={t.bookmarkResistanceAlt}
+        width={2573}
+        height={583}
+        priority
+        sizes='100vw'
+        className='h-auto w-full'
+        style={{ marginTop: 'var(--navbar-height, 84px)' }}
+      />
+      {/* ChromeLayout gives this route a full-bleed <main>, so the list
+          itself re-applies the usual centered column and side gutter. */}
+      <div className='mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 sm:gap-8 sm:px-6 lg:px-10'>
+        {data === null ? (
+          <div className='flex justify-center py-16'>
+            <Spinner size={36} />
+          </div>
+        ) : (
+          <>
+            {allTags.length > 0 && (
+              <div>
+                <p className='mb-2 text-xs text-neutral-500 dark:text-neutral-400'>
+                  {t.categoriesCaption.replace('{count}', String(categoryCount))}
+                </p>
+                <div className='flex flex-wrap gap-2'>
                   <button
-                    key={tag}
                     type='button'
-                    onClick={() => toggleTag(tag)}
+                    onClick={() => setActiveTags([])}
                     className={`cursor-pointer rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                      activeTags.includes(tag) ? TAG_ACTIVE : TAG_INACTIVE
+                      activeTags.length === 0 ? TAG_ACTIVE : TAG_INACTIVE
                     }`}
                   >
-                    ＃{tag}
+                    {t.allTags}
                   </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {filteredReading.length > 0 && (
-            <section>
-              <h2 className='mb-4 text-lg font-bold text-neutral-800 sm:text-xl dark:text-neutral-100'>
-                {t.readingHeading}
-                <span className='ml-1 text-sm font-normal text-neutral-400 dark:text-neutral-500'>
-                  {t.countSuffix.replace('{count}', String(readingCount))}
-                </span>
-              </h2>
-              <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3'>
-                <AnimatePresence initial={false}>
-                  {filteredReading.map((book) => (
-                    <motion.div
-                      key={book.id}
-                      layout
-                      initial={{ opacity: 0, scale: 0.96 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.96 }}
-                      transition={{ duration: 0.2 }}
+                  {allTags.map((tag) => (
+                    <button
+                      key={tag}
+                      type='button'
+                      onClick={() => toggleTag(tag)}
+                      className={`cursor-pointer rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                        activeTags.includes(tag) ? TAG_ACTIVE : TAG_INACTIVE
+                      }`}
                     >
-                      <BookCard book={book} variant='featured' />
-                    </motion.div>
+                      ＃{tag}
+                    </button>
                   ))}
-                </AnimatePresence>
+                </div>
               </div>
-            </section>
-          )}
+            )}
 
-          {filteredFinished.length > 0 && (
-            <section>
-              <h2 className='mb-4 text-lg font-bold text-neutral-800 sm:text-xl dark:text-neutral-100'>
-                {t.finishedHeading}
-                <span className='ml-1 text-sm font-normal text-neutral-400 dark:text-neutral-500'>
-                  {t.countSuffix.replace('{count}', String(finishedCount))}
-                </span>
-              </h2>
-              <div className='relative'>
-                <div
-                  ref={finishedStripRef}
-                  onWheel={handleFinishedWheel}
-                  onScroll={handleFinishedScroll}
-                  className='hide-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto py-6'
-                >
+            {filteredReading.length > 0 && (
+              <section>
+                <h2 className='mb-4 text-lg font-bold text-neutral-800 sm:text-xl dark:text-neutral-100'>
+                  {t.readingHeading}
+                  <span className='ml-1 text-sm font-normal text-neutral-400 dark:text-neutral-500'>
+                    {t.countSuffix.replace('{count}', String(readingCount))}
+                  </span>
+                </h2>
+                <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3'>
                   <AnimatePresence initial={false}>
-                    {filteredFinished.map((book) => (
+                    {filteredReading.map((book) => (
                       <motion.div
                         key={book.id}
                         layout
@@ -230,47 +218,99 @@ export default function ReadingPage() {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.96 }}
                         transition={{ duration: 0.2 }}
-                        className='w-40 flex-shrink-0 snap-center sm:w-44 lg:w-48'
                       >
-                        <div className='origin-center scale-100 transition-transform duration-200 ease-out hover:z-10 hover:scale-[1.1]'>
-                          <BookCard book={book} variant='shelf' />
-                        </div>
+                        <BookCard book={book} variant='featured' />
                       </motion.div>
                     ))}
                   </AnimatePresence>
                 </div>
+              </section>
+            )}
 
-                <button
-                  type='button'
-                  aria-label={t.scrollLeft}
-                  onClick={() => scrollFinishedBy(-1)}
-                  disabled={!canScrollLeft}
-                  className={`absolute top-1/2 left-0 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border shadow-sm transition-opacity ${
-                    canScrollLeft
-                      ? 'cursor-pointer border-neutral-200 bg-white/90 text-neutral-600 hover:bg-white dark:border-neutral-600 dark:bg-neutral-800/90 dark:text-neutral-300 dark:hover:bg-neutral-800'
-                      : 'cursor-not-allowed border-neutral-200/50 bg-white/40 text-neutral-400 opacity-40 dark:border-neutral-700/50 dark:bg-neutral-800/40 dark:text-neutral-600'
-                  }`}
-                >
-                  <ChevronLeft size={18} />
-                </button>
-                <button
-                  type='button'
-                  aria-label={t.scrollRight}
-                  onClick={() => scrollFinishedBy(1)}
-                  disabled={!canScrollRight}
-                  className={`absolute top-1/2 right-0 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border shadow-sm transition-opacity ${
-                    canScrollRight
-                      ? 'cursor-pointer border-neutral-200 bg-white/90 text-neutral-600 hover:bg-white dark:border-neutral-600 dark:bg-neutral-800/90 dark:text-neutral-300 dark:hover:bg-neutral-800'
-                      : 'cursor-not-allowed border-neutral-200/50 bg-white/40 text-neutral-400 opacity-40 dark:border-neutral-700/50 dark:bg-neutral-800/40 dark:text-neutral-600'
-                  }`}
-                >
-                  <ChevronRight size={18} />
-                </button>
-              </div>
-            </section>
-          )}
-        </>
-      )}
+            {filteredFinished.length > 0 && (
+              <section>
+                <h2 className='mb-4 text-lg font-bold text-neutral-800 sm:text-xl dark:text-neutral-100'>
+                  {t.finishedHeading}
+                  <span className='ml-1 text-sm font-normal text-neutral-400 dark:text-neutral-500'>
+                    {t.countSuffix.replace('{count}', String(finishedCount))}
+                  </span>
+                </h2>
+                <div className='relative'>
+                  <div
+                    ref={finishedStripRef}
+                    onWheel={handleFinishedWheel}
+                    onScroll={handleFinishedScroll}
+                    className='hide-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto py-6'
+                  >
+                    <AnimatePresence initial={false}>
+                      {filteredFinished.map((book) => (
+                        <motion.div
+                          key={book.id}
+                          layout
+                          initial={{ opacity: 0, scale: 0.96 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.96 }}
+                          transition={{ duration: 0.2 }}
+                          className='w-40 flex-shrink-0 snap-center sm:w-44 lg:w-48'
+                        >
+                          <div className='origin-center scale-100 transition-transform duration-200 ease-out hover:z-10 hover:scale-[1.1]'>
+                            <BookCard book={book} variant='shelf' />
+                          </div>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+
+                  <button
+                    type='button'
+                    aria-label={t.scrollLeft}
+                    onClick={() => scrollFinishedBy(-1)}
+                    disabled={!canScrollLeft}
+                    className={`absolute top-1/2 left-0 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border shadow-sm transition-opacity ${
+                      canScrollLeft
+                        ? 'cursor-pointer border-neutral-200 bg-white/90 text-neutral-600 hover:bg-white dark:border-neutral-600 dark:bg-neutral-800/90 dark:text-neutral-300 dark:hover:bg-neutral-800'
+                        : 'cursor-not-allowed border-neutral-200/50 bg-white/40 text-neutral-400 opacity-40 dark:border-neutral-700/50 dark:bg-neutral-800/40 dark:text-neutral-600'
+                    }`}
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+                  <button
+                    type='button'
+                    aria-label={t.scrollRight}
+                    onClick={() => scrollFinishedBy(1)}
+                    disabled={!canScrollRight}
+                    className={`absolute top-1/2 right-0 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border shadow-sm transition-opacity ${
+                      canScrollRight
+                        ? 'cursor-pointer border-neutral-200 bg-white/90 text-neutral-600 hover:bg-white dark:border-neutral-600 dark:bg-neutral-800/90 dark:text-neutral-300 dark:hover:bg-neutral-800'
+                        : 'cursor-not-allowed border-neutral-200/50 bg-white/40 text-neutral-400 opacity-40 dark:border-neutral-700/50 dark:bg-neutral-800/40 dark:text-neutral-600'
+                    }`}
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </div>
+              </section>
+            )}
+          </>
+        )}
+      </div>
+      {/* The page's footer floats over this photo's bottom edge, so no
+          page background shows below it. From xl (1280px) up the photo is
+          tall enough to hold the footer under the bookmark's text; any
+          narrower and the icons would land on top of 「活」, so the footer
+          drops below it onto a band of the bookmark's own blue instead. */}
+      <div className='relative bg-[#1C9EEB]'>
+        <Image
+          src='/images/bookmark-change.jpg'
+          alt={t.bookmarkChangeAlt}
+          width={2573}
+          height={556}
+          sizes='100vw'
+          className='block h-auto w-full'
+        />
+        <div className='xl:absolute xl:inset-x-0 xl:bottom-0'>
+          <Footer onImage />
+        </div>
+      </div>
     </div>
   )
 }

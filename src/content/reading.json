@@ -17,7 +17,9 @@
     "categoriesCaption": "依主題瀏覽（共 {count} 個）",
     "allTags": "全部",
     "scrollLeft": "往前",
-    "scrollRight": "往後"
+    "scrollRight": "往後",
+    "bookmarkResistanceAlt": "有河書店的書籤：閱讀是種抵抗",
+    "bookmarkChangeAlt": "有河書店的書籤：閱讀改變生活"
   },
   "en": {
     "heading": "Reading",
@@ -37,6 +39,8 @@
     "categoriesCaption": "Browse by topic ({count})",
     "allTags": "All",
     "scrollLeft": "Scroll left",
-    "scrollRight": "Scroll right"
+    "scrollRight": "Scroll right",
+    "bookmarkResistanceAlt": "A bookmark from Youhe Bookstore: \"Reading is a form of resistance\"",
+    "bookmarkChangeAlt": "A bookmark from Youhe Bookstore: \"Reading changes life\""
   }
 }
