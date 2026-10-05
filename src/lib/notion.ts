@@ -132,6 +132,25 @@ export async function getFinishedBooks(): Promise<Book[]> {
   return queryByStatus("已完成", "結束閱讀日期");
 }
 
+// One book's row by page id — used server-side for a book page's share
+// preview (title/cover), where the client-side list cache isn't available.
+export async function getBookById(id: string): Promise<Book | null> {
+  const token = process.env.NOTION_TOKEN;
+  if (!token) return null;
+
+  const res = await fetch(`https://api.notion.com/v1/pages/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Notion-Version": "2022-06-28",
+    },
+    cache: "no-store",
+  });
+
+  if (!res.ok) return null;
+  const book = parseBook((await res.json()) as NotionPage);
+  return book.title ? book : null;
+}
+
 // A book's own reflection ("讀後心得") lives in the Notion *page's content*
 // (blocks), not in the database row properties above. Empirically, every
 // book page wraps its reflection in a single callout block (with an

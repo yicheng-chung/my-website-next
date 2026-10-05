@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import { LANGUAGE_STORAGE_KEY } from '@/lib/languageCookie'
+import { HTML_LANG, LANGUAGE_STORAGE_KEY } from '@/lib/languageCookie'
 
 export type Lang = 'zh' | 'en'
 
@@ -50,6 +50,10 @@ export function LanguageProvider({
       writeCookie(stored)
     }
   }, [])
+
+  useLayoutEffect(() => {
+    document.documentElement.lang = HTML_LANG[lang]
+  }, [lang])
 
   const setLang = (next: Lang) => {
     setLangState(next)

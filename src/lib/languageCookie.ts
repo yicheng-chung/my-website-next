@@ -5,3 +5,7 @@
 // client-reference stub when a Server Component imports it, even a plain
 // string constant.
 export const LANGUAGE_STORAGE_KEY = 'my-website-lang'
+
+// Value for <html lang> per site language — set by the server on first load
+// (layout.tsx) and kept in sync by LanguageContext when the visitor toggles.
+export const HTML_LANG = { zh: 'zh-TW', en: 'en' } as const

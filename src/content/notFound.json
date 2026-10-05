@@ -1,0 +1,12 @@
+{
+  "zh": {
+    "title": "這一頁不存在",
+    "body": "可能是網址打錯了，或這一頁已經搬走。",
+    "back": "回首頁"
+  },
+  "en": {
+    "title": "This page doesn't exist",
+    "body": "The link may be mistyped, or the page has moved.",
+    "back": "Back to home"
+  }
+}

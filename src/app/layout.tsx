@@ -6,7 +6,7 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { ThemeProvider, type Theme } from "@/context/ThemeContext";
 import { LanguageProvider, type Lang } from "@/context/LanguageContext";
-import { LANGUAGE_STORAGE_KEY } from "@/lib/languageCookie";
+import { HTML_LANG, LANGUAGE_STORAGE_KEY } from "@/lib/languageCookie";
 import { THEME_STORAGE_KEY } from "@/lib/themeCookie";
 import ChromeLayout from "@/components/ChromeLayout";
 
@@ -45,9 +45,26 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
 });
 
+const SITE_DESCRIPTION =
+  "貽丞的個人網站。前軟體工程師，正在成為心理師的路上。這裡放我讀的書、寫的字，和想不通的問題。";
+
+// Share previews need absolute image URLs. Vercel sets this env var to the
+// production domain on every deployment; locally it falls back to dev.
+const SITE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "http://localhost:3000";
+
 export const metadata: Metadata = {
-  title: "YiCheng",
-  description: "貽丞 (Yi-Cheng) — personal resume site",
+  metadataBase: new URL(SITE_URL),
+  title: { default: "YiCheng", template: "%s · YiCheng" },
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    siteName: "YiCheng",
+    title: "YiCheng",
+    description: SITE_DESCRIPTION,
+    locale: "zh_TW",
+    type: "website",
+  },
 };
 
 export default async function RootLayout({
@@ -71,7 +88,7 @@ export default async function RootLayout({
 
   return (
     <html
-      lang="zh-TW"
+      lang={HTML_LANG[initialLang]}
       className={`${montserrat.variable} h-full overflow-x-hidden antialiased${initialTheme === "dark" ? " dark" : ""}`}
       suppressHydrationWarning
     >
