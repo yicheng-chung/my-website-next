@@ -21,10 +21,10 @@ export default function Footer({ onImage = false }: { onImage?: boolean }) {
   return (
     <footer
       className={`mx-auto flex max-w-7xl flex-col items-center border-neutral-200 px-4 sm:px-6 lg:px-10 dark:border-neutral-700 ${
-        onImage ? 'gap-3 py-4' : 'gap-4 py-6'
+        onImage ? 'gap-1.5 py-1.5 xl:gap-3 xl:py-4' : 'gap-4 py-6'
       }`}
     >
-      <div className='flex items-center gap-5'>
+      <div className={`flex items-center ${onImage ? 'gap-3 xl:gap-5' : 'gap-5'}`}>
         {SOCIAL_LINKS.map(({ href, label, Icon }) => (
           <a
             key={label}
@@ -38,13 +38,17 @@ export default function Footer({ onImage = false }: { onImage?: boolean }) {
                 : 'text-neutral-500 transition-colors hover:text-white dark:text-neutral-400 dark:hover:text-[#F6B45E]'
             }
           >
-            <Icon size={28} />
+            {/* Smaller on a narrower photo (md–xl), where there's less
+                room under the bookmark's text. */}
+            <Icon className={onImage ? 'h-[18px] w-[18px] xl:h-7 xl:w-7' : 'h-7 w-7'} />
           </a>
         ))}
       </div>
       <p
         className={
-          onImage ? 'text-sm text-white/80' : 'text-sm text-slate-600 dark:text-slate-400'
+          onImage
+            ? 'text-[11px] text-white/80 xl:text-sm'
+            : 'text-sm text-slate-600 dark:text-slate-400'
         }
       >
         {t.footer.copyright.replace('{year}', String(year))}

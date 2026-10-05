@@ -293,12 +293,17 @@ export default function ReadingPage() {
           </>
         )}
       </div>
-      {/* The page's footer floats over this photo's bottom edge, so no
-          page background shows below it. From xl (1280px) up the photo is
-          tall enough to hold the footer under the bookmark's text; any
-          narrower and the icons would land on top of 「活」, so the footer
-          drops below it onto a band of the bookmark's own blue instead. */}
-      <div className='relative bg-[#1C9EEB]'>
+      {/* From md (768px) up, the page's footer floats over this photo's
+          bottom edge (compacted below xl, where the photo is shorter, so it
+          stays clear of the bookmark's text). On phones the photo is far too
+          short for that, so the ordinary footer sits just above it instead
+          and the page ends on the bookmark alone (per yicheng). */}
+      {/* mt/-mb shift it down toward the bookmark without moving the
+          bookmark itself. */}
+      <div className='mt-6 -mb-6 sm:mt-8 sm:-mb-8 md:hidden'>
+        <Footer />
+      </div>
+      <div className='relative'>
         <Image
           src='/images/bookmark-change.jpg'
           alt={t.bookmarkChangeAlt}
@@ -307,7 +312,7 @@ export default function ReadingPage() {
           sizes='100vw'
           className='block h-auto w-full'
         />
-        <div className='xl:absolute xl:inset-x-0 xl:bottom-0'>
+        <div className='hidden md:absolute md:inset-x-0 md:bottom-0 md:block'>
           <Footer onImage />
         </div>
       </div>
