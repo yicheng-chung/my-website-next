@@ -42,22 +42,6 @@ export default function ActivitiesPage() {
           re-applies the same side gutter ChromeLayout's <main> would
           otherwise have provided. */}
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 sm:px-6 lg:px-10">
-        <div
-          className="relative overflow-hidden rounded-[2rem] border-4 border-black px-6 py-20 text-center shadow-[8px_8px_0_0_#000]"
-          style={{
-            backgroundColor: "#F2A341",
-            backgroundImage:
-              "repeating-linear-gradient(45deg, rgba(0,0,0,0.08) 0px, rgba(0,0,0,0.08) 14px, transparent 14px, transparent 28px)",
-          }}
-        >
-          <h1
-            className="text-5xl font-black text-white sm:text-7xl"
-            style={{ WebkitTextStroke: "3px black", paintOrder: "stroke fill" }}
-          >
-            {t.title}
-          </h1>
-        </div>
-
         <div className="flex flex-col items-center gap-3 rounded-[2rem] border-4 border-black bg-white px-6 py-16 text-center shadow-[8px_8px_0_0_#000]">
           <p className="text-2xl font-black text-black sm:text-3xl">{t.emptyTitle}</p>
           <p className="text-xs font-medium text-neutral-600 sm:whitespace-nowrap sm:text-base">
