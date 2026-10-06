@@ -24,11 +24,10 @@ import SeamShimmer from '@/components/SeamShimmer'
 // neutral/cream + orange-accent language. The white "About"/"Into lately"
 // bands below do still adapt for dark mode, since those read as ordinary
 // page content rather than the deliberate hero/timeline color blocking.
-const GREEN = '#20463D'
+const ORANGE = '#F2A341'
 const CREAM = '#F3E4DC'
-// Same lightness/saturation as GREEN, hue rotated to blue — used only for
-// the Life Timeline band, which yicheng wanted switched to blue while the
-// Hero band above stays green.
+// Used only for the Life Timeline band, which yicheng wanted blue while
+// the Hero band above stays its own color (now orange).
 const TIMELINE_BLUE = '#2B455E'
 
 // ChromeLayout gives Home's <main> no side padding of its own (so these
@@ -55,28 +54,42 @@ export default function Home() {
           photo is an absolutely-positioned overlay anchored to this
           section's own bottom edge (top-full) and shifted up by half its
           own height (-translate-y-1/2), so it's centered exactly on the
-          seam — half sitting on the green, half on the white — without
+          seam — half sitting on the orange, half on the white — without
           needing to know either section's actual rendered height. A full
           circle rather than the earlier arch shape, since that symmetry is
           what makes this positioning trick work cleanly. */}
       <section
         className={`relative z-10 flex flex-col items-center pt-24 pb-28 text-center sm:pt-28 sm:pb-36 ${GUTTER}`}
-        style={{ backgroundColor: GREEN }}
+        style={{ backgroundColor: ORANGE }}
       >
-        <p
-          className='mt-4 max-w-md text-sm leading-relaxed sm:max-w-xl sm:text-base'
-          style={{ color: CREAM }}
-        >
-          {profile.intro
+        {/* Dark ink on the orange — cream text didn't read clearly on
+            this lighter band. Each \n in the source starts a new line.
+            Fixed colors, not dark: variants, since the band itself
+            doesn't change with theme. English gets a touch more width on
+            desktop so "…along the road." doesn't spill a lone word onto
+            its own line. */}
+        {(() => {
+          const lines = profile.intro
             .replace('{age}', String(getAge()))
             .split('\n')
-            .map((line, i, arr) => (
-              <span key={i}>
-                {line}
-                {i < arr.length - 1 && <br />}
-              </span>
-            ))}
-        </p>
+            .map((line) => line.trim())
+          return (
+            <p
+              className={`mt-4 max-w-md text-base leading-relaxed font-medium text-neutral-900 sm:text-lg ${
+                lang === 'zh' ? 'md:max-w-lg' : 'md:max-w-[34rem]'
+              }`}
+            >
+              {/* Each source line as its own balanced block, so a line
+                  that wraps splits evenly instead of leaving a few
+                  characters stranded on the next line. */}
+              {lines.map((line, i) => (
+                <span key={i} className='block text-balance'>
+                  {line}
+                </span>
+              ))}
+            </p>
+          )
+        })()}
 
         <SeamShimmer />
 
@@ -102,7 +115,7 @@ export default function Home() {
         className={`relative bg-white pt-28 pb-32 sm:pt-36 sm:pb-40 ${GUTTER} dark:bg-neutral-950`}
       >
         <div className='mx-auto max-w-5xl'>
-          <div className='grid gap-10 sm:grid-cols-2 sm:gap-12'>
+          <div className='grid gap-14 sm:grid-cols-2 sm:gap-20'>
             {/* Left: self-intro (about.json). Right: site intro (home.json).
                 Each column's own heading sits at its own top-left, both the
                 same size — rather than one big heading shared above both
@@ -111,22 +124,45 @@ export default function Home() {
                 actual <p> tags with even spacing instead of relying on
                 whitespace-pre-line's bare line-height gap. */}
             <div>
-              <h2 className='text-3xl font-black leading-tight text-[#F2A341] sm:text-4xl dark:text-[#F6B45E]'>
-                {about.heading}
-              </h2>
-              <div className='mt-4 flex flex-col gap-3'>
+              {/* Plain block flow (space-y, not flex/gap) so the drop cap's
+                  float can reach past the short first paragraph and the
+                  following ones wrap around it too — a flex item would
+                  contain the float inside its own paragraph. */}
+              <div className='space-y-3'>
                 {`${about.intro1.replace('{age}', String(getAge()))}\n${
                   about.intro2
                 }`
                   .split('\n')
-                  .map((paragraph, i) => (
-                    <p
-                      key={i}
-                      className='text-base leading-relaxed text-neutral-600 dark:text-neutral-300'
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
+                  .map((paragraph, i) => {
+                    // Same magazine-style drop cap as the hero, on the
+                    // first paragraph only — in the site's orange here
+                    // since this band is white, not orange. The rest of
+                    // the greeting (你好 / Hello, up to the first
+                    // punctuation) stays orange too, as a lead-in.
+                    const initial = i === 0 ? Array.from(paragraph)[0] ?? '' : ''
+                    const leadIn =
+                      i === 0
+                        ? (paragraph.match(/^[^！!，,\s]+/)?.[0] ?? initial).slice(initial.length)
+                        : ''
+                    return (
+                      <p
+                        key={i}
+                        className='text-base leading-relaxed text-neutral-600 dark:text-neutral-300'
+                      >
+                        {initial && (
+                          <span className='float-left mt-1 mr-3 text-[4.5rem] leading-[0.85] font-black text-[#F2A341] dark:text-[#F6B45E]'>
+                            {initial}
+                          </span>
+                        )}
+                        {leadIn && (
+                          <span className='text-[#F2A341] dark:text-[#F6B45E]'>
+                            {leadIn}
+                          </span>
+                        )}
+                        {paragraph.slice(initial.length + leadIn.length)}
+                      </p>
+                    )
+                  })}
               </div>
             </div>
             <div>

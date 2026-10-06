@@ -1,15 +1,15 @@
 {
   "zh": {
     "heading": "關於我",
-    "intro1": "你好！我是貽丞，今年{age}歲。\n我喜歡畫畫、寫程式，也熱愛旅行，2016年暑假去歐洲打工換宿了兩個月（很美好的回憶，希望能再次有機會這麼做）。\n我也很喜歡英文，這也是我把這個網站做成雙語切換的原因。",
-    "intro2": "因為受到了好朋友的啟發，開始對哲學感到興趣，最近在試著閱讀語言分析哲學，也試圖理解維根斯坦。很喜歡心理學，在接受兩年的心理諮商後，對於心理治療產生了濃厚興趣。\n去年做了人生稍微轉向的決定：離開做了三年多的軟體工程師工作，並考上了心理諮商研究所，未來會成為心理師。\n考上後的現在決定休學一年，目前在準備前往澳洲打工度假事宜。",
+    "intro1": "嗨 我是貽丞，今年{age}歲 🏳️‍🌈。\n我喜歡畫畫、寫程式，也熱愛旅行，2016年暑假去歐洲打工換宿了兩個月（很美好的回憶，希望能再次有機會這麼做）。我很喜歡英文，這也是我把這個網站做成雙語切換的原因。",
+    "intro2": "受到了好朋友的啟發，開始對哲學感到興趣，最近在試著閱讀語言分析哲學，也試圖理解維根斯坦。很喜歡心理學，在接受兩年的心理諮商後，對於心理治療產生了濃厚的興趣。\n去年做了人生稍大向的決定：離開做了三年多的軟體工程師工作，並考上了心理諮商研究所，未來會成為心理師。\n考上後的現在決定休學一年，目前在準備前往澳洲打工度假事宜。",
     "quote": "「哈利，決定我們成為什麼樣的人，不是我們的能力，而是我們的選擇。」",
     "quoteSource": "《哈利波特：消失的密室》（鄧不利多）"
   },
   "en": {
     "heading": "About Me",
-    "intro1": "Hello! I'm Yi-Cheng, {age} years old.\nI love painting, coding, and traveling — in the summer of 2016 I went to Europe and spent two months work-exchanging for food and lodging (such a good memory, I hope I get the chance to do it again).\nI really enjoy English too, which is part of why I built this site with a language toggle.",
-    "intro2": "Inspired by a close friend, I started getting interested in philosophy — lately I've been trying to read analytic philosophy of language and make sense of Wittgenstein. I also love psychology: after two years of my own counseling, I developed a real interest in psychotherapy.\nLast year I made a decision that shifted my life's direction a little: I left my job as a software engineer after three-plus years, and got into a counseling psychology graduate program — I'll become a therapist down the road.\nNow that I've been admitted, I've decided to take a year off, and I'm currently preparing to go to Australia on a working holiday.",
+    "intro1": "Hello! I'm Yi-Cheng, {age} years old 🏳️‍🌈.\nI love painting, coding, and traveling — in the summer of 2016 I went to Europe and spent two months work-exchanging for food and lodging (such a good memory, I hope I get the chance to do it again).\nI really enjoy English, which is part of why I built this site with a language toggle.",
+    "intro2": "Inspired by a close friend, I started getting interested in philosophy — lately I've been trying to read analytic philosophy of language and make sense of Wittgenstein. I also love psychology: after two years of my own counseling, I developed a real interest in psychotherapy.\nLast year I made a decision that shifted my life's direction: I left my job as a software engineer after three-plus years, and got into a counseling psychology graduate program — I'll become a therapist down the road.\nNow that I've been admitted, I've decided to take a year off, and I'm currently preparing to go to Australia on a working holiday.",
     "quote": "It is our choices, Harry, that show what we truly are, far more than our abilities.",
     "quoteSource": "Harry Potter and the Chamber of Secrets (Dumbledore)"
   }

@@ -163,8 +163,10 @@ export default function Navbar() {
             <nav className='hidden md:block'>
               <NavLinks />
             </nav>
-            <ThemeToggle />
-            <LanguageToggle />
+            <div className='hidden items-center gap-6 md:flex'>
+              <ThemeToggle />
+              <LanguageToggle />
+            </div>
             <button
               type='button'
               className='flex-shrink-0 text-white md:hidden dark:text-black'
@@ -191,7 +193,7 @@ export default function Navbar() {
               transition={{ duration: 0.25 }}
             />
             <motion.div
-              className='absolute top-0 right-0 h-full w-64 max-w-[80vw] bg-black p-6 shadow-xl dark:bg-white'
+              className='absolute top-0 right-0 flex h-full w-64 max-w-[80vw] flex-col bg-black p-6 shadow-xl dark:bg-white'
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
@@ -199,13 +201,24 @@ export default function Navbar() {
             >
               <button
                 type='button'
-                className='mb-8 ml-auto block text-white dark:text-black'
+                className='ml-auto block text-white dark:text-black'
                 aria-label='Close menu'
                 onClick={() => setDrawerOpen(false)}
               >
                 <X size={28} />
               </button>
-              <NavLinks onNavigate={() => setDrawerOpen(false)} />
+              {/* Links sit vertically centered in the drawer rather than
+                  stacked under the close button, so they're within thumb
+                  reach instead of up at the top of the screen. */}
+              <div className='flex flex-1 flex-col justify-center'>
+                <NavLinks onNavigate={() => setDrawerOpen(false)} />
+              </div>
+              {/* Phones keep the toggles in here instead of in the header
+                  bar — pinned to the drawer's bottom, also for thumb reach. */}
+              <div className='flex flex-col gap-3'>
+                <LanguageToggle fullWidth />
+                <ThemeToggle fullWidth />
+              </div>
             </motion.div>
           </div>
         )}

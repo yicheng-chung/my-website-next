@@ -12,9 +12,13 @@
       "zh": "中文",
       "en": "ENG"
     },
+    "themeSwitch": {
+      "light": "淺色",
+      "dark": "深色"
+    },
     "profile": {
       "name": "貽丞",
-      "intro": "{age}歲 🏳️‍🌈\n過去曾擔任軟體工程師三年多，未來會成為心理師。\n在人生的路上跌倒、迷路了很多次，但現在我想成為更像貽丞的人。"
+      "intro": "過去曾擔任軟體工程師三年多，未來會成為心理師。\n在人生的路上跌倒、迷路了很多次。{age}歲的現在，我想成為更像自己的人。"
     },
     "footer": {
       "copyright": "Copyright ⓒ {year} Yi-Cheng. All rights reserved."
@@ -33,9 +37,13 @@
       "zh": "中文",
       "en": "ENG"
     },
+    "themeSwitch": {
+      "light": "Light",
+      "dark": "Dark"
+    },
     "profile": {
       "name": "Yi-Cheng",
-      "intro": "{age} 🏳️‍🌈\nI spent over three years working as a software engineer, and I’m now on my way to becoming a therapist. \nI’ve stumbled, lost my way, and taken many wrong turns along the road. \nBut now, I want to become more like myself—more like Yicheng."
+      "intro": "I spent over three years as a software engineer, and I’m on my way to becoming a therapist.\nI’ve stumbled and lost my way many times along the road.\nNow, at {age}, I want to become more like myself."
     },
     "footer": {
       "linksHeading": "My Links",
