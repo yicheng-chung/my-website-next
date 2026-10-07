@@ -12,7 +12,7 @@ import activitiesContent from '@/content/activities.json'
 import common from '@/content/common.json'
 import status from '@/content/status.json'
 import LifeTimeline from '@/components/LifeTimeline'
-import NowPlaying from '@/components/NowPlaying'
+import NowPlayingCard from '@/components/NowPlayingCard'
 import NowReading from '@/components/NowReading'
 import { VerticalMarquee } from '@/components/Marquee'
 import WaveDivider from '@/components/WaveDivider'
@@ -36,6 +36,66 @@ const TIMELINE_BLUE = '#2B455E'
 // so its own text/widgets still sit inset from the edge rather than
 // touching it.
 const GUTTER = 'px-4 sm:px-6 lg:px-10'
+
+// Shared frame for the three "into lately" cards (music / reading /
+// activity), so they read as one set. Dark mode flips the frame to light,
+// since a black border and shadow vanish on the dark background.
+// Background is left to each card (music dark blue, reading cream,
+// activity white).
+const CARD =
+  'border-4 border-black shadow-[4px_4px_0_0_#000] dark:border-neutral-200 dark:shadow-[4px_4px_0_0_#e5e5e5]'
+
+// status.json's labels end in a colon (NowStatus shows them inline before
+// the widget); as a tag above a card the colon is just noise.
+const stripColon = (label: string) => label.replace(/[：:]\s*$/, '')
+
+// The card's label as a tab on its top-left corner (`tone`: its bg/text
+// classes). Fully bordered, bottom edge included (per yicheng), so it sits
+// on the card's border; -mb-1 (border-4 = 4px) lands that bottom edge
+// exactly on the card's top border instead of doubling it. The "see more"
+// link (if any) sits at the right of the same row — kept out from under
+// the card so cards sharing a grid row stay the same height.
+function CardTag({
+  children,
+  tone,
+  href,
+  linkLabel,
+}: {
+  children: React.ReactNode
+  tone: string
+  href?: string
+  linkLabel?: string
+}) {
+  return (
+    <div className='flex items-end justify-between gap-4'>
+      <span
+        className={`relative z-10 -mb-1 border-4 border-black px-3 py-1.5 text-sm font-bold tracking-wide dark:border-neutral-200 ${tone}`}
+      >
+        {children}
+      </span>
+      {href && (
+        <Link
+          href={href}
+          className='mb-2 text-sm font-medium text-[#2B455E] hover:underline dark:text-[#F3E4DC]'
+        >
+          {linkLabel}
+        </Link>
+      )}
+    </div>
+  )
+}
+
+const MUSIC_TONE = 'bg-[#2B455E] text-[#F3E4DC]'
+const READING_TONE = 'bg-[#F3E4DC] text-[#2B455E]'
+const ACTIVITY_TONE = 'bg-white text-black dark:bg-neutral-900 dark:text-white'
+// The activity tab takes the orange of the card's own marquee strips (the
+// left one runs right under it) instead of the card's white.
+const ACTIVITY_TAB_TONE = 'bg-[#F2A341] text-black'
+
+// A card that's a link itself grows a little on hover. Done on the column
+// (tab + card together) rather than the card alone, which would pull the
+// card away from its tab.
+const HOVER_GROW = 'transition-transform has-[>a:hover]:scale-[1.02]'
 
 export default function Home() {
   const t = useTranslations(content)
@@ -281,9 +341,8 @@ export default function Home() {
       </section>
 
       {/* What's currently on — the homepage's old "最近在讀/Spotify" widgets,
-          kept (per yicheng) but laid flat instead of in their old rounded
-          card — NowReading's `bare` prop strips that chrome; NowPlaying's
-          rounded corners are Spotify's own embed styling, left alone. */}
+          kept (per yicheng). NowReading's `bare` prop strips its own card
+          chrome so the shared CARD frame below is the only one. */}
       <section
         className={`bg-white py-14 sm:py-20 ${GUTTER} dark:bg-neutral-950`}
       >
@@ -291,61 +350,44 @@ export default function Home() {
           <h2 className='text-3xl font-black tracking-tight text-neutral-900 uppercase sm:text-4xl dark:text-neutral-100'>
             {lang === 'zh' ? '音樂、書以及活動' : "What I'm Into Lately"}
           </h2>
-          {/* Two equal-width columns (grid, not flex-1 — flex-1 let each
-              column's intrinsic content width win, which is what made them
-              look uneven). Three flat items in a 2-col grid auto-flows as
-              music+reading on row one, activity alone on row two — per
-              yicheng. Separated with plain border lines (yicheng didn't
-              want boxed-card panels) rather than backgrounds: a vertical
-              rule between music/reading on desktop, a horizontal rule
-              above activity. */}
-          <div className='mt-8 grid gap-10 sm:grid-cols-2'>
-            <div>
-              <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-                {s.musicLabel}
-              </p>
-              <div className='mt-2'>
-                <NowPlaying />
+          {/* All three as the same card — the activity card's own black
+              border + hard shadow, which the rest of the site already
+              uses — instead of three different treatments split apart by
+              rule lines (per yicheng: the lines only made the mismatch
+              more visible). Music + reading share row one at equal height
+              (grid rows stretch); activity spans row two. Each card's
+              label is a tab on its top-left corner (see CardTag). min-w-0
+              on each column (and wrap-anywhere on the titles) so a long
+              unbroken word in a book or song title can't widen its card
+              past the screen on phones (per yicheng). */}
+          <div className='mt-10 grid gap-x-8 gap-y-12 sm:grid-cols-2'>
+            <div className={`flex min-w-0 flex-col ${HOVER_GROW}`}>
+              <CardTag tone={MUSIC_TONE}>{stripColon(s.musicLabel)}</CardTag>
+              <NowPlayingCard className={`${CARD} flex-1`} />
+            </div>
+            <div className='flex min-w-0 flex-col'>
+              <CardTag tone={READING_TONE} href='/reading' linkLabel={s.viewAllLabel}>
+                {stripColon(s.readingLabel)}
+              </CardTag>
+              <div className={`${CARD} flex flex-1 flex-col justify-center bg-[#F3E4DC] p-2`}>
+                <NowReading onCream />
               </div>
             </div>
-            <div className='sm:border-l-2 sm:border-neutral-200 sm:pl-6 dark:sm:border-neutral-700'>
-              <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-                {s.readingLabel}
-              </p>
-              <div className='mt-2 rounded-xl bg-neutral-100 p-3 dark:bg-neutral-900'>
-                <NowReading bare />
-              </div>
-              <Link
-                href='/reading'
-                className='mt-3 inline-block text-sm text-[#F2A341] hover:underline dark:text-[#F6B45E]'
-              >
-                {s.viewAllLabel}
-              </Link>
-            </div>
-            <div className='border-t-2 border-neutral-200 pt-10 sm:col-span-2 dark:border-neutral-700'>
-              <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-                {s.activityLabel}
-              </p>
+            <div className={`flex min-w-0 flex-col sm:col-span-2 ${HOVER_GROW}`}>
+              <CardTag tone={ACTIVITY_TAB_TONE} href='/activities' linkLabel={s.viewActivityLabel}>
+                {stripColon(s.activityLabel)}
+              </CardTag>
               {/* No Notion-backed activity to show yet, so this reuses the
-                  Activities page's own empty-state card verbatim (same
-                  text, same white/border-4/hard-shadow treatment) rather
-                  than a bare color swatch. Swap for the real activity's
-                  cover + title once that page actually has data. */}
-              {/* Vertical marquees now live inside the card's own border
-                  (one shared border/shadow/hover-scale around the whole
-                  assembly) rather than as separate strips glued onto the
-                  outside of it — per yicheng. Explicit height on the row
-                  itself — without it, `h-full` on the marquees has no
-                  definite parent height to resolve against, so the row
-                  ends up stretching to the marquees' own enormous
-                  (pre-clip) content height instead of the other way
-                  around. */}
+                  Activities page's own empty-state card. Vertical marquees
+                  live inside the card's border; the row has an explicit
+                  height so the marquees' h-full has something to resolve
+                  against. */}
               <Link
                 href='/activities'
-                className='mt-2 flex h-56 items-stretch overflow-hidden border-4 border-black shadow-[4px_4px_0_0_#000] transition-transform hover:scale-[1.02]'
+                className={`${CARD} flex h-56 items-stretch overflow-hidden ${ACTIVITY_TONE}`}
               >
                 <VerticalMarquee text='COMING SOON' />
-                <div className='flex min-w-0 flex-1 flex-col items-center justify-center gap-3 bg-white px-4 py-10 text-center dark:bg-neutral-900'>
+                <div className='flex min-w-0 flex-1 flex-col items-center justify-center gap-3 px-4 py-10 text-center'>
                   <p className='text-2xl font-black text-black sm:text-3xl dark:text-white'>
                     {activities.emptyTitle}
                   </p>
@@ -354,12 +396,6 @@ export default function Home() {
                   </p>
                 </div>
                 <VerticalMarquee text='COMING SOON' reverse />
-              </Link>
-              <Link
-                href='/activities'
-                className='mt-3 inline-block text-sm text-[#F2A341] hover:underline dark:text-[#F6B45E]'
-              >
-                {s.viewActivityLabel}
               </Link>
             </div>
           </div>

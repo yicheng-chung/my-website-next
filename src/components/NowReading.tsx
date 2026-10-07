@@ -8,7 +8,17 @@ import { readNotionCache, writeNotionCache } from '@/lib/notionCache'
 import ProgressBar from './ProgressBar'
 import Spinner from './Spinner'
 
-export default function NowReading({ bare = false }: { bare?: boolean }) {
+// `onCream` is for the homepage's cream reading card: the site's dark blue
+// for text, cover border and idle dots, orange for progress and the active
+// dot (implies `bare`).
+export default function NowReading({
+  bare: bareProp = false,
+  onCream = false,
+}: {
+  bare?: boolean
+  onCream?: boolean
+}) {
+  const bare = bareProp || onCream
   const [books, setBooks] = useState<Book[] | null>(null)
   const [index, setIndex] = useState(0)
   const touchStartX = useRef<number | null>(null)
@@ -94,9 +104,9 @@ export default function NowReading({ bare = false }: { bare?: boolean }) {
       >
         {book.cover ? (
           <div
-            className={`relative flex-shrink-0 rounded-md bg-white p-[5%] ${
-              bare ? 'h-38 w-26' : 'h-48 w-32'
-            }`}
+            className={`relative flex-shrink-0 bg-white p-[5%] ${
+              onCream ? 'h-44 w-30 border-2 border-[#2B455E]' : 'rounded-md'
+            } ${onCream ? '' : bare ? 'h-38 w-26' : 'h-48 w-32'}`}
           >
             <Image
               src={book.cover}
@@ -108,14 +118,32 @@ export default function NowReading({ bare = false }: { bare?: boolean }) {
             />
           </div>
         ) : (
-          <div className={`flex-shrink-0 rounded-md bg-white ${bare ? 'h-38 w-26' : 'h-48 w-32'}`} />
+          <div
+            className={`flex-shrink-0 bg-white ${
+              onCream ? 'h-44 w-30 border-2 border-[#2B455E]' : `rounded-md ${bare ? 'h-38 w-26' : 'h-48 w-32'}`
+            }`}
+          />
         )}
         <div className='min-w-0 flex-1'>
-          <p className='line-clamp-2 text-sm font-semibold text-neutral-800 dark:text-neutral-100'>
+          <p
+            className={
+              onCream
+                ? 'line-clamp-2 text-xl wrap-anywhere leading-tight font-black text-[#2B455E] sm:text-2xl'
+                : 'line-clamp-2 text-sm font-semibold text-neutral-800 dark:text-neutral-100'
+            }
+          >
             {book.title}
           </p>
-          <p className='truncate text-xs text-neutral-500 dark:text-neutral-400'>{book.author}</p>
-          {book.progress !== null && <ProgressBar percent={book.progress} />}
+          <p
+            className={
+              onCream
+                ? 'mt-1 mb-4 truncate text-sm text-[#2B455E]/70'
+                : 'truncate text-xs text-neutral-500 dark:text-neutral-400'
+            }
+          >
+            {book.author}
+          </p>
+          {book.progress !== null && <ProgressBar percent={book.progress} onCream={onCream} />}
         </div>
       </Link>
 
@@ -129,8 +157,12 @@ export default function NowReading({ bare = false }: { bare?: boolean }) {
               onClick={() => setIndex(i)}
               className={`h-1.5 rounded-full transition-all ${
                 i === index
-                  ? 'w-4 bg-[#F2A341] dark:bg-[#F6B45E]'
-                  : 'w-1.5 bg-neutral-300 dark:bg-neutral-600'
+                  ? onCream
+                    ? 'w-4 bg-[#F2A341]'
+                    : 'w-4 bg-[#F2A341] dark:bg-[#F6B45E]'
+                  : onCream
+                    ? 'w-1.5 bg-[#2B455E]/25'
+                    : 'w-1.5 bg-neutral-300 dark:bg-neutral-600'
               }`}
             />
           ))}
