@@ -75,6 +75,7 @@ export default function BlogPostPage() {
     // bundled into the content request below, which covers direct links
     // and posts the reader hasn't scrolled to yet.
     const cachedPost = readBlogCache()?.posts.find((p) => p.id === params.id) ?? null;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reads this session's cache (sessionStorage) after mount on purpose: the server can't see it, so reading it during render would make server and client HTML differ.
     if (cachedPost) setPost(cachedPost);
 
     fetch(`/api/blog/${params.id}`)

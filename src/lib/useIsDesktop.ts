@@ -1,17 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
+const QUERY = "(min-width: 768px)";
+
+function subscribe(onChange: () => void) {
+  const mq = window.matchMedia(QUERY);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+
+// Subscribed to the media query rather than read in an effect. The server
+// (and the first, hydrating client render) still says "not desktop", same
+// as before, so server and client HTML match; the real value takes over
+// right after.
 export function useIsDesktop() {
-  const [isDesktop, setIsDesktop] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
-    setIsDesktop(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
-
-  return isDesktop;
+  return useSyncExternalStore(
+    subscribe,
+    () => window.matchMedia(QUERY).matches,
+    () => false
+  );
 }

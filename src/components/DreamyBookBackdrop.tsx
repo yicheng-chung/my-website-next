@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, type CSSProperties } from 'react'
+import { useMemo, useState, type CSSProperties } from 'react'
 import Image from 'next/image'
 import { canOptimizeCover, type Book } from '@/lib/notion'
 
@@ -8,15 +8,33 @@ import { canOptimizeCover, type Book } from '@/lib/notion'
 // rise up the screen, each at its own speed and phase so they never look
 // synced. Sits behind all page content — decorative only (aria-hidden,
 // pointer-events-none), never meant to be legible.
+// Small seeded random generator (mulberry32), so the picks below are a
+// pure function of the books + one seed instead of calling Math.random
+// while rendering.
+function seededRandom(seed: number) {
+  let a = seed >>> 0
+  return () => {
+    a = (a + 0x6d2b79f5) | 0
+    let t = Math.imul(a ^ (a >>> 15), 1 | a)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
+
 export default function DreamyBookBackdrop({ books }: { books: Book[] }) {
+  // Rolled once per mount (a lazy initializer runs only on the first
+  // render), so the backdrop is still a fresh random mix each visit.
+  const [seed] = useState(() => Math.floor(Math.random() * 2 ** 32))
+
   const covers = useMemo(() => {
+    const random = seededRandom(seed)
     const withCovers = books.filter((b) => b.cover)
     if (withCovers.length === 0) return []
 
     // Picked once per mount (not re-rolled on every render) — four or five
     // random books from whatever's currently reading or finished.
-    const count = Math.min(withCovers.length, 4 + Math.round(Math.random()))
-    const shuffled = [...withCovers].sort(() => Math.random() - 0.5).slice(0, count)
+    const count = Math.min(withCovers.length, 4 + Math.round(random()))
+    const shuffled = [...withCovers].sort(() => random() - 0.5).slice(0, count)
 
     // Fixed slot templates for placement/size/timing/phase so the chosen
     // books never line up or move in sync.
@@ -33,7 +51,7 @@ export default function DreamyBookBackdrop({ books }: { books: Book[] }) {
       src: book.cover as string,
       key: book.id,
     }))
-  }, [books])
+  }, [books, seed])
 
   if (covers.length === 0) return null
 

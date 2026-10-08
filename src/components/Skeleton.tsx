@@ -9,8 +9,14 @@ import { useLanguage } from '@/context/LanguageContext'
 // (.skeleton).
 
 // One placeholder block; size/shape/color come from className.
-export function Bone({ className = '' }: { className?: string }) {
-  return <div aria-hidden className={`skeleton ${className}`} />
+export function Bone({
+  className = '',
+  style,
+}: {
+  className?: string
+  style?: React.CSSProperties
+}) {
+  return <div aria-hidden className={`skeleton ${className}`} style={style} />
 }
 
 const LABEL = { zh: '載入中', en: 'Loading' }

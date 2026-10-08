@@ -13,6 +13,7 @@ import BookCard from '@/components/BookCard'
 import DreamyBookBackdrop from '@/components/DreamyBookBackdrop'
 import Footer from '@/components/Footer'
 import { ReadingListLoading } from '@/components/ReadingLoading'
+import { Bone } from '@/components/Skeleton'
 import {
   readNotionCache,
   writeNotionCache,
@@ -41,6 +42,7 @@ export default function ReadingPage() {
   useEffect(() => {
     const cached = readNotionCache()
     if (cached) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reads this session's cache (sessionStorage) after mount on purpose: the server can't see it, so reading it during render would make server and client HTML differ.
       setData(cached)
       return
     }
@@ -156,8 +158,15 @@ export default function ReadingPage() {
           --navbar-height offset as Activities), the other at the very
           bottom. Photographed and pre-rotated to lie flat (the files
           themselves are landscape — no CSS rotation). Hidden while the
-          Notion fetch is still out (see `loaded`); the loading skeleton
-          then takes over the navbar offset this photo normally carries. */}
+          Notion fetch is still out (see `loaded`); a skeleton block of the
+          same size holds its place meanwhile, so the list doesn't get
+          pushed down when the photo appears. */}
+      {!loaded && (
+        <Bone
+          className='aspect-[2573/583] w-full'
+          style={{ marginTop: 'var(--navbar-height, 84px)' }}
+        />
+      )}
       <Image
         src='/images/bookmark-resistance.jpg'
         alt={t.bookmarkResistanceAlt}

@@ -26,6 +26,7 @@ export default function NowReading({
   useEffect(() => {
     const cached = readNotionCache()
     if (cached) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reads this session's cache (sessionStorage) after mount on purpose: the server can't see it, so reading it during render would make server and client HTML differ.
       setBooks(cached.reading)
       return
     }
@@ -93,6 +94,11 @@ export default function NowReading({
 
   const book = books[index]
   const swipeCount = books.length
+  // The book the carousel shows next — its cover is loaded ahead of time
+  // (see the hidden image below) so it's already there when its turn
+  // comes, instead of the card sitting with a blank cover for a few seconds
+  // while it downloads.
+  const upcoming = books.length > 1 ? books[(index + 1) % books.length] : null
 
   function handleTouchStart(e: React.TouchEvent) {
     touchStartX.current = e.touches[0].clientX
@@ -169,6 +175,24 @@ export default function NowReading({
           {book.progress !== null && <ProgressBar percent={book.progress} onCream={onCream} />}
         </div>
       </Link>
+
+      {/* Same src/sizes as the visible cover, so the browser fetches the
+          exact same (optimized) file and reuses it on the next turn. Eager,
+          since a lazy image that's invisible never loads; 1px and
+          transparent rather than display:none for the same reason. */}
+      {upcoming?.cover && (
+        <div aria-hidden className='pointer-events-none absolute h-px w-px overflow-hidden opacity-0'>
+          <Image
+            key={upcoming.id}
+            src={upcoming.cover}
+            alt=''
+            fill
+            sizes='128px'
+            loading='eager'
+            unoptimized={!canOptimizeCover(upcoming.cover)}
+          />
+        </div>
+      )}
 
       {books.length > 1 && (
         <div className='mt-2 flex justify-center gap-1.5'>

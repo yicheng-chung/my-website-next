@@ -8,10 +8,7 @@ export function useCountUp(target: number, duration = 700): number {
   const [value, setValue] = useState(0)
 
   useEffect(() => {
-    if (target <= 0) {
-      setValue(0)
-      return
-    }
+    if (target <= 0) return
     let start: number | null = null
     let frame: number
 
@@ -26,5 +23,7 @@ export function useCountUp(target: number, duration = 700): number {
     return () => cancelAnimationFrame(frame)
   }, [target, duration])
 
-  return value
+  // A target of 0 just reads as 0 — derived here rather than reset with a
+  // setState in the effect.
+  return target <= 0 ? 0 : value
 }

@@ -34,15 +34,11 @@ function ShelfBookSkeleton() {
 }
 
 // /reading: category pills, the "reading now" cards, the finished shelf.
-// The top margin stands in for the navbar offset the (still hidden) top
-// bookmark normally carries, plus a little air so the first row doesn't
-// sit right under the navbar.
+// (The top bookmark's own placeholder lives in reading/page.tsx, where the
+// photo itself is.)
 export function ReadingListLoading() {
   return (
-    <SkeletonStatus
-      className='flex flex-col gap-6 sm:gap-8'
-      style={{ marginTop: 'calc(var(--navbar-height, 84px) + 1.5rem)' }}
-    >
+    <SkeletonStatus className='flex flex-col gap-6 sm:gap-8'>
       <div>
         <Bone className='mb-2 h-3 w-28' />
         <div className='flex flex-wrap gap-2'>

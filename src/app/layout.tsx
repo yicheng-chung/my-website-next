@@ -99,6 +99,7 @@ export default async function RootLayout({
             host this one (its typed subset list for Noto Sans TC only
             covers latin/cyrillic/vietnamese, not the Chinese glyphs this
             site actually needs), hence a plain stylesheet link instead. */}
+        {/* eslint-disable-next-line @next/next/no-page-custom-font -- this is the App Router root layout, which wraps every page; the rule is about the old pages/ router. */}
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap"

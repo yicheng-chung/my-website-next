@@ -181,31 +181,6 @@
   animation: current-flow linear infinite;
 }
 
-@keyframes spinner-fade {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.15;
-  }
-}
-
-.spinner-spoke {
-  position: absolute;
-  inset: 0;
-  animation: spinner-fade 1s linear infinite;
-}
-
-.spinner-spoke::before {
-  content: "";
-  display: block;
-  width: 9%;
-  height: 26%;
-  margin: 4% auto 0;
-  border-radius: 40%;
-  background-color: currentColor;
-}
-
 /* Site-wide loading skeleton (components/Skeleton.tsx): placeholder blocks
    with a highlight sweeping left to right, no text (per yicheng); held
    still under reduced motion. In @layer components so a Tailwind bg-* /

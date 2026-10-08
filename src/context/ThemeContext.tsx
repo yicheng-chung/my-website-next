@@ -49,6 +49,7 @@ export function ThemeProvider({
     if (document.cookie.includes(`${THEME_STORAGE_KEY}=`)) return;
     const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
     if (stored === "light" || stored === "dark") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time migration from localStorage, read after mount on purpose: the server can't see it, so reading it during render would make server and client HTML differ.
       setThemeState(stored);
       writeCookie(stored);
     }

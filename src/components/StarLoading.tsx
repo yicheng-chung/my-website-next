@@ -8,7 +8,7 @@ const GLOW_FILTER =
   "drop-shadow(0 0 6px rgba(246,180,94,0.7)) drop-shadow(0 0 12px rgba(246,180,94,0.4))";
 
 // A loose triangle of three twinkling sparkles, pulsing out of phase —
-// this page's own loading motif, distinct from the site-wide Spinner.
+// this page's own loading motif, distinct from the site-wide skeletons.
 const STARS = [
   { size: 36, left: 22, top: 12, delay: 0 },
   { size: 16, left: 2, top: 52, delay: 0.35 },

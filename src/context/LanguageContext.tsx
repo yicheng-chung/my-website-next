@@ -46,6 +46,7 @@ export function LanguageProvider({
     if (document.cookie.includes(`${LANGUAGE_STORAGE_KEY}=`)) return
     const stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY)
     if (stored === 'zh' || stored === 'en') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time migration from localStorage, read after mount on purpose: the server can't see it, so reading it during render would make server and client HTML differ.
       setLangState(stored)
       writeCookie(stored)
     }

@@ -42,14 +42,50 @@ export default function BlogPage() {
   // Mirrors the latest state into refs so the IntersectionObserver (set up
   // once, never torn down/recreated) can always act on current values
   // without needing to be recreated whenever they change.
+  // Synced in a layout effect (after each render, before any regular
+  // effect below runs) rather than assigned during render.
   const stateRef = useRef({ hasMore, nextCursor, loadingMore, category })
-  stateRef.current = { hasMore, nextCursor, loadingMore, category }
+  useLayoutEffect(() => {
+    stateRef.current = { hasMore, nextCursor, loadingMore, category }
+  })
+
+  // Fetches the next page of posts. Declared up here, before the effects
+  // that call it. Reads stateRef rather than state directly, since the
+  // IntersectionObserver below keeps the first render's copy of it.
+  const loadMore = () => {
+    const current = stateRef.current
+    if (current.loadingMore || !current.hasMore || !current.nextCursor) return
+    setLoadingMore(true)
+    const categoryParam = current.category
+      ? `&category=${encodeURIComponent(current.category)}`
+      : ''
+    fetch(`/api/blog?cursor=${encodeURIComponent(current.nextCursor)}${categoryParam}`)
+      .then((res) => res.json())
+      .then((json: BlogPostPage) => {
+        setPosts((prev) => {
+          const merged = [...(prev ?? []), ...(json.posts ?? [])]
+          if (current.category === null) {
+            writeBlogCache({
+              posts: merged,
+              nextCursor: json.nextCursor,
+              hasMore: json.hasMore,
+            })
+          }
+          return merged
+        })
+        setNextCursor(json.nextCursor)
+        setHasMore(json.hasMore)
+      })
+      .catch(() => setHasMore(false))
+      .finally(() => setLoadingMore(false))
+  }
 
   // useLayoutEffect, not useEffect — this runs before the browser paints,
   // so switching away from the "list" default (when a different layout was
   // saved from a previous visit) doesn't flash the default on screen first.
   useLayoutEffect(() => {
     const stored = localStorage.getItem(LAYOUT_KEY)
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reads the saved layout (localStorage) after mount on purpose: the server can't see it, so reading it during render would make server and client HTML differ.
     setLayout(stored === 'grid' ? 'grid' : 'list')
   }, [])
 
@@ -66,6 +102,7 @@ export default function BlogPage() {
   useEffect(() => {
     const cached = readCategoriesCache()
     if (cached) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reads this session's cache (sessionStorage) after mount on purpose: the server can't see it, so reading it during render would make server and client HTML differ.
       setCategories(cached)
       return
     }
@@ -97,6 +134,7 @@ export default function BlogPage() {
     if (category === null) {
       const cached = readBlogCache()
       if (cached) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- reads this session's cache (sessionStorage) after mount on purpose: the server can't see it, so reading it during render would make server and client HTML differ.
         setPosts(cached.posts)
         setNextCursor(cached.nextCursor)
         setHasMore(cached.hasMore)
@@ -150,7 +188,6 @@ export default function BlogPage() {
     )
     observer.observe(sentinel)
     return () => observer.disconnect()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Re-checks the sentinel's actual on-screen position (rather than relying
@@ -174,36 +211,7 @@ export default function BlogPage() {
     // so this effect can otherwise fire while loadingMore is still true and
     // bail out with nothing left to re-trigger it), this re-checks and
     // retries instead of getting stuck.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [posts, hasMore, nextCursor, loadingMore])
-
-  const loadMore = () => {
-    const current = stateRef.current
-    if (current.loadingMore || !current.hasMore || !current.nextCursor) return
-    setLoadingMore(true)
-    const categoryParam = current.category
-      ? `&category=${encodeURIComponent(current.category)}`
-      : ''
-    fetch(`/api/blog?cursor=${encodeURIComponent(current.nextCursor)}${categoryParam}`)
-      .then((res) => res.json())
-      .then((json: BlogPostPage) => {
-        setPosts((prev) => {
-          const merged = [...(prev ?? []), ...(json.posts ?? [])]
-          if (current.category === null) {
-            writeBlogCache({
-              posts: merged,
-              nextCursor: json.nextCursor,
-              hasMore: json.hasMore,
-            })
-          }
-          return merged
-        })
-        setNextCursor(json.nextCursor)
-        setHasMore(json.hasMore)
-      })
-      .catch(() => setHasMore(false))
-      .finally(() => setLoadingMore(false))
-  }
 
   return (
     <div className='flex flex-col gap-6 pt-2 sm:gap-8'>
