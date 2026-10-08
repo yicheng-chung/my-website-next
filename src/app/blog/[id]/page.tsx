@@ -10,6 +10,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import content from "@/content/blog.json";
 import common from "@/content/common.json";
 import { readBlogCache } from "@/lib/blogCache";
+import { translateTexts } from "@/lib/translate";
 import type { BlogPost } from "@/lib/blog";
 import type { ContentBlock } from "@/lib/notion";
 import { toDisplayableImageSrc } from "@/lib/notion";
@@ -139,15 +140,12 @@ export default function BlogPostPage() {
     setTranslating(true);
     setTranslateError(false);
     try {
+      // Translated in the browser, not via our server (see lib/translate.ts
+      // for why), and remembered per post.
       const texts = [post.title, ...blocks.map(blockText)];
-      const res = await fetch("/api/blog/translate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ texts }),
+      const [translatedTitle, ...translatedTexts] = await translateTexts(texts, {
+        cacheKey: post.id,
       });
-      if (!res.ok) throw new Error("translate request failed");
-      const json: { texts: string[] } = await res.json();
-      const [translatedTitle, ...translatedTexts] = json.texts;
       setTranslated({
         title: translatedTitle,
         blocks: blocks.map((b, i) => withTranslatedText(b, translatedTexts[i])),
