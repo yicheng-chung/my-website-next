@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Languages } from "lucide-react";
+import { ArrowLeft, ArrowRight, Languages, RotateCw } from "lucide-react";
 import { useTranslations } from "@/lib/useTranslations";
 import { useDocumentTitle } from "@/lib/useDocumentTitle";
 import { useLanguage } from "@/context/LanguageContext";
@@ -198,25 +198,39 @@ export default function BlogPostPage() {
               type="button"
               onClick={handleTranslateClick}
               disabled={translating}
-              className="inline-flex shrink-0 items-center gap-1.5 self-end rounded-full border border-neutral-200 px-3 py-1 text-sm font-medium text-neutral-600 transition-colors hover:border-[#F2A341] hover:text-[#F2A341] disabled:opacity-60 sm:self-auto dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-[#F6B45E] dark:hover:text-[#F6B45E]"
+              // A failed translation shows on the button itself (per
+              // yicheng) rather than as a separate error line: it shakes
+              // once, goes to a dashed red outline (red to stand out, per
+              // yicheng) with a retry icon and label, and clicking it again retries. The shake replays on
+              // every failure, since translateError is cleared while the
+              // retry is in flight.
+              className={`inline-flex shrink-0 items-center gap-1.5 self-end rounded-full border px-3 py-1 text-sm font-medium transition-colors disabled:opacity-60 sm:self-auto ${
+                translateError
+                  ? "animate-[button-shake_0.4s_ease-in-out] border-dashed border-red-500 text-red-600 hover:bg-red-500/10 dark:border-red-400 dark:text-red-400"
+                  : "border-neutral-200 text-neutral-600 hover:border-[#F2A341] hover:text-[#F2A341] dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-[#F6B45E] dark:hover:text-[#F6B45E]"
+              }`}
             >
               {/* While translating, the icon's spot becomes a small
                   shimmering block — the site's skeleton, no spinner. */}
               {translating ? (
                 <Bone className="h-3.5 w-3.5 rounded-sm" />
+              ) : translateError ? (
+                <RotateCw size={14} />
               ) : (
                 <Languages size={14} />
               )}
               {/* Each label is in the language it switches TO, not whatever
                   the site's current language happens to be — "Translate to
                   English" reads in English, "顯示原文" (switching back to
-                  the Chinese original) reads in Chinese. */}
-              {showTranslated && translated ? "顯示原文" : "Translate to English"}
+                  the Chinese original) reads in Chinese. The failure label
+                  follows the site's language instead. */}
+              {translateError
+                ? t.translateFailed
+                : showTranslated && translated
+                  ? "顯示原文"
+                  : "Translate to English"}
             </button>
           </div>
-          {translateError && (
-            <p className="text-sm text-red-500 dark:text-red-400">{t.translateFailed}</p>
-          )}
         </header>
 
         <hr className="my-6 border-neutral-200 dark:border-neutral-700" />
