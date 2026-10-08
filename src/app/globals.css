@@ -241,3 +241,26 @@
     animation: none;
   }
 }
+
+/* Activities page: soft blurred glows drifting and swelling slowly on the
+   sage bands, like breathing (the evening opens with a few minutes of
+   it). Held still under reduced motion. */
+@keyframes breathe {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(0.9);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate(var(--breathe-x, 30px), var(--breathe-y, -20px)) scale(1.15);
+    opacity: 1;
+  }
+}
+.animate-breathe {
+  animation: breathe var(--breathe-duration, 10s) ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-breathe {
+    animation: none;
+  }
+}

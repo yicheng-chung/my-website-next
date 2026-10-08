@@ -15,6 +15,7 @@ import LifeTimeline from '@/components/LifeTimeline'
 import NowPlayingCard from '@/components/NowPlayingCard'
 import NowReading from '@/components/NowReading'
 import { VerticalMarquee } from '@/components/Marquee'
+import EventPreviewCard from '@/components/EventPreviewCard'
 import WaveDivider from '@/components/WaveDivider'
 import OceanCurrents from '@/components/OceanCurrents'
 import SeamShimmer from '@/components/SeamShimmer'
@@ -377,26 +378,33 @@ export default function Home() {
               <CardTag tone={ACTIVITY_TAB_TONE} href='/activities' linkLabel={s.viewActivityLabel}>
                 {stripColon(s.activityLabel)}
               </CardTag>
-              {/* No Notion-backed activity to show yet, so this reuses the
-                  Activities page's own empty-state card. Vertical marquees
-                  live inside the card's border; the row has an explicit
-                  height so the marquees' h-full has something to resolve
-                  against. */}
-              <Link
-                href='/activities'
-                className={`${CARD} flex h-56 items-stretch overflow-hidden ${ACTIVITY_TONE}`}
-              >
-                <VerticalMarquee text='COMING SOON' />
-                <div className='flex min-w-0 flex-1 flex-col items-center justify-center gap-3 px-4 py-10 text-center'>
-                  <p className='text-2xl font-black text-black sm:text-3xl dark:text-white'>
-                    {activities.emptyTitle}
-                  </p>
-                  <p className='text-xs font-medium text-neutral-600 sm:text-base dark:text-neutral-400'>
-                    {activities.emptyBody}
-                  </p>
-                </div>
-                <VerticalMarquee text='COMING SOON' reverse />
-              </Link>
+              {/* With an event on (`hasEvent` in activities.json), a
+                  preview of it on the Activities page's cream (see
+                  EventPreviewCard), inside the same frame as the other two
+                  cards. Without one, the original "nothing planned yet"
+                  card (vertical marquees inside the card's border; the row
+                  has an explicit height so the marquees' h-full has
+                  something to resolve against), same as the Activities
+                  page's own fallback. */}
+              {activitiesContent.hasEvent ? (
+                <EventPreviewCard className={CARD} />
+              ) : (
+                <Link
+                  href='/activities'
+                  className={`${CARD} flex h-56 items-stretch overflow-hidden ${ACTIVITY_TONE}`}
+                >
+                  <VerticalMarquee text='COMING SOON' />
+                  <div className='flex min-w-0 flex-1 flex-col items-center justify-center gap-3 px-4 py-10 text-center'>
+                    <p className='text-2xl font-black text-black sm:text-3xl dark:text-white'>
+                      {activities.emptyTitle}
+                    </p>
+                    <p className='text-xs font-medium text-neutral-600 sm:text-base dark:text-neutral-400'>
+                      {activities.emptyBody}
+                    </p>
+                  </div>
+                  <VerticalMarquee text='COMING SOON' reverse />
+                </Link>
+              )}
             </div>
           </div>
         </div>

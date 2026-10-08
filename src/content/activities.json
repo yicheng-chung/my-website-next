@@ -1,12 +1,233 @@
 {
+  "hasEvent": true,
   "zh": {
     "title": "活動",
     "emptyTitle": "目前還沒有想到什麼活動",
-    "emptyBody": "有好點子的時候會公佈在這邊，請稍微期待一下（但也不用太期待）"
+    "emptyBody": "有好點子的時候會公佈在這邊，請稍微期待一下（但也不用太期待）",
+    "event": {
+      "eyebrow": "安靜閱讀活動・第一場籌備中",
+      "titleLead": "一起安靜讀點東西，",
+      "titleAccent": "再好好地聊天",
+      "lede": "帶一本你正在讀的書來。在有音樂、有咖啡的地方，和一群也喜歡讀書的人，一起讀一段，再聊一聊。",
+      "details": [
+        {
+          "label": "地點（暫定）",
+          "value": "台北的共享空間​或咖啡館"
+        },
+        {
+          "label": "時間",
+          "value": "未定"
+        },
+        {
+          "label": "長度",
+          "value": "約兩個半小時"
+        }
+      ],
+      "ctaDisabled": "報名即將開放",
+      "ctaFlow": "看活動流程",
+      "aboutTitleLead": "不用讀",
+      "aboutTitleAccent": "同一本書",
+      "about": [
+        {
+          "title": "帶你自己的書",
+          "body": "小說、哲學、漫畫、電子書都可以。不用事先讀任何指定的書，也不用讀完。"
+        },
+        {
+          "title": "大部分時間是安靜的",
+          "body": "手機收起來，在背景音樂裡讀自己的書。一個人來也完全沒問題。"
+        },
+        {
+          "title": "中間和最後，聊一聊",
+          "body": "跟身邊的人說說你在讀什麼、哪一段留在心上。想只聽不說，也可以。"
+        }
+      ],
+      "flowTitleLead": "當天",
+      "flowTitleAccent": "怎麼進行",
+      "flowNote": "時間為暫定，實際依場地調整。",
+      "flow": [
+        {
+          "time": "0:00",
+          "title": "入場",
+          "body": "找個位子，點杯喝的，把手機調成靜音收起來。"
+        },
+        {
+          "time": "0:10",
+          "title": "開場",
+          "body": "幾分鐘的呼吸，讓自己從一整天裡慢下來。"
+        },
+        {
+          "time": "0:15",
+          "title": "第一段閱讀",
+          "body": "四十五分鐘，安靜地讀，背景放著音樂。"
+        },
+        {
+          "time": "1:00",
+          "title": "中場聊天",
+          "body": "抽一張問題卡，和旁邊的人一對一聊十幾分鐘。"
+        },
+        {
+          "time": "1:20",
+          "title": "第二段閱讀",
+          "body": "再讀四十分鐘。剛才聊到的，也許會讀出不一樣的東西。"
+        },
+        {
+          "time": "2:00",
+          "title": "小組分享",
+          "body": "三五個人一組，說說今天讀了什麼、哪一句想帶回家。"
+        },
+        {
+          "time": "2:30",
+          "title": "散場",
+          "body": "可以直接走，也可以留下來繼續聊。"
+        }
+      ],
+      "bringTitleLead": "你需要",
+      "bringTitleAccent": "帶什麼",
+      "bring": [
+        "一本正在讀的書（紙本或電子書）",
+        "一點想安靜下來的心情",
+        "如果想記下什麼，一支筆"
+      ],
+      "faqTitleLead": "常見",
+      "faqTitleAccent": "問題",
+      "faq": [
+        {
+          "q": "我讀書速度很慢，或很久沒讀書了，可以來嗎？",
+          "a": "當然可以。這裡沒有進度，閱讀一頁也是閱讀。"
+        },
+        {
+          "q": "一定要跟其他人分享嗎？",
+          "a": "完全不用！聊天的時段只想聽他人分享，也完全沒關係。"
+        },
+        {
+          "q": "要費用嗎？",
+          "a": "還沒決定，可能會包含一杯飲料或場地費。確定後公布在這頁。"
+        },
+        {
+          "q": "什麼時候、在哪裡？",
+          "a": "還在找地方，暫定台北的共享空間或咖啡館。時間和地點確定後，會更新在這裡。"
+        }
+      ],
+      "closingLead": "第一場",
+      "closingAccent": "還在準備",
+      "closingBody": "日期和地點確定後，報名會在這一頁開放。",
+      "cardMeta": "台北・時間未定",
+      "cardCta": "看看怎麼進行"
+    }
   },
   "en": {
     "title": "Activities",
     "emptyTitle": "Nothing planned yet",
-    "emptyBody": "I'll post it here once I think of something — don't hold your breath."
+    "emptyBody": "I'll post it here once I think of something — don't hold your breath.",
+    "event": {
+      "eyebrow": "Quiet reading event · First one in the works",
+      "titleLead": "Quietly read a little together, ",
+      "titleAccent": "then have a good chat",
+      "lede": "Bring whatever you're reading. Somewhere with music and coffee, with a room of people who also like to read — read for a while together, then talk about it.",
+      "details": [
+        {
+          "label": "Where (TBC)",
+          "value": "A coworking space or café in Taipei"
+        },
+        {
+          "label": "When",
+          "value": "TBD"
+        },
+        {
+          "label": "Length",
+          "value": "About 2.5 hours"
+        }
+      ],
+      "ctaDisabled": "Sign-ups opening soon",
+      "ctaFlow": "See how it works",
+      "aboutTitleLead": "No need to read ",
+      "aboutTitleAccent": "the same book",
+      "about": [
+        {
+          "title": "Bring your own book",
+          "body": "Novels, philosophy, comics, e-books — anything. Nothing to read beforehand, nothing to finish."
+        },
+        {
+          "title": "Mostly quiet",
+          "body": "Phones away, your own book, music in the background. Coming alone is completely fine."
+        },
+        {
+          "title": "Talk in the middle and at the end",
+          "body": "Tell someone what you're reading and what stayed with you. Just listening is fine too."
+        }
+      ],
+      "flowTitleLead": "How the evening ",
+      "flowTitleAccent": "goes",
+      "flowNote": "Times are tentative and may shift with the venue.",
+      "flow": [
+        {
+          "time": "0:00",
+          "title": "Arrive",
+          "body": "Find a seat, get a drink, put your phone on silent and away."
+        },
+        {
+          "time": "0:10",
+          "title": "Settle in",
+          "body": "A few minutes of breathing to slow down from the day."
+        },
+        {
+          "time": "0:15",
+          "title": "First reading",
+          "body": "Forty-five minutes of quiet reading, with music on."
+        },
+        {
+          "time": "1:00",
+          "title": "Halftime chat",
+          "body": "Draw a question card and talk one-on-one with the person next to you."
+        },
+        {
+          "time": "1:20",
+          "title": "Second reading",
+          "body": "Forty more minutes. What you just talked about might change how it reads."
+        },
+        {
+          "time": "2:00",
+          "title": "Small groups",
+          "body": "Groups of three to five: what you read today, and a line you'd take home."
+        },
+        {
+          "time": "2:30",
+          "title": "Wrap up",
+          "body": "Head off, or stay and keep talking."
+        }
+      ],
+      "bringTitleLead": "What to ",
+      "bringTitleAccent": "bring",
+      "bring": [
+        "A book you're reading (paper or e-book)",
+        "A mind ready to slow down",
+        "A pen, if you like to note things"
+      ],
+      "faqTitleLead": "Good ",
+      "faqTitleAccent": "questions",
+      "faq": [
+        {
+          "q": "I read slowly, or haven't read in ages. Can I come?",
+          "a": "Of course. There's no pace here — reading one page is still reading."
+        },
+        {
+          "q": "Do I have to share with others?",
+          "a": "Not at all! If you'd rather just listen to others during the chats, that's completely fine."
+        },
+        {
+          "q": "Is there a fee?",
+          "a": "Not decided yet — it may cover a drink or the venue. It'll be posted here."
+        },
+        {
+          "q": "When and where?",
+          "a": "Still looking for a place, likely a coworking space or café in Taipei. Date and venue will be updated here."
+        }
+      ],
+      "closingLead": "The first one is ",
+      "closingAccent": "still in the works",
+      "closingBody": "Sign-ups will open on this page once the date and venue are set.",
+      "cardMeta": "Taipei · Date TBD",
+      "cardCta": "See how it works"
+    }
   }
 }
