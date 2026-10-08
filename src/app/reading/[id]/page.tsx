@@ -17,7 +17,7 @@ import {
   type NotionData,
 } from '@/lib/notionCache'
 import { canOptimizeCover, type Book, type ContentBlock } from '@/lib/notion'
-import Spinner from '@/components/Spinner'
+import { BookPageLoading } from '@/components/ReadingLoading'
 import BlockList from '@/components/BookContentBlocks'
 import ProgressBar from '@/components/ProgressBar'
 
@@ -73,11 +73,7 @@ export default function BookDetailPage() {
   }, [params.id])
 
   if (book === undefined || blocks === null) {
-    return (
-      <div className='flex justify-center py-16'>
-        <Spinner size={36} />
-      </div>
-    )
+    return <BookPageLoading />
   }
 
   if (book === null) {

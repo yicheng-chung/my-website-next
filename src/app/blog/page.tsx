@@ -10,7 +10,7 @@ import BlogCard from '@/components/BlogCard'
 import BlogLayoutToggle, {
   type BlogLayout,
 } from '@/components/BlogLayoutToggle'
-import Spinner from '@/components/Spinner'
+import BlogLoading, { BlogLoadingMore } from '@/components/BlogLoading'
 import {
   readBlogCache,
   readCategoriesCache,
@@ -30,7 +30,12 @@ export default function BlogPage() {
   const [nextCursor, setNextCursor] = useState<string | null>(null)
   const [hasMore, setHasMore] = useState(false)
   const [loadingMore, setLoadingMore] = useState(false)
-  const [layout, setLayout] = useState<BlogLayout>('list')
+  // null until the saved layout has been read (localStorage, so only on
+  // the client): the server-rendered HTML can't know it, and guessing
+  // "list" there made a grid user's reload flash the list skeleton first.
+  // Everything else just treats "not read yet" as the "list" default.
+  const [savedLayout, setLayout] = useState<BlogLayout | null>(null)
+  const layout: BlogLayout = savedLayout ?? 'list'
   const [categories, setCategories] = useState<string[] | null>(null)
   const [category, setCategory] = useState<string | null>(null)
   const sentinelRef = useRef<HTMLDivElement>(null)
@@ -45,7 +50,7 @@ export default function BlogPage() {
   // saved from a previous visit) doesn't flash the default on screen first.
   useLayoutEffect(() => {
     const stored = localStorage.getItem(LAYOUT_KEY)
-    if (stored === 'list' || stored === 'grid') setLayout(stored)
+    setLayout(stored === 'grid' ? 'grid' : 'list')
   }, [])
 
   const handleLayoutChange = (next: BlogLayout) => {
@@ -249,9 +254,7 @@ export default function BlogPage() {
       )}
 
       {posts === null ? (
-        <div className='flex justify-center py-16'>
-          <Spinner size={36} />
-        </div>
+        <BlogLoading layout={savedLayout} />
       ) : posts.length === 0 ? (
         <p className='text-sm text-neutral-500 dark:text-neutral-400'>
           {t.emptyList}
@@ -278,8 +281,10 @@ export default function BlogPage() {
         </div>
       )}
 
+      {/* Next page loading: a skeleton of the next few posts (see
+          BlogLoadingMore) where they're about to appear. */}
       <div ref={sentinelRef} className='flex justify-center py-6'>
-        {loadingMore && <Spinner size={28} />}
+        {loadingMore && <BlogLoadingMore layout={layout} />}
       </div>
     </div>
   )

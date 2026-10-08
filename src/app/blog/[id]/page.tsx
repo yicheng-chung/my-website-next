@@ -13,7 +13,8 @@ import { readBlogCache } from "@/lib/blogCache";
 import type { BlogPost } from "@/lib/blog";
 import type { ContentBlock } from "@/lib/notion";
 import { toDisplayableImageSrc } from "@/lib/notion";
-import Spinner from "@/components/Spinner";
+import { BlogPostLoading } from "@/components/BlogLoading";
+import { Bone } from "@/components/Skeleton";
 import BlockList from "@/components/BlogContentBlocks";
 
 // Only these block types carry translatable text; the rest (divider, image)
@@ -96,11 +97,7 @@ export default function BlogPostPage() {
   }, [params.id]);
 
   if (post === undefined || blocks === null) {
-    return (
-      <div className="flex justify-center py-16">
-        <Spinner size={36} />
-      </div>
-    );
+    return <BlogPostLoading />;
   }
 
   if (post === null) {
@@ -203,8 +200,10 @@ export default function BlogPostPage() {
               disabled={translating}
               className="inline-flex shrink-0 items-center gap-1.5 self-end rounded-full border border-neutral-200 px-3 py-1 text-sm font-medium text-neutral-600 transition-colors hover:border-[#F2A341] hover:text-[#F2A341] disabled:opacity-60 sm:self-auto dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-[#F6B45E] dark:hover:text-[#F6B45E]"
             >
+              {/* While translating, the icon's spot becomes a small
+                  shimmering block — the site's skeleton, no spinner. */}
               {translating ? (
-                <Spinner size={14} />
+                <Bone className="h-3.5 w-3.5 rounded-sm" />
               ) : (
                 <Languages size={14} />
               )}

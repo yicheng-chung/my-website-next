@@ -12,7 +12,7 @@ import common from '@/content/common.json'
 import BookCard from '@/components/BookCard'
 import DreamyBookBackdrop from '@/components/DreamyBookBackdrop'
 import Footer from '@/components/Footer'
-import Spinner from '@/components/Spinner'
+import { ReadingListLoading } from '@/components/ReadingLoading'
 import {
   readNotionCache,
   writeNotionCache,
@@ -137,6 +137,13 @@ export default function ReadingPage() {
     })
   }
 
+  // The bookmarks stay hidden until the list itself is in (per yicheng),
+  // so the page doesn't open on two photos around a spinner. Kept mounted
+  // (display: none, not unmounted) so the top one's `priority` preload
+  // still starts right away and it's ready the moment the list lands.
+  const loaded = data !== null
+  const bookmarkClass = loaded ? 'animate-[fadeIn_0.4s_ease]' : 'hidden'
+
   const categoryCount = useCountUp(allTags.length)
   const readingCount = useCountUp(filteredReading.length)
   const finishedCount = useCountUp(filteredFinished.length)
@@ -148,8 +155,9 @@ export default function ReadingPage() {
           this one on top, flush against the fixed navbar (same
           --navbar-height offset as Activities), the other at the very
           bottom. Photographed and pre-rotated to lie flat (the files
-          themselves are landscape — no CSS rotation), and shown
-          independent of the Notion fetch. */}
+          themselves are landscape — no CSS rotation). Hidden while the
+          Notion fetch is still out (see `loaded`); the loading skeleton
+          then takes over the navbar offset this photo normally carries. */}
       <Image
         src='/images/bookmark-resistance.jpg'
         alt={t.bookmarkResistanceAlt}
@@ -157,16 +165,14 @@ export default function ReadingPage() {
         height={583}
         priority
         sizes='100vw'
-        className='h-auto w-full'
+        className={`h-auto w-full ${bookmarkClass}`}
         style={{ marginTop: 'var(--navbar-height, 84px)' }}
       />
       {/* ChromeLayout gives this route a full-bleed <main>, so the list
           itself re-applies the usual centered column and side gutter. */}
       <div className='mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 sm:gap-8 sm:px-6 lg:px-10'>
         {data === null ? (
-          <div className='flex justify-center py-16'>
-            <Spinner size={36} />
-          </div>
+          <ReadingListLoading />
         ) : (
           <>
             {allTags.length > 0 && (
@@ -299,11 +305,12 @@ export default function ReadingPage() {
           short for that, so the ordinary footer sits just above it instead
           and the page ends on the bookmark alone (per yicheng). */}
       {/* mt/-mb shift it down toward the bookmark without moving the
-          bookmark itself. */}
-      <div className='mt-6 -mb-6 sm:mt-8 sm:-mb-8 md:hidden'>
+          bookmark itself. While loading (no bookmark yet) this plain footer
+          is shown at every width instead, so md+ isn't left without one. */}
+      <div className={`mt-6 -mb-6 sm:mt-8 sm:-mb-8 ${loaded ? 'md:hidden' : ''}`}>
         <Footer />
       </div>
-      <div className='relative'>
+      <div className={`relative ${bookmarkClass}`}>
         <Image
           src='/images/bookmark-change.jpg'
           alt={t.bookmarkChangeAlt}

@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { canOptimizeCover, type Book } from '@/lib/notion'
 import { readNotionCache, writeNotionCache } from '@/lib/notionCache'
 import ProgressBar from './ProgressBar'
-import Spinner from './Spinner'
+import { Bone, SkeletonStatus } from './Skeleton'
 
 // `onCream` is for the homepage's cream reading card: the site's dark blue
 // for text, cover border and idle dots, orange for progress and the active
@@ -55,14 +55,37 @@ export default function NowReading({
   }, [books])
 
   if (books === null) {
+    // Skeleton in the same shape as the book row below (cover, title,
+    // author, progress, dots), sized per variant; on the cream card the
+    // blocks are a faint dark blue instead of the default warm grey.
+    const tone = onCream ? 'bg-[#2B455E]/10 [--skeleton-shine:rgba(255,255,255,0.5)]' : ''
+    const cover = onCream
+      ? 'h-44 w-30'
+      : bare
+        ? 'h-38 w-26 rounded-md'
+        : 'h-48 w-32 rounded-md'
     return (
-      <div
-        className={`flex items-center justify-center ${bare ? 'h-[152px]' : 'h-[216px]'} ${
-          bare ? '' : 'rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800'
-        }`}
-      >
-        <Spinner />
-      </div>
+      <SkeletonStatus>
+        <div
+          className={`flex items-center gap-3 p-3 ${
+            bare
+              ? ''
+              : 'rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800'
+          }`}
+        >
+          <Bone className={`flex-shrink-0 ${cover} ${tone}`} />
+          <div className='flex min-w-0 flex-1 flex-col gap-2'>
+            <Bone className={`${onCream ? 'h-6' : 'h-4'} w-3/4 ${tone}`} />
+            <Bone className={`${onCream ? 'mb-3 h-4' : 'h-3'} w-1/2 ${tone}`} />
+            <Bone className={`h-1.5 w-full rounded-full ${tone}`} />
+          </div>
+        </div>
+        <div className='mt-2 flex justify-center gap-1.5'>
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Bone key={i} className={`h-1.5 w-1.5 rounded-full ${tone}`} />
+          ))}
+        </div>
+      </SkeletonStatus>
     )
   }
 
