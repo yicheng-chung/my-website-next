@@ -62,7 +62,11 @@ export default function BlogPostPage() {
   const [translated, setTranslated] = useState<{ title: string; blocks: ContentBlock[] } | null>(
     null
   );
-  const [showTranslated, setShowTranslated] = useState(false);
+  // What the reader asked for with the button. What's actually shown also
+  // depends on the site language: switching the site back to 中文 (navbar
+  // toggle) brings the original back too (per yicheng).
+  const [wantTranslated, setWantTranslated] = useState(false);
+  const showTranslated = wantTranslated && lang === "en";
   const [translating, setTranslating] = useState(false);
   const [translateError, setTranslateError] = useState(false);
 
@@ -134,7 +138,7 @@ export default function BlogPostPage() {
   const handleTranslateClick = async () => {
     if (translated) {
       const next = !showTranslated;
-      setShowTranslated(next);
+      setWantTranslated(next);
       setLang(next ? "en" : "zh");
       return;
     }
@@ -151,7 +155,7 @@ export default function BlogPostPage() {
         title: translatedTitle,
         blocks: blocks.map((b, i) => withTranslatedText(b, translatedTexts[i])),
       });
-      setShowTranslated(true);
+      setWantTranslated(true);
       setLang("en");
     } catch {
       setTranslateError(true);
