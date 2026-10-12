@@ -123,92 +123,19 @@ export default function Home() {
         className={`relative z-10 flex flex-col items-center pt-[calc(var(--navbar-height,68px)+1.5rem)] pb-6 text-center md:pt-[calc(var(--navbar-height,84px)+4rem)] md:pb-16 ${GUTTER}`}
         style={{ backgroundColor: ORANGE }}
       >
-        {/* Dark ink on the orange — cream text didn't read clearly on
-            this lighter band. Fixed colors, not dark: variants, since the
-            band itself doesn't change with theme. Opens magazine-style:
-            the first word (過去 / the first English word) is set huge and
-            floated so the small body text wraps around it. Left-aligned
-            everywhere, since the wrap needs it; on desktop the block sits
-            in the right half, with the photo on the left. */}
-        {(() => {
-          const lines = profile.intro
-            .replace('{age}', String(getAge()))
-            .split('\n')
-            .map((line) => line.trim())
-          const first = lines[0] ?? ''
-          const opener =
-            lang === 'zh' ? first.slice(0, 2) : (first.match(/^\S+/)?.[0] ?? '')
-          return (
-            <div className='mx-auto flex w-full max-w-5xl items-center gap-6 sm:gap-8 md:block'>
-              {/* Phones: the photo sits inside the band, to the left of
-                  the text. Desktop uses the seam-straddling one below. */}
-              <div className='relative h-24 w-24 shrink-0 overflow-hidden rounded-full border-[3px] border-white shadow-lg sm:h-32 sm:w-32 md:hidden'>
-                <Image
-                  src='/images/yc-childhood.jpg'
-                  alt={profile.name}
-                  fill
-                  sizes='128px'
-                  className='object-cover object-[center_30%]'
-                />
-              </div>
-              <p className='relative min-w-0 flex-1 text-right text-sm leading-relaxed font-medium text-neutral-900 sm:text-base md:mr-0 md:ml-auto md:max-w-md md:flex-none md:text-left md:text-lg lg:max-w-xl'>
-                {/* Hand-drawn arrow from the photo (bottom-left) up to the
-                    text, with a little loop for a doodled feel. Anchored to
-                    the text's own left edge so it always lands on it;
-                    lg+ only, where there's room between photo and text. */}
-                <svg
-                  aria-hidden
-                  viewBox='0 0 200 120'
-                  fill='none'
-                  stroke='currentColor'
-                  strokeWidth='3.5'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  className='pointer-events-none absolute top-2 right-full mr-3 hidden w-44 text-black lg:block'
-                >
-                  <path d='M8 100 C 30 94, 52 94, 78 84 C 104 74, 96 50, 82 58 C 68 66, 84 88, 112 80 C 140 72, 162 64, 188 56' />
-                  <path d='M188 56 C 182 51, 176 47, 170 45' />
-                  <path d='M188 56 C 183 60, 179 65, 176 70' />
-                </svg>
-                {/* Each source line as its own balanced block, so a line
-                    that wraps splits evenly instead of leaving a few
-                    characters stranded on the next line. The opener is
-                    plain text on phones, where the text is centered; from
-                    md up it floats as a big drop cap the text wraps
-                    around. */}
-                {lines.map((line, i) => {
-                  const text =
-                    i === 0 ? line.slice(opener.length).trimStart() : line
-                  // Phones (zh only): one clause per line, broken after
-                  // every ，/。, so each line is a whole thought short enough
-                  // to fit beside the photo without being split mid-word
-                  // (心理／師。). English clauses are too uneven ("Now,"
-                  // alone) for this, so it keeps normal wrapping.
-                  const clauses =
-                    lang === 'zh' ? text.split(/(?<=[，。])/).filter(Boolean) : [text]
-                  return (
-                    <span key={i} className='block md:text-balance'>
-                      {i === 0 && (
-                        <span className='md:float-left md:mt-1 md:mr-3 md:text-[5.25rem] md:leading-[0.85] md:font-black md:tracking-tight md:text-black'>
-                          {opener}
-                        </span>
-                      )}
-                      {clauses.map((clause, j) =>
-                        j === 0 ? (
-                          clause
-                        ) : (
-                          <span key={j} className='block md:inline'>
-                            {clause}
-                          </span>
-                        )
-                      )}
-                    </span>
-                  )
-                })}
-              </p>
-            </div>
-          )
-        })()}
+        {/* The intro text that used to sit on this band (profile.intro,
+            black on orange) is gone (per yicheng) — the band now just
+            carries the photo. Phones: the photo sits inside the band,
+            centered. Desktop uses the seam-straddling one below. */}
+        <div className='relative h-24 w-24 shrink-0 overflow-hidden rounded-full border-[3px] border-white shadow-lg sm:h-32 sm:w-32 md:hidden'>
+          <Image
+            src='/images/yc-childhood.jpg'
+            alt={profile.name}
+            fill
+            sizes='128px'
+            className='object-cover object-[center_30%]'
+          />
+        </div>
 
         <SeamShimmer />
 
