@@ -81,7 +81,7 @@ export default function EventPreviewCard({ className = '' }: { className?: strin
         >
           {e.eyebrow}
         </span>
-        <p className='mt-4 font-serif text-3xl leading-tight font-bold tracking-tight text-balance sm:text-5xl'>
+        <p className='mt-4 font-event text-3xl leading-tight font-bold tracking-tight text-balance sm:text-5xl'>
           {e.titleLead}
           <span style={{ color: ORANGE }}>{e.titleAccent}</span>
         </p>

@@ -4,6 +4,12 @@
 
 @theme inline {
   --font-sans: var(--font-montserrat), "Noto Sans TC", "微軟正黑體", Arial, Helvetica, sans-serif;
+  /* `font-event`: the reading event's headings (Activities page + the
+     homepage's event card). Latin in the same serif stack as font-serif;
+     none of those fonts have Chinese glyphs, so Chinese falls through to
+     the site's Noto Sans TC instead of a system serif (per yicheng: the
+     English serif yes, the Chinese one no). */
+  --font-event: ui-serif, Georgia, Cambria, "Times New Roman", Times, "Noto Sans TC", "微軟正黑體", sans-serif;
 }
 
 * {

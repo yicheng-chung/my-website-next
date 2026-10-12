@@ -43,7 +43,7 @@ const GUTTER = "px-4 sm:px-6 lg:px-10";
 const BAND = `relative ${GUTTER} py-20 sm:py-28`;
 
 // Type on this page (per yicheng, who liked the timeline's): headings,
-// titles, numbers and key values in the blog's serif (font-serif); body
+// titles, numbers and key values in font-event (serif for English, the site's sans for Chinese — see globals.css); body
 // copy, labels and buttons stay in the site's sans.
 function Heading({
   lead,
@@ -56,7 +56,7 @@ function Heading({
 }) {
   return (
     <h2
-      className={`font-serif text-3xl leading-tight font-bold tracking-tight sm:text-5xl ${className}`}
+      className={`font-event text-3xl leading-tight font-bold tracking-tight sm:text-5xl ${className}`}
     >
       {lead}
       <span style={{ color: ORANGE }}>{accent}</span>
@@ -111,7 +111,7 @@ function FaqItem({
           aria-expanded={open}
           aria-controls={id}
           onClick={() => setOpen((o) => !o)}
-          className="flex w-full cursor-pointer items-start justify-between gap-4 text-left font-serif text-lg font-semibold"
+          className="flex w-full cursor-pointer items-start justify-between gap-4 text-left font-event text-lg font-semibold"
         >
           {question}
           <span
@@ -163,7 +163,7 @@ function EventPage() {
       >
         <div className="mx-auto flex max-w-3xl flex-col items-center">
           <Tag>{e.eyebrow}</Tag>
-          <h1 className="mt-6 font-serif text-4xl leading-[1.15] font-bold tracking-tight sm:text-6xl">
+          <h1 className="mt-6 font-event text-4xl leading-[1.15] font-bold tracking-tight sm:text-6xl">
             {e.titleLead}
             <br className="sm:hidden" />
             <span style={{ color: ORANGE }}>{e.titleAccent}</span>
@@ -216,7 +216,7 @@ function EventPage() {
                     <dt className="text-xs font-bold tracking-wider text-neutral-400 uppercase">
                       {d.label}
                     </dt>
-                    <dd className="mt-1 font-serif text-base leading-snug font-semibold [word-break:keep-all]">
+                    <dd className="mt-1 font-event text-base leading-snug font-semibold [word-break:keep-all]">
                       {d.value}
                     </dd>
                   </div>
@@ -252,12 +252,12 @@ function EventPage() {
                 className="text-center sm:text-left"
               >
                 <p
-                  className="font-serif text-5xl leading-none font-bold"
+                  className="font-event text-5xl leading-none font-bold"
                   style={{ color: ORANGE }}
                 >
                   0{i + 1}
                 </p>
-                <p className="mt-4 font-serif text-xl font-semibold">
+                <p className="mt-4 font-event text-xl font-semibold">
                   {item.title}
                 </p>
                 <p className="mt-3 text-sm leading-relaxed opacity-90 sm:text-base">
@@ -270,7 +270,7 @@ function EventPage() {
       </section>
 
       {/* Flow — a quiet vertical timeline (per yicheng, in the spirit of
-          the reference site's): times in the blog's serif, a hairline, small
+          the reference site's): times in font-event, a hairline, small
           dark dots. */}
       <section
         id="flow"
@@ -303,7 +303,7 @@ function EventPage() {
                   />
                 )}
                 <span
-                  className="w-14 shrink-0 pt-0.5 text-right font-serif text-sm tabular-nums sm:w-16 sm:text-base"
+                  className="w-14 shrink-0 pt-0.5 text-right font-event text-sm tabular-nums sm:w-16 sm:text-base"
                   style={{ color: ORANGE_DEEP }}
                 >
                   {step.time}
@@ -313,7 +313,7 @@ function EventPage() {
                   className="relative mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-neutral-900"
                 />
                 <div className="min-w-0">
-                  <p className="font-serif text-lg font-semibold">
+                  <p className="font-event text-lg font-semibold">
                     {step.title}
                   </p>
                   <p className="mt-1 text-sm leading-relaxed text-neutral-600 sm:text-base">
