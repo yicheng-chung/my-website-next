@@ -107,7 +107,7 @@ const PARAGRAPHS = [
 
 export function BlogPostLoading() {
   return (
-    <SkeletonStatus className='flex w-full flex-col gap-8 sm:gap-10'>
+    <SkeletonStatus className='mx-auto flex w-full max-w-[60rem] flex-col gap-8 sm:gap-10'>
       <Bone className='h-4 w-24' />
       <div className='-mx-4 bg-white p-4 sm:mx-0 sm:rounded-2xl sm:border sm:border-neutral-200 sm:p-8 dark:bg-neutral-800 sm:dark:border-neutral-700'>
         <div className='flex flex-col gap-3'>

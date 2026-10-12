@@ -163,8 +163,11 @@ export default function BlogPostPage() {
   const displayTitle = showTranslated && translated ? translated.title : post.title;
   const displayBlocks = showTranslated && translated ? translated.blocks : blocks;
 
+  // A reading column narrower than the site's full width — per yicheng,
+  // halfway between full width (~74 Chinese characters a line) and
+  // max-w-2xl (~38, too narrow): ~56 a line at the body size.
   return (
-    <div className="flex w-full flex-col gap-8 sm:gap-10">
+    <div className="mx-auto flex w-full max-w-[60rem] flex-col gap-8 sm:gap-10">
       <Link
         href="/blog"
         className="inline-flex w-fit items-center gap-1 text-sm text-neutral-800 hover:text-black dark:text-neutral-400 dark:hover:text-[#F6B45E]"
